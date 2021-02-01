@@ -1,0 +1,33 @@
+<h3>
+    {{'MENU-LOAD-PROGRESS.TITLE' | translate}}
+</h3>
+
+<div>
+    <span class="span">
+        {{ (loadStatus.casId[0]) | translate}}
+    </span>
+    <mat-icon [ngClass]="loadStatus.casId[1] == 'check' ? 'green' : 'yellow'">
+        {{ loadStatus.casId[1]}}
+    </mat-icon>
+</div>
+
+<div>
+    <span class="span">
+        {{ (loadStatus.view[0]) | translate}}
+    </span>
+    <mat-icon [ngClass]="loadStatus.view[1] == 'check' ? 'green' : 'yellow'">
+        {{ loadStatus.view[1]}}
+    </mat-icon>
+</div>
+
+<div>
+    <span class="span">
+        {{ (loadStatus.toolId[0]) | translate}}
+    </span>
+    <mat-icon [ngClass]="loadStatus.toolId[1] == 'check' ? 'green' : 'yellow'">
+        {{ loadStatus.toolId[1]}}
+    </mat-icon>
+</div>
+
+<button mat-raised-button color="accent" (click)="close(false)"
+    style="width: 100%">{{'MENU-LOAD-PROGRESS.CANCEL' | translate}}</button>

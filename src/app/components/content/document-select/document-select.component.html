@@ -1,0 +1,48 @@
+<mat-card>
+    <mat-card-title>{{ 'CONTENT-DOCUMENT-SELECT.TITLE' | translate}}</mat-card-title>
+
+
+    <mat-card-content class="content">
+        <div class="spinner-container" *ngIf="isWaiting">
+            <mat-spinner></mat-spinner>
+        </div>
+        <div>
+            <mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="expandable">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon *ngIf="element.leaf === false">storage</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="icon">
+                    <mat-header-cell *matHeaderCellDef>{{'CONTENT-DOCUMENT-SELECT.TABLE-TYPE' | translate}}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-icon>{{getIconForType(element.type)}}</mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="text">
+                    <mat-header-cell mat *matHeaderCellDef mat-sort-header>
+                        {{'CONTENT-DOCUMENT-SELECT.TABLE-NAME' | translate}}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">{{element.text}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayColumns" style="width: 100%;"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayColumns;" (click)="openRepository(row)"></mat-row>
+            </mat-table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons> </mat-paginator>
+    </mat-card-content>
+
+    <mat-card-actions class="actions">
+        <button mat-raised-button color="primary" *ngIf="currRootPath.length > 1" (click)="closeRepository()">
+            <mat-icon>arrow_back_ios</mat-icon>
+            <span>{{'CONTENT-DOCUMENT-SELECT.BACK' | translate}}</span>
+        </button>
+        <button mat-raised-button color="accent"
+            (click)="navigateToDocument(undefined)">{{'CONTENT-DOCUMENT-SELECT.CANCEL' | translate}}</button>
+    </mat-card-actions>
+</mat-card>

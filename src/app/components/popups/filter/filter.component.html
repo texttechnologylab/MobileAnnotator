@@ -1,0 +1,30 @@
+<div class="header">
+    <h3>{{'POPUP-FILTER.TITLE' | translate}}</h3>
+</div>
+
+<div class="content">
+    <mat-tab-group *ngIf="filter.length > 1">
+        <mat-tab class="contentholder" *ngFor="let filters of filter" [label]="filters[0] | translate">
+            <div *ngFor="let entry of filters[1]" class="entryDiv" [style.background]="entry.rgb"
+                (tap)="selected(entry)" [ngClass]="getClassesForEntry(entry)">
+                {{ entry.name }}
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+    <div *ngIf="filter.length === 1">
+        <div *ngFor="let entry of filter[0][1]" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+            [ngClass]="getClassesForEntry(entry)">
+            {{ entry.name }}
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+
+    <button mat-raised-button color="primary" style="width: 100%;"
+        (tap)="close()">{{'POPUP-FILTER.OK' | translate}}</button>
+
+    <button mat-stroked-button color="primary" style="width: 100%; margin-top: 2%;"
+        (tap)="unselectAll()">{{'POPUP-FILTER.UNSELECT' | translate}}</button>
+</div>

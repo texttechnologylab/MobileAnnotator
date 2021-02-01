@@ -1,0 +1,34 @@
+<div class="header">
+    <mat-slide-toggle [checked]="methapher" (change)="sliderChange(0, $event)" style="width: 100%;">
+        {{'POPUP-PICKER.METHAPHER' | translate}}
+    </mat-slide-toggle>
+    <mat-slide-toggle [checked]="metonym" (change)="sliderChange(1, $event)" style="width: 100%;">
+        {{'POPUP-PICKER.METONYM' | translate}}
+    </mat-slide-toggle>
+
+    <div *ngIf="lastAnnotations.length">
+        <h5>{{'POPUP-PICKER.LASTANNOS' | translate}}</h5>
+        <div *ngFor="let entry of lastAnnotations" class="entryDiv" [style.background]="entry.rgb"
+            (tap)="selected(entry)">
+            {{ entry.name }}
+        </div>
+    </div>
+</div>
+
+<mat-tab-group class="content">
+    <mat-tab [label]="'POPUP-PICKER.ANNOTATION-LABEL' | translate" class="contentholder">
+
+        <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+            <span>{{ entry.name }}</span>
+            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+        </div>
+    </mat-tab>
+    <mat-tab [label]="'POPUP-PICKER.CONCEPT-LABEL' | translate" class="contentholder">
+        <div *ngFor="let entry of concepts" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+            <span>{{ entry.name }}</span>
+            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+        </div>
+    </mat-tab>
+</mat-tab-group>

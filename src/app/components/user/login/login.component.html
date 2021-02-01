@@ -1,0 +1,26 @@
+<form #loginForm="ngForm" class="form" (ngSubmit)="login(false)" id="loginForm">
+    <mat-card>
+        <mat-card-title>{{ 'USER-LOGIN.TITLE' | translate}}</mat-card-title>
+        <mat-card-content class="content">
+            <div class="spinner-container" *ngIf="isWaiting">
+                <mat-spinner></mat-spinner>
+            </div>
+
+            <mat-form-field class="formfield">
+                <input matInput ngModel style="width: 100%" required placeholder="{{'USER-LOGIN.USERNAME' | translate}}"
+                    [(ngModel)]="username" name="username">
+            </mat-form-field>
+            <mat-form-field class="formfield">
+                <input matInput ngModel style="width: 100%" required type="password"
+                    placeholder="{{'USER-LOGIN.PASSWORD' | translate}}" [(ngModel)]="password" name="password">
+            </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end" class="actions">
+            <button mat-raised-button type="submit" form="loginForm" [disabled]="loginForm.form.invalid"
+                color="primary">
+                {{ 'USER-LOGIN.LOGIN' | translate}} </button>
+            <button mat-raised-button type="button" (click)="loginAsPublic()" form="loginForm" color="accent">
+                {{ 'USER-LOGIN.GUEST' | translate}} </button>
+        </mat-card-actions>
+    </mat-card>
+</form>

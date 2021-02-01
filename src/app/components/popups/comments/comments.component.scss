@@ -1,0 +1,30 @@
+.contentholder {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+.entryDiv {
+    padding: 0.2em;
+    margin: 0.2em;
+    text-align: left;
+    box-shadow: 0 2px 5px 0 rgba(52,47,51,.63);
+    overflow-x: hidden;
+}
+
+.header {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.content {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

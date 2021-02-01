@@ -1,0 +1,31 @@
+.snackContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  mat-icon {
+    margin-right: .5em;
+  }
+}
+
+.snackText {
+  * {
+    margin: 0;
+  }
+}
+
+.error {
+  color: #B3062C;
+}
+
+.info {
+  color: #48A9DA;
+}
+
+.success {
+    color: #A5AB52;
+}
+
+.warning {
+  color: #C96215;
+}

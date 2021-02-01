@@ -1,0 +1,56 @@
+<div class="header">
+    <h3>{{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-TITLE' | translate}}</h3>
+
+    <mat-card>
+        <mat-card-content>
+            <mat-form-field>
+                <mat-label>{{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-SOURCE' | translate}}</mat-label>
+                <mat-select [(value)]="selectedSource">
+                    <mat-option [value]="entry" *ngFor="let entry of searchSources">
+                        {{entry.label}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>{{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-INPUT' | translate}}</mat-label>
+                <input matInput [(ngModel)]="input" cdkTextareaAutosize cdkAutosizeMaxRows="3" cdkAutosizeMinRows="3"
+                    style="width: 100%;" />
+            </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions>
+            <button mat-raised-button style="width: 100%;" color="accent" (tap)="search()">
+                <span>{{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-SEARCH' | translate}}</span>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+
+    <h4>{{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-SEARCHRESULT' | translate}}</h4>
+</div>
+
+<mat-accordion class="content">
+
+    <mat-expansion-panel *ngFor="let entry of searchResult">
+        <mat-expansion-panel-header>
+            <img [src]="entry.image" style="max-width: 32px; max-height: 32px;" />
+            <span>{{entry.label}}</span>
+        </mat-expansion-panel-header>
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <img [src]="entry.image" *ngIf="entry.image" style="max-height: 90%; width: 30%;" fxFlex="none" />
+            <div fxFlex="grow">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <mat-form-field fxFlex="grow">
+                        <input matInput readonly="true" style="text-align: center;" [value]="entry.label" />
+                        <mat-label style="padding-left: 3%;">{{entry.identifier}}</mat-label>
+                    </mat-form-field>
+                </div>
+                <textarea matInput cdkTextareaAutosize readonly="true" #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="3" cdkAutosizeMaxRows="8"
+                    style="width: 96%; padding: 2%;">{{entry.text}}</textarea>
+            </div>
+        </div>
+        <button mat-raised-button color="primary" style="width: 100%;" (click)="select(entry)">
+            {{'TOOL-KNOWLEDGEBASE.KNOWLEDGE-PICKER-PICK' | translate}}
+        </button>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,46 @@
+.contentholder {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+.entryDiv {
+    border-radius: 9%;
+    padding: 0.2em;
+    margin: 0.2em;
+    text-align: center;
+    box-shadow: 0 2px 5px 0 rgba(52,47,51,.63);
+}
+
+.highlight {
+    border: 0.3em solid black;
+}
+
+.filtered {
+    opacity: 0.75;
+}
+
+.header {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.content {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-bottom: 2%;
+    border-bottom: 2px solid darkgray;
+}
+
+.footer {
+    padding-top: 2%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

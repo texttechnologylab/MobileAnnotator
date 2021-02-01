@@ -1,0 +1,25 @@
+.contentholder {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+.header {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 1%;
+}
+
+.content {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 1%;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}

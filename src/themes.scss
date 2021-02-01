@@ -1,0 +1,141 @@
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+
+/* Goethe University Frankfurt Colors*/
+$bluePrimary: #00618F; // Goethe-Blau
+$blueSecondary: #48A9DA; // Lichtblau
+$greenPrimary: #737C45; // Grün
+$greenSecondary: #A5AB52; // Helles Grün
+$yellowPrimary: #E3BA0F; // Senfgelb
+$yellowSecondary: #F7D926; // Sonnengelb
+$redPrimary: #B3062C; // Emo-Rot
+$orangePrimary: #C96215; // Orange
+$purplePrimary: #860047; // Purple
+$purpleSecondary: #AD3B76; // Magenta
+$whitePrimary: #F8F6F5; // Hellgrau
+$whiteSecondary: #E4E3DD; // Sandgrau
+$blackPrimary: #4D4B46; // Dunkelgrau
+
+$md-goetheblue: (
+    50 : #e0ecf2,
+    100 : #b3d0dd,
+    200 : #80b0c7,
+    300 : #4d90b1,
+    400 : #2679a0,
+    500 : #00618f,
+    600 : #005987,
+    700 : #004f7c,
+    800 : #004572,
+    900 : #003360,
+    A100 : #90c2ff,
+    A200 : #5da6ff,
+    A400 : #2a8aff,
+    A700 : #117cff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$md-lightgreen: (
+    50 : #f4f5ea,
+    100 : #e4e6cb,
+    200 : #d2d5a9,
+    300 : #c0c486,
+    400 : #b3b86c,
+    500 : #a5ab52,
+    600 : #9da44b,
+    700 : #939a41,
+    800 : #8a9138,
+    900 : #798028,
+    A100 : #faffc3,
+    A200 : #f5ff90,
+    A400 : #f0ff5d,
+    A700 : #eeff44,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-emored: (
+    50 : #f6e1e6,
+    100 : #e8b4c0,
+    200 : #d98396,
+    300 : #ca516b,
+    400 : #be2b4c,
+    500 : #b3062c,
+    600 : #ac0527,
+    700 : #a30421,
+    800 : #9a031b,
+    900 : #8b0210,
+    A100 : #ffb7bb,
+    A200 : #ff848b,
+    A400 : #ff515a,
+    A700 : #ff3742,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #ffffff,
+    )
+);
+
+$primary: mat-palette($md-goetheblue);
+$accent:  mat-palette($md-lightgreen);
+
+// The warn palette is optional (defaults to red).
+$warn:    mat-palette($md-emored);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$textanno-theme: mat-light-theme($primary, $accent, $warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($textanno-theme);
+

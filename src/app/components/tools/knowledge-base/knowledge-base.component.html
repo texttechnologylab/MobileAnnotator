@@ -1,0 +1,61 @@
+<app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-KNOWLEDGEBASE.TITLE'" (menuEvent)="onMenuSelect($event)">
+</app-tool-bar>
+
+<app-contentholder class="content" [inData]="data" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
+    (createMultiToken)="createMultiToken($event)" (removeMultiToken)="removeMultiToken($event)" [showLastTapped]="true"
+    [inAnnotations]="annoData" [filters]="activeFilters">
+</app-contentholder>
+
+<div class="footer" fxLayout="column" fxLayoutAlign="start center">
+    <button mat-raised-button color="accent" class="fillWidth" fxFlex="none" (click)="createAnnotation()"
+        [disabled]="selectedElement == null">{{'TOOL-KNOWLEDGEBASE.NEW-ANNO' | translate}}</button>
+
+    <div style="overflow-y: auto; width: 100%;">
+        <table mat-table [dataSource]="annotationDataSource" class="mat-elevation-z8 fillWidth" fxFlex="grow"
+            style="overflow-y: auto;" multiTemplateDataRows>
+            <ng-container matColumnDef="icon">
+                <td mat-cell *matCellDef="let element" [style.border-left]="'10px solid ' + element.rgb">
+                    <img *ngIf="element.icon" [src]="element.icon" style="max-height: 32px; max-width: 32px;" />
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="source">
+                <td mat-cell *matCellDef="let element">
+                    <span>{{element.source}}</span>
+                    <mat-icon *ngIf="element.userAnnotation" style="vertical-align: bottom;">person</mat-icon>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expanded">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
+                    <div fxLayout="row" fxLayoutAlign="center start">
+                        <img [src]="element.extended.image" *ngIf="element.extended.image"
+                            style="max-height: 90%; width: 30%;" fxFlex="none" />
+                        <div fxFlex="grow">
+                            <div fxLayout="row" fxLayoutAlign="center center">
+                                <mat-form-field fxFlex="grow">
+                                    <input matInput readonly="true" style="text-align: center;"
+                                        [value]="element.extended.label" />
+                                    <mat-label style="padding-left: 3%;">{{element.identifier}}</mat-label>
+                                </mat-form-field>
+                                <button mat-icon-button fxFlex="none" (tap)="removeAnnotation(element)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                            <textarea matInput cdkTextareaAutosize readonly="true" #autosize="cdkTextareaAutosize"
+                                cdkAutosizeMinRows="3" cdkAutosizeMaxRows="8"
+                                style="width: 96%; padding: 2%;">{{element.extended.text}}</textarea>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-row *matRowDef="let row; columns: columns" class="example-element-row"
+                [class.example-element-row]="isExpanded(0,row)" (click)="expand(row)">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expanded']; when: isExpanded.bind(this)"
+                class="example-detail-row">
+            </tr>
+        </table>
+    </div>
+</div>

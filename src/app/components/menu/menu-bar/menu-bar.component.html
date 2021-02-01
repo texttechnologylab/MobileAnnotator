@@ -1,0 +1,33 @@
+<mat-toolbar *ngIf="isVisible" class="mat-elevation-z8" color="primary" fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="grow" (click)="navigateDefault()">
+        {{'MENU-BAR.TITLE' | translate}}
+    </div>
+
+    <mat-form-field fxFlex="none" class="select">
+        <mat-select (selectionChange)="changeLanguage($event.value.value)" [(value)]="selectedValue"
+            class="selectOption">
+            <mat-select-trigger *ngIf="selectedValue">
+                {{selectedValue.short}}
+            </mat-select-trigger>
+            <mat-option *ngFor='let lang of languages' [value]="lang" class="selectOption">
+                <img src="{{'assets/flags/' + lang.icon}}" class="image" />
+                <span>{{lang.label}}</span>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-mini-fab color="accent" fxFlex="none" [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="isLoggedIn" (click)="logout()">
+            <mat-icon>power_settings_new</mat-icon>
+            <span>{{'MENU-BAR.LOGOUT' | translate}}</span>
+        </button>
+        <button mat-menu-item (click)="navigateDefault()">
+            <mat-icon>dashboard</mat-icon>
+            <span>{{'USER-DASHBOARD.TITLE' | translate}}</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>

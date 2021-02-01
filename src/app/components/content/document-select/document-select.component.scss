@@ -1,0 +1,21 @@
+.content {
+    width: 100%;
+}
+
+.actions {
+    text-align: right;
+}
+
+.mat-header-cell:first-child,.mat-cell:first-child{
+    width: 3em;
+    flex: 0 1 auto;
+}
+
+.mat-header-cell:nth-child(2),.mat-cell:nth-child(2){
+    width: 3em;
+    flex: 0 1 auto;
+}
+
+.mat-header-cell:last-child,.mat-cell:last-child{
+    flex: 1 0 auto;
+}

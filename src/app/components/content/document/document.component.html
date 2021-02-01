@@ -1,0 +1,43 @@
+<mat-card>
+    <div class="spinner-container" *ngIf="isWaiting">
+        <mat-spinner></mat-spinner>
+    </div>
+
+    <mat-card-content>
+        <mat-form-field appearance="outline" style="width: 100%;">
+            <mat-label>{{ 'CONTENT-DOCUMENT.CAS' | translate}}</mat-label>
+            <input matInput disabled="true" style="color: black;"
+                [value]="cas ? cas.name : 'CONTENT-DOCUMENT.NO-CAS' | translate">
+            <mat-icon matSuffix (click)="selectDocument()">folder_open</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="cas" appearance="outline" style="width: 100%;">
+            <mat-label>{{ 'CONTENT-DOCUMENT.VIEW' | translate}}</mat-label>
+            <mat-select [(ngModel)]="currentView" (selectionChange)="viewSelected($event)">
+                <mat-option *ngFor="let view of views" [value]="view">
+                    {{view.label | translate}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="currentView" appearance="outline" style="width: 100%;">
+            <mat-label>{{ 'CONTENT-DOCUMENT.TOOL' | translate}}</mat-label>
+            <mat-select (selectionChange)="openTool($event.value)">
+                <mat-option *ngFor="let tool of toolService.toolSelection" [value]="tool">
+                    {{tool.label | translate}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </mat-card-content>
+</mat-card>
+
+<div *ngIf="cas">
+    <mat-card>
+        <mat-card-title>{{ 'CONTENT-DOCUMENT.TEXT' | translate }}</mat-card-title>
+
+        <mat-card-content>
+            <textarea matInput cdkTextareaAutosize readonly="true" #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="3" style="width: 100%;">{{cas.text}}</textarea>
+        </mat-card-content>
+    </mat-card>
+</div>

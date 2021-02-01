@@ -1,0 +1,34 @@
+<div class="content">
+    <div class="contentholder" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')">
+        <div *ngFor="let entry of data" class="entryDiv" [style.background]="getBackground(entry)"
+            [style.border]="entry.border" [ngClass]="getClassesForEntry(entry)" (press)="multiSelect(entry, $event)"
+            (click)="onSelect(entry, $event)" [matBadge]="getBadgeValue(entry)" [matBadgeHidden]="isBadgeHidden(entry)"
+            matBadgeSize="small">
+            {{entry.label}} </div>
+    </div>
+    <div class="spacer" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')"> </div>
+</div>
+
+<div class="footer" fxLayout="row" fxLayoutAlign="center center">
+    <button mat-icon-button fxFlex="none" [disabled]="page === 0" (click)="switchPage('fst')">
+        <mat-icon>skip_previous</mat-icon>
+    </button>
+    <button mat-icon-button fxFlex="none" [disabled]="page === 0" (click)="switchPage('-1')">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span fxFlex="grow" style="text-align: center;">{{ 'CONTENT-CONTENTHOLDER.PAGE' | translate}}
+        {{ page + 1 }}/{{ maxPage + 1 }}</span>
+    <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('+1')">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('lst')">
+        <mat-icon>skip_next</mat-icon>
+    </button>
+</div>
+
+<div class="contextMenuContainer" #contextMenuContainer [matMenuTriggerFor]="contextMenu">
+    <mat-menu #contextMenu="matMenu">
+        <button mat-menu-item *ngFor="let entry of contextMenuEntries"
+            (click)="contextMenuEvent(entry)">{{entry | translate}}</button>
+    </mat-menu>
+</div>

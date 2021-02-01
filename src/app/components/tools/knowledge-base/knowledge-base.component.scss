@@ -1,0 +1,36 @@
+.toolbar {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.content {
+    overflow-y: auto;
+    height: 60%;
+    flex-grow: 1;
+}
+
+.footer {
+    overflow-y: auto;
+    height: 40%;
+    flex-grow: 1;
+}
+
+.fillWidth {
+    width: 98%;
+    margin: 1%;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
