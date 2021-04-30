@@ -25,3 +25,41 @@ Zunächst muss sichergestellt werden, dass alle nötigen Pakete lokal vorliegen.
 
 Anschließend lässt sich über `yarn start` die Anwendung bauen und über *localhost:4200* aufrufen.
 Für das Bauen der Anwendung, um sie zum Beispiel auf einem Server produktiv zu schalten, muss statt dessen der Befehl `yarn prodbuild` ausgeführt werden. Die gebaute Anwendung ist nach Abschluss des Vorgangs im *dist/* Verzeichnis zu finden.
+
+
+# Cite
+If you want to use the Project, please quote this as follows:
+
+Pascal Adeberg. MobileAnnotator : eine App für den TextAnnotator , bachelor’s thesis, Johann Wolfgang Goethe-Universität, Frankfurt, Germany, 2020. 
+http://publikationen.ub.uni-frankfurt.de/files/57150/Thesis2.pdf
+
+G. Abrami, A. Henlein, A. Lücking, A. Kett, P. Adeberg, and A. Mehler, “Unleashing annotations with TextAnnotator: Multimedia, multi-perspective document views for ubiquitous annotation,” in Proceedings of the Seventeenth Joint ACL – ISO Workshop on Interoperable Semantic Annotation (ISA-17), 2021. accepted
+
+# BibTeX
+```
+@thesis{Adeberg:2020,
+  address = {Frankfurt, Germany},
+  author = {Adeberg, Pascal},
+  institution = {Institute of Computer Science and Mathematics, Text Technology Lab},
+  pdf = {http://publikationen.ub.uni-frankfurt.de/files/57150/Thesis2.pdf},
+  school = {Johann Wolfgang Goethe-Universit{\"a}t},
+  title = {MobileAnnotator : eine App f{\"u}r den TextAnnotator},
+  type = {bachelor's thesis},
+  url = {http://publikationen.ub.uni-frankfurt.de/frontdoor/index/index/docId/57150},
+  year = {2020}
+}
+
+@InProceedings{Abrami:et:al:2021,
+  Author         = {Abrami, Giuseppe and Henlein, Alexander and Lücking, Andy and Kett, Attila and Adeberg, Pascal and Mehler, Alexander},
+  Title          = {Unleashing annotations with {TextAnnotator}: Multimedia, multi-perspective document views for ubiquitous annotation},
+  BookTitle      = {Proceedings of the Seventeenth Joint ACL - ISO Workshop on Interoperable Semantic Annotation (ISA-17)},
+  Series         = {ISA-17},
+  location       = {Groningen, Netherlands},
+  month     = {June},
+  year           = {2021},
+  note = {accepted}
+}
+
+
+
+```
