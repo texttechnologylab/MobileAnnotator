@@ -1,5 +1,7 @@
 # MobileAnnotator
 
+Test1234
+
 Dieses Projekt ist im Zuge einer Bachelorarbeit entstanden und wurde von Pascal Adeberg in Zusammenarbeit mit dem TextTechnologyLab der Goethe Universität Frankfurt (Main) entwickelt.
 
 ## Hinweise für die Entwicklung
