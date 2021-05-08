@@ -31,20 +31,20 @@ Für das Bauen der Anwendung, um sie zum Beispiel auf einem Server produktiv zu 
 
 1) Download and install Visual Studio Code from 
 > code.visualstudio.com
-3) Download and install Node.js  from 
+2) Download and install Node.js  from 
 > nodejs.dev
-5) Download and install Yarn from 
+3) Download and install Yarn from 
 > classic.yarnpkg.com/en/
-7) Open the command line and copy this, then press enter
+4) Open the command line and copy this, then press enter
 > yarn global add @angular/cli ng config -g cli.packageManager yarn
-8) clone the github code (e.g. with the Github Desktop App)
-9) in the command line, change the directory to the directory of the mobile annotator files on your machine with
+5) clone the github code (e.g. with the Github Desktop App)
+6) in the command line, change the directory to the directory of the mobile annotator files on your machine with
 > cd <Path to your directory>
-10) now type in the command line and enter:
+7) now type in the command line and enter:
 > yarn
-11) now type in the command line and enter:
+8) now type in the command line and enter:
 > yarn start
-12) after it concluded loading, you can access the website in a browser of your choice with 
+9) after it concluded loading, you can access the website in a browser of your choice with 
 > localhost:4200 
 in the address field
 
