@@ -39,7 +39,7 @@ Für das Bauen der Anwendung, um sie zum Beispiel auf einem Server produktiv zu 
 > yarn global add @angular/cli ng config -g cli.packageManager yarn
 5) clone the github code (e.g. with the Github Desktop App)
 6) in the command line, change the directory to the directory of the mobile annotator files on your machine with
-> cd <Path to your directory>
+> cd Path_to_your_directory
 7) now type in the command line and enter:
 > yarn
 8) now type in the command line and enter:
