@@ -87,6 +87,17 @@
         "FILTER": "filter",
         "SAVE": "save"
     },
+    "TOOL-SEM-AF": {
+        "TITLE": "ISO Space Annotator",
+        "NOSELECT": "change annotation",
+        "ITEMS": "Items per page",
+        "MODES": "mode selection",
+        "MODE-ONE": "repeated anno.",
+        "MODE-TWO": "single anno.",
+        "MODE-THREE": "comments",
+        "FILTER": "filter",
+        "SAVE": "save"
+    },
     "TOOL-KNOWLEDGEBASE": {
         "TITLE": "KnowledgeBase",
         "ITEMS": "Items per page",

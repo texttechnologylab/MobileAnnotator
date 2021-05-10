@@ -16,6 +16,8 @@ export class ToolService {
   private implementedTools: IImplementedTool[] = [
     { label: 'TOOL-QUICKANNO.TITLE', url: ['/quickanno'], id: 'quickpanel' },
     { label: 'TOOL-KNOWLEDGEBASE.TITLE', url: ['/knowledgebase'], id: 'nel2panel' },
+    { label: 'TOOL-SEM-AF.TITLE', url: ['/sem-af'], id: 'semaf' },
+
   ];
 
   constructor(

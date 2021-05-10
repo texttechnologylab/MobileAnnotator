@@ -28,6 +28,10 @@ import { CommentsComponent } from './components/popups/comments/comments.compone
 import { KnowledgePickerComponent } from './components/tools/knowledge-base/knowledge-picker/knowledge-picker.component';
 import { ToolBarComponent } from './components/menu/tool-bar/tool-bar.component';
 
+
+import { SemAF } from './components/tools/sem-af/sem-af.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +49,8 @@ import { ToolBarComponent } from './components/menu/tool-bar/tool-bar.component'
     KnowledgeBaseComponent,
     CommentsComponent,
     KnowledgePickerComponent,
-    ToolBarComponent
+    ToolBarComponent,
+    SemAF
   ],
   imports: [
     BrowserModule,

@@ -35,6 +35,8 @@ export class TaskService {
 
   private getToolTitle(tool: string): string {
     switch (tool) {
+      case 'semaf':
+        return 'TOOL-SEM-AF.TITLE';
       case 'quickpanel':
         return 'TOOL-QUICKANNO.TITLE';
       case 'nel2panel':

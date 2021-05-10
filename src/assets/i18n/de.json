@@ -87,6 +87,17 @@
         "FILTER": "Filter",
         "SAVE": "Speichern"
     },
+    "TOOL-SEM-AF": {
+        "TITLE": "ISO Space Annotator",
+        "NOSELECT": "Annotation wählen",
+        "ITEMS": "Elemente pro Seite",
+        "MODES": "Modus Auswahl",
+        "MODE-ONE": "Mehrfache Anno.",
+        "MODE-TWO": "Einzelne Anno.",
+        "MODE-THREE": "Kommentare",
+        "FILTER": "Filter",
+        "SAVE": "Speichern"
+    },
     "TOOL-KNOWLEDGEBASE": {
         "TITLE": "KnowledgeBase",
         "ITEMS": "Elemente pro Seite",
