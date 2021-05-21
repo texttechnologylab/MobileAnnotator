@@ -5,7 +5,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     sort: 1,
-    concept: false,
+    concept: true,
     stype: 'ner',
     css: 'OTHER',
     value: 'I-Spatial-Entity',

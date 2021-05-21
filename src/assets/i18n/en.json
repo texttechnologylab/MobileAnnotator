@@ -98,6 +98,9 @@
         "FILTER": "filter",
         "SAVE": "save"
     },
+    "SEM-AF-POPUP-PICKER": {
+        "LINK-LABEL": "Link"
+    },
     "TOOL-KNOWLEDGEBASE": {
         "TITLE": "KnowledgeBase",
         "ITEMS": "Items per page",

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DocumentService, } from 'src/app/services/document.service';
 import { ITool, IToolElement } from 'src/app/services/interfaces';
 import { IContentholderData, IContentholderAnnotation } from '../../content/contentholder/contentholder.component';
-import { PickerComponent } from '../../popups/picker/picker.component';
+import { PickerComponent } from '../../popups/sem-af-picker/picker.component';
 import { IAnnotationClass, defaultAnnotationClasses } from './sem-af.utils';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { Subscription, PartialObserver } from 'rxjs';

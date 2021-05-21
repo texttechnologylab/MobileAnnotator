@@ -1,0 +1,27 @@
+<div class="header">
+    <div *ngIf="lastAnnotations.length">
+        <h5>{{'POPUP-PICKER.LASTANNOS' | translate}}</h5>
+        <div *ngFor="let entry of lastAnnotations" class="entryDiv" [style.background]="entry.rgb"
+            (tap)="selected(entry)">
+            {{ entry.name }}
+        </div>
+    </div>
+</div>
+
+<mat-tab-group class="content">
+    <mat-tab [label]="'POPUP-PICKER.ANNOTATION-LABEL' | translate" class="contentholder">
+
+        <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+            <span>{{ entry.name }}</span>
+            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+        </div>
+    </mat-tab>
+    <mat-tab [label]="'SEM-AF-POPUP-PICKER.LINK-LABEL' | translate" class="contentholder">
+        <div *ngFor="let entry of concepts" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+            <span>{{ entry.name }}</span>
+            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+        </div>
+    </mat-tab>
+</mat-tab-group>

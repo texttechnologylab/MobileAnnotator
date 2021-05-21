@@ -29,6 +29,9 @@ import { KnowledgePickerComponent } from './components/tools/knowledge-base/know
 import { ToolBarComponent } from './components/menu/tool-bar/tool-bar.component';
 
 
+import { PickerComponent as semafPickerComponent } from './components/popups/sem-af-picker/picker.component';
+
+
 import { SemAF } from './components/tools/sem-af/sem-af.component';
 
 
@@ -45,6 +48,7 @@ import { SemAF } from './components/tools/sem-af/sem-af.component';
     QuickAnnoComponent,
     LoadProgressComponent,
     PickerComponent,
+    semafPickerComponent,
     FilterComponent,
     KnowledgeBaseComponent,
     CommentsComponent,
@@ -74,6 +78,7 @@ import { SemAF } from './components/tools/sem-af/sem-af.component';
     DashboardComponent,
     LoadProgressComponent,
     PickerComponent,
+    semafPickerComponent,
     FilterComponent,
     CommentsComponent,
     KnowledgePickerComponent,
