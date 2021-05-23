@@ -17,6 +17,7 @@ export class PickerComponent implements OnInit {
   public metonym = false;
   public highlightAnnotation = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
+  public features_json: string;
 
   constructor(
     public dialogRef: MatDialogRef<PickerComponent>,
@@ -26,11 +27,23 @@ export class PickerComponent implements OnInit {
   public ngOnInit(): void {
     const annotationList = [];
     const conceptList = [];
-    const { entries, methapher, metonym, highlights, last } = this.data;
+    const { entries, methapher, metonym, highlights, last,features } = this.data;
     this.methapher = methapher;
     this.metonym = metonym;
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>(highlights || []);
+
+    var new_features = {}
+
+    for (const [key,value] of Object.entries(features["features"])) {
+      if(["end","begin"].includes(key)) continue; // end and begin are indexes should not be changed by user directly
+      if(value != "null") {
+        new_features[key] = value;
+      }
+    }
+
+    this.features_json = JSON.stringify(new_features,null,4);
+
 
     for (const entry of entries) {
       if (entry.concept) {
@@ -71,6 +84,7 @@ export interface IPickerData {
   methapher: boolean;
   highlights?: Array<[string, boolean]>;
   last: IPickerEntryData[];
+  features?: any;
 }
 
 export interface IPickerEntryData {

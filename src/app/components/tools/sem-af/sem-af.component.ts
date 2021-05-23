@@ -116,6 +116,7 @@ export class SemAF implements OnInit, OnDestroy {
         // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
         const picker = this.dialog.open(PickerComponent, {
           data: {
+            features: this.annoData[data.id].features,
             entries: defaultAnnotationClasses,
             methapher: this.methapher,
             metonym: this.metonym,
@@ -123,7 +124,8 @@ export class SemAF implements OnInit, OnDestroy {
             highlights: this.annoData[data.id] &&
               Object.entries(this.annoData[data.id].annotations).map(([type, array]) => [type, array.some(({ fp }) => fp)]) || [],
           },
-          height: 'inherit'
+          height: 'inherit',
+          
         });
         picker.afterClosed().subscribe((result) => {
           if (result) {
@@ -389,6 +391,7 @@ export class SemAF implements OnInit, OnDestroy {
               badge: 0,
               ref: id,
               annotations: {},
+              features: anno
             };
           }
           const entry = mapping[id];
