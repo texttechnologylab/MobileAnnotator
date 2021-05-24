@@ -24,7 +24,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   {
     rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.MetaLink',
+    type: 'org.texttechnologylab.annotation.semaf.meta.MetaLink',
     name: 'Meta Link',
     sort: 1,
     concept: true,
