@@ -16,6 +16,23 @@
             <span>{{ entry.name }}</span>
             <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
         </div>
+
+
+        <h2>Attributes</h2>
+        <form [formGroup]="profileForm">
+
+            <div *ngFor="let inp of text_inputs; index as i">
+                <mat-form-field  [floatLabel]="true" appearance="outline">
+                    <mat-label>{{inp.key}}</mat-label>
+                    <input matInput formControlName={{inp.key}} placeholder="Just a placeholder">
+                    <br />
+                </mat-form-field>
+            </div>
+        
+        
+            
+        </form>
+
     </mat-tab>
     <mat-tab [label]="'SEM-AF-POPUP-PICKER.LINK-LABEL' | translate" class="contentholder">
         <div *ngFor="let entry of concepts" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
@@ -27,4 +44,6 @@
 </mat-tab-group>
 
 
-<pre>{{ features_json }}</pre>
+
+
+

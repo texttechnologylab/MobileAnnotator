@@ -1,5 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+
 
 @Component({
   selector: 'app-picker',
@@ -17,7 +20,13 @@ export class PickerComponent implements OnInit {
   public metonym = false;
   public highlightAnnotation = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
-  public features_json: string;
+  public features_json: string = "";
+  public new_features = {}
+  public text_inputs : {key: string, value: string,org_string: string}[] = []
+
+  profileForm: FormGroup;
+
+
 
   constructor(
     public dialogRef: MatDialogRef<PickerComponent>,
@@ -27,22 +36,47 @@ export class PickerComponent implements OnInit {
   public ngOnInit(): void {
     const annotationList = [];
     const conceptList = [];
-    const { entries, methapher, metonym, highlights, last,features } = this.data;
+    const { entries, methapher, metonym, highlights, last, features } = this.data;
     this.methapher = methapher;
     this.metonym = metonym;
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>(highlights || []);
 
-    var new_features = {}
+    this.dialogRef.disableClose = true;//disable default close operation
+    this.dialogRef.backdropClick().subscribe(result => {
+      this.gather();
+      this.dialogRef.close([this.gather()]);
+    });
 
-    for (const [key,value] of Object.entries(features["features"])) {
-      if(["end","begin"].includes(key)) continue; // end and begin are indexes should not be changed by user directly
-      if(value != "null") {
-        new_features[key] = value;
+
+    var forms = {}
+
+    if (features["features"])
+      for (const [key, value] of Object.entries(features["features"])) {
+        if (["end", "begin"].includes(key)) continue; // end and begin are indexes should not be changed by user directly
+        if (value != "null") {
+          this.text_inputs.push({
+            key: key,
+            value: `${value}`,
+            org_string: `${value}`,
+          })
+          forms[key]= new FormControl(value)
+        }
       }
-    }
 
-    this.features_json = JSON.stringify(new_features,null,4);
+
+
+    
+
+
+    this.profileForm = new FormGroup(forms);
+    console.log(this.profileForm)
+
+
+    this.features_json = JSON.stringify(features, null, 4);
+    console.log(this.features_json)
+
+    this.new_features = features;
 
 
     for (const entry of entries) {
@@ -56,11 +90,23 @@ export class PickerComponent implements OnInit {
     this.concepts = conceptList.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
+  private gather(){
+    var new_features = {}
+    for (const elem of this.text_inputs) {
+      const val = this.profileForm.get(elem.key).value;
+      if(val != elem.org_string){
+        new_features[elem.key] = val;
+      }
+    }
+    return new_features;
+    console.log("Gather",JSON.stringify(new_features,null,4))
+  }
+
   /**
    * Schließen des Dialogs mit Übergabe der gewählten Kategorie
    */
   public selected(entry: IPickerEntryData): void {
-    this.dialogRef.close([entry, this.methapher, this.metonym]);
+    this.dialogRef.close([entry, this.methapher, this.metonym, this.new_features]);
   }
 
   /**

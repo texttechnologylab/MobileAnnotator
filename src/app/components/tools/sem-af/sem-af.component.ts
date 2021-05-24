@@ -116,7 +116,7 @@ export class SemAF implements OnInit, OnDestroy {
         // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
         const picker = this.dialog.open(PickerComponent, {
           data: {
-            features: this.annoData[data.id].features,
+            features: (this.annoData[data.id] || { features: {} }).features,
             entries: defaultAnnotationClasses,
             methapher: this.methapher,
             metonym: this.metonym,
@@ -125,12 +125,22 @@ export class SemAF implements OnInit, OnDestroy {
               Object.entries(this.annoData[data.id].annotations).map(([type, array]) => [type, array.some(({ fp }) => fp)]) || [],
           },
           height: 'inherit',
-          
+
         });
         picker.afterClosed().subscribe((result) => {
+          console.log("CLOSED!")
+          var new_features;
           if (result) {
-            [this.selectedAnnotation, this.methapher, this.metonym] = result;
-            this.handleAnnotationSelect(data, this.selectedAnnotation);
+            if (result.length == 1) {
+              if (this.annoData[data.id]) {
+                const addr = this.annoData[data.id].features["_addr"];
+                this.update_feature(addr,result[0])
+              }
+            } else {
+              [this.selectedAnnotation, this.methapher, this.metonym, new_features] = result;
+              this.handleAnnotationSelect(data, this.selectedAnnotation);
+            }
+
           }
         });
         break;
@@ -430,6 +440,7 @@ export class SemAF implements OnInit, OnDestroy {
       }
     }
 
+
     const index = this.lastAnnations.findIndex(({ type }) => type === annotationClass.type);
     if (index !== -1) {
       this.lastAnnations = [annotationClass, ...this.lastAnnations.filter(({ type }) => type !== annotationClass.type)];
@@ -437,22 +448,24 @@ export class SemAF implements OnInit, OnDestroy {
       this.lastAnnations.unshift(annotationClass);
       this.lastAnnations = this.lastAnnations.slice(0, 3);
     }
-    
+
     if (toRemove) {
       this.removeAnnotation(toRemove);
       //console.log("data remove:  ",JSON.stringify(toRemove));
     } else {
-      const all_annotations=this.annoData;
+      const all_annotations = this.annoData;
       //for annotation check if there are other annotations saved *by annoID, if yes remove, if no continue
       //console.log("alle",all_annotations);
       //console.log("data id", data.id);
-      for (const obj in all_annotations){
-        if(obj==data.id){
-          for (const obj in all_annotations[data.id].annotations){
+      for (const obj in all_annotations) {
+        if (obj == data.id) {
+          for (const obj in all_annotations[data.id].annotations) {
             //console.log("annoids", all_annotations[data.id].annotations[obj][0].id);
             this.removeallAnnotations(all_annotations[data.id].annotations[obj][0].id);
-          }}}
-            
+          }
+        }
+      }
+
       this.createAnnotation(data);
     }
   }
@@ -476,11 +489,27 @@ export class SemAF implements OnInit, OnDestroy {
     this.sendBatch([queue]);
   }
 
+
+  /**
+   * Updates features of a given addr
+   */
+  private update_feature(addr: number, features: {}): void {
+    const queue: IQueueElement = {
+      cmd: 'edit',
+      data: {
+        bid: '_b0_',
+        addr: `${addr}`,
+        features: features,
+      }
+    };
+    this.sendBatch([queue]);
+  }
+
   /**
    * Erzeugt eine Annotation
    */
   private createAnnotation(data: IContentholderData): void {
-    console.log("data:  ",JSON.stringify(data,null,4));
+    console.log("data:  ", JSON.stringify(data, null, 4));
     const queue: IQueueElement = {
       cmd: 'create',
       data: {
@@ -495,7 +524,7 @@ export class SemAF implements OnInit, OnDestroy {
         _type: this.selectedAnnotation.type,
       }
     };
-    console.log("queue:  ",JSON.stringify(queue,null,4));
+    console.log("queue:  ", JSON.stringify(queue, null, 4));
     this.sendBatch([queue]);
   }
 
@@ -513,11 +542,11 @@ export class SemAF implements OnInit, OnDestroy {
     this.sendBatch([queue]);
   }
 
-  
+
   /**
    * Remove all annotations
    */
-   private removeallAnnotations(addr: string): void {
+  private removeallAnnotations(addr: string): void {
     //console.log("Remove");
     //console.log("data remove:  ",JSON.stringify(data,null,4));
     //console.log(`${data._addr}`);
