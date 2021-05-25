@@ -8,42 +8,46 @@
     </div>
 </div>
 
-<mat-tab-group class="content">
-    <mat-tab [label]="'POPUP-PICKER.ANNOTATION-LABEL' | translate" class="contentholder">
 
-        <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
-            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
-            <span>{{ entry.name }}</span>
-            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
-        </div>
+<div>
+
+    <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+        [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+        <span>{{ entry.name }}</span>
+        <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+    </div>
 
 
+    <ng-container *ngIf="index != -1">
         <h2>Attributes</h2>
         <form [formGroup]="profileForm">
 
             <div *ngFor="let inp of text_inputs; index as i">
-                <mat-form-field  [floatLabel]="true" appearance="outline">
+                <mat-form-field [floatLabel]="true" appearance="outline">
                     <mat-label>{{inp.key}}</mat-label>
                     <input matInput formControlName={{inp.key}} placeholder="Just a placeholder">
                     <br />
                 </mat-form-field>
             </div>
-        
-        
-            
+
+            <ng-container *ngFor="let feature of features_typed">
+                <ng-container *ngIf="feature[1].type == 0">
+                    <mat-form-field [floatLabel]="true" appearance="outline">
+                        <mat-label>{{feature[1].display_name}}</mat-label>
+                        <mat-select formControlName={{feature[0]}}>
+                            <mat-option *ngFor="let feature_value of feature[1].select_option"
+                                [value]="feature_value.value">
+                                {{feature_value.display_name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-container>
+            </ng-container>
+
+
+
+
         </form>
+    </ng-container>
 
-    </mat-tab>
-    <mat-tab [label]="'SEM-AF-POPUP-PICKER.LINK-LABEL' | translate" class="contentholder">
-        <div *ngFor="let entry of concepts" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
-            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
-            <span>{{ entry.name }}</span>
-            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
-        </div>
-    </mat-tab>
-</mat-tab-group>
-
-
-
-
-
+</div>

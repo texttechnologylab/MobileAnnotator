@@ -9,5 +9,5 @@
 <div class="footer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode === 0">
     <button mat-stroked-button fxFlex="grow" style="margin: 1%;"
         [style.background]="selectedAnnotation && selectedAnnotation.rgb || '#FFFFFF'"
-        (click)="chooseClass()">{{ selectedAnnotation ? selectedAnnotation.name : ('TOOL-QUICKANNO.NOSELECT' | translate) }}</button>
+        >{{ selectedAnnotation ? selectedAnnotation.name : ('TOOL-QUICKANNO.NOSELECT' | translate) }}</button>
 </div>

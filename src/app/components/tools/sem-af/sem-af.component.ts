@@ -26,7 +26,6 @@ export class SemAF implements OnInit, OnDestroy {
 
   public data: IContentholderData[] = [];
   public annoData: { [id: string]: IContentholderAnnotation } = {};
-  public commentData: { [id: string]: IContentholderAnnotation } = {};
   public pageSizes = [35, 60, 100, 150, 250];
   public pageSize = this.pageSizes[0];
   public mode = 1;
@@ -38,8 +37,7 @@ export class SemAF implements OnInit, OnDestroy {
   private viewId: string;
   private tool: ITool;
 
-  private methapher = false;
-  private metonym = false;
+
   private subscriptions: Subscription[] = [];
   private lastAnnations: IAnnotationClass[] = [];
   private fingerprints = new Map<string, IFingerprint>();
@@ -118,8 +116,6 @@ export class SemAF implements OnInit, OnDestroy {
           data: {
             features: (this.annoData[data.id] || { features: {} }).features,
             entries: defaultAnnotationClasses,
-            methapher: this.methapher,
-            metonym: this.metonym,
             last: this.lastAnnations,
             highlights: this.annoData[data.id] &&
               Object.entries(this.annoData[data.id].annotations).map(([type, array]) => [type, array.some(({ fp }) => fp)]) || [],
@@ -133,48 +129,15 @@ export class SemAF implements OnInit, OnDestroy {
           if (result) {
             if (result.length == 1) {
               if (this.annoData[data.id]) {
+                if(Object.entries(result[0]).length == 0) return;
                 const addr = this.annoData[data.id].features["_addr"];
-                this.update_feature(addr,result[0])
+                this.update_feature(addr, result[0])
               }
             } else {
-              [this.selectedAnnotation, this.methapher, this.metonym, new_features] = result;
+              [this.selectedAnnotation, new_features] = result;
               this.handleAnnotationSelect(data, this.selectedAnnotation);
             }
 
-          }
-        });
-        break;
-
-      case 2:
-        // Modus: Kommentare lesen und schreiben
-        const comData = this.commentData[data.id];
-        const comments: ICommentData[] = [];
-        if (comData) {
-          for (const { id } of comData.annotations[commentType]) {
-            const fingerprint = this.fingerprints.get(id);
-            if (!fingerprint) {
-              continue;
-            }
-            const entry = getAnnotation(this.tool.toolElements[commentType][id]);
-            if (!entry) {
-              continue;
-            }
-
-            comments.push({
-              label: entry.features.label as string,
-              user: fingerprint.features.user,
-              create: fingerprint.features.create,
-            });
-          }
-        }
-
-        const comment = this.dialog.open(CommentsComponent, {
-          data: comments,
-          height: 'inherit'
-        });
-        comment.afterClosed().subscribe((result) => {
-          if (result) {
-            this.createComment(data, result);
           }
         });
         break;
@@ -185,30 +148,12 @@ export class SemAF implements OnInit, OnDestroy {
     this.pageSize = num;
   }
 
-  public chooseClass(): void {
-    const picker = this.dialog.open(PickerComponent, {
-      data: {
-        entries: defaultAnnotationClasses,
-        methapher: this.methapher,
-        metonym: this.metonym,
-        last: this.lastAnnations,
-      },
-      height: 'inherit'
-    });
-    picker.afterClosed().subscribe((result) => {
-      if (result) {
-        [this.selectedAnnotation, this.methapher, this.metonym] = result;
-      }
-    });
-  }
+
 
   public openFilterSelection(): void {
     const filterData = {
       type: 'multi',
-      data: {
-        'POPUP-FILTER.ANNOTATION-LABEL': defaultAnnotationClasses.filter(({ concept }) => !concept),
-        'POPUP-FILTER.CONCEPT-LABEL': defaultAnnotationClasses.filter(({ concept }) => concept),
-      },
+      data: {},
     };
 
     const filter = this.dialog.open(FilterComponent, {
@@ -340,7 +285,6 @@ export class SemAF implements OnInit, OnDestroy {
     const tokens = this.tool.toolElements[quickTreeType] || {};
     const data: IContentholderData[] = [];
     const annotations: { [id: string]: IContentholderAnnotation } = {};
-    const comments: { [id: string]: IContentholderAnnotation } = {};
 
     for (const fingerprint of Object.values(this.tool.toolElements[fingerprintType] || {})) {
       const elem = getTypedAnnotation<IFingerprint>(fingerprint);
@@ -349,7 +293,7 @@ export class SemAF implements OnInit, OnDestroy {
       }
       this.fingerprints.set(`${elem.features.reference}`, elem);
     }
-
+    
     for (const [id, anno] of Object.entries(tokens)) {
       const token = getAnnotation(anno);
       if (!token || token.features.parent !== 'null') {
@@ -372,9 +316,9 @@ export class SemAF implements OnInit, OnDestroy {
       });
     }
     // tslint:disable-next-line: max-line-length
-    const types = [...defaultAnnotationClasses, { type: commentType, rgb: 'grey', concept: false }];
+    const types = [...defaultAnnotationClasses];
 
-    for (const { type, rgb, concept } of types) {
+    for (const { type, rgb } of types) {
       const typeAnnoations = this.tool.toolElements[type];
       if (!typeAnnoations) {
         continue;
@@ -393,7 +337,7 @@ export class SemAF implements OnInit, OnDestroy {
           continue;
         }
         for (const idx of idxArray) {
-          const mapping = type === commentType ? comments : annotations;
+          const mapping = annotations;
           const id = data[idx].id;
           if (!mapping[id]) {
             mapping[id] = {
@@ -406,7 +350,7 @@ export class SemAF implements OnInit, OnDestroy {
           }
           const entry = mapping[id];
           entry.rgb.push(rgb);
-          entry.border = concept ? '0.2em dashed darkgrey' : undefined;
+          //entry.border = concept ? '0.2em dashed darkgrey' : undefined;
           if (!entry.annotations[type]) {
             entry.annotations[type] = [];
           }
@@ -420,7 +364,6 @@ export class SemAF implements OnInit, OnDestroy {
 
     this.data = data.sort((a, b) => a.data.features.begin - b.data.features.begin);
     this.annoData = annotations;
-    this.commentData = comments;
   }
 
   private handleAnnotationSelect(data: IContentholderData, annotationClass: IAnnotationClass): void {
@@ -470,24 +413,6 @@ export class SemAF implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Erzeugt einen neuen Kommentar
-   */
-  private createComment(data: IContentholderData, str: string): void {
-    const queue: IQueueElement = {
-      cmd: 'create',
-      data: {
-        bid: '_b0_',
-        features: {
-          begin: data.data.features.begin,
-          end: data.data.features.end,
-          label: str,
-        },
-        _type: commentType,
-      }
-    };
-    this.sendBatch([queue]);
-  }
 
 
   /**
@@ -509,6 +434,17 @@ export class SemAF implements OnInit, OnDestroy {
    * Erzeugt eine Annotation
    */
   private createAnnotation(data: IContentholderData): void {
+    const abc: [string, (string | number | boolean)][]
+      = Object.entries(this.selectedAnnotation.features).map((x) => [x[0], x[1].value]);
+    // Convert (string,Feature)[] to (string,(string | number | boolean))[]
+
+    const featues = {
+      begin: data.data.features.begin,
+      end: data.data.features.end,
+      value: this.selectedAnnotation.features,
+    }
+
+
     console.log("data:  ", JSON.stringify(data, null, 4));
     const queue: IQueueElement = {
       cmd: 'create',
@@ -517,9 +453,7 @@ export class SemAF implements OnInit, OnDestroy {
         features: {
           begin: data.data.features.begin,
           end: data.data.features.end,
-          metaphor: this.methapher,
-          meonym: this.metonym,
-          value: this.selectedAnnotation.value,
+          value: this.selectedAnnotation.features,
         },
         _type: this.selectedAnnotation.type,
       }

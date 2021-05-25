@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature } from '../../tools/sem-af/sem-af.utils';
 
 
 @Component({
@@ -15,14 +16,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class PickerComponent implements OnInit {
 
   public annotations: IPickerEntryData[] = [];
-  public concepts: IPickerEntryData[] = [];
-  public methapher = false;
-  public metonym = false;
   public highlightAnnotation = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
   public features_json: string = "";
   public new_features = {}
-  public text_inputs : {key: string, value: string,org_string: string}[] = []
+  public text_inputs: { key: string, value: string, org_string: string }[] = []
+
+  public ft = FeatureType;
+
+  public features_typed: [string, Feature][]
+  public index: number;
 
   profileForm: FormGroup;
 
@@ -35,10 +38,7 @@ export class PickerComponent implements OnInit {
 
   public ngOnInit(): void {
     const annotationList = [];
-    const conceptList = [];
-    const { entries, methapher, metonym, highlights, last, features } = this.data;
-    this.methapher = methapher;
-    this.metonym = metonym;
+    const { entries, highlights, last, features } = this.data;
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>(highlights || []);
 
@@ -51,76 +51,108 @@ export class PickerComponent implements OnInit {
 
     var forms = {}
 
-    if (features["features"])
-      for (const [key, value] of Object.entries(features["features"])) {
-        if (["end", "begin"].includes(key)) continue; // end and begin are indexes should not be changed by user directly
-        if (value != "null") {
+
+    this.index = defaultAnnotationClasses.findIndex((x) => { return x.type == features["_type"] })
+    if (this.index != -1) {
+
+      const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
+      const featues = annon.features
+
+
+
+
+
+      console.log("featues", featues)
+      for (const [key, value] of Object.entries(featues)) {
+
+        if ((features["features"]) && !features["features"][key]) {
+          forms[key] = new FormControl(value.value)
+          console.log("forms: ", key, value.value)
+          if (featues[key].type == FeatureType.Text) {
+            this.text_inputs.push({
+              key: key,
+              value: `${value.value}`,
+              org_string: `${value.value}`,
+            })
+          }
+
+          continue;
+        }
+
+
+        featues[key].value = features["features"][key]
+        const text_value = featues[key].value;
+        if (featues[key].type == FeatureType.Text) {
           this.text_inputs.push({
             key: key,
-            value: `${value}`,
-            org_string: `${value}`,
+            value: `${text_value}`,
+            org_string: `${text_value}`,
           })
-          forms[key]= new FormControl(value)
+          forms[key] = new FormControl(text_value)
+          console.log("forms: ", key, text_value)
+        }
+        else if (featues[key].type == FeatureType.Select) {
+          forms[key] = new FormControl(text_value)
+          console.log("forms: ", key, text_value)
         }
       }
 
+      this.features_typed = Object.entries(featues);
+
+      const t = featues[0]
 
 
-    
+
+      console.log("annon", JSON.stringify(this.text_inputs, null, 4));
 
 
-    this.profileForm = new FormGroup(forms);
-    console.log(this.profileForm)
 
 
-    this.features_json = JSON.stringify(features, null, 4);
-    console.log(this.features_json)
 
-    this.new_features = features;
+      this.profileForm = new FormGroup(forms);
+      console.log(this.profileForm)
+
+
+      this.features_json = JSON.stringify(features, null, 4);
+      console.log(this.features_json)
+
+      this.new_features = features;
+    }
+    else {
+      this.profileForm = new FormGroup({})
+    }
 
 
     for (const entry of entries) {
-      if (entry.concept) {
-        conceptList.push(entry);
-      } else {
-        annotationList.push(entry);
-      }
+      annotationList.push(entry);
     }
     this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
-    this.concepts = conceptList.sort((a, b) => a.name < b.name ? -1 : 1);
   }
 
-  private gather(){
+  private gather() {
+    if(this.index == -1) return {};
     var new_features = {}
-    for (const elem of this.text_inputs) {
-      const val = this.profileForm.get(elem.key).value;
-      if(val != elem.org_string){
-        new_features[elem.key] = val;
+
+    console.log("controls", this.profileForm.controls)
+    for (const [key, elem] of Object.entries(this.profileForm.controls)) {
+      const val = this.profileForm.get(key).value;
+
+      if (this.profileForm.get(key).dirty) {
+        new_features[key] = val;
       }
     }
     return new_features;
-    console.log("Gather",JSON.stringify(new_features,null,4))
+    console.log("Gather", JSON.stringify(new_features, null, 4))
   }
 
   /**
    * Schließen des Dialogs mit Übergabe der gewählten Kategorie
    */
   public selected(entry: IPickerEntryData): void {
-    this.dialogRef.close([entry, this.methapher, this.metonym, this.new_features]);
+    this.dialogRef.close([entry, this.new_features]);
   }
 
-  /**
-   * Update der Slider für Methapher und Metonym
-   */
-  public sliderChange(id: number, event: { checked: boolean }): void {
-    switch (id) {
-      case 0:
-        this.methapher = event.checked;
-        break;
-      case 1:
-        this.metonym = event.checked;
-    }
-  }
+
 
 }
 
