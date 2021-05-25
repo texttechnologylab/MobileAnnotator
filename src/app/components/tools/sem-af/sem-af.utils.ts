@@ -67,7 +67,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   {
     rgb: 'rgb(120, 0, 40)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.Nonmotion_Event',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.NonMotionEvent',
     name: 'Nonmotion_Event',
     css_class: 'I-Nonmotion_Event',
     features: {}

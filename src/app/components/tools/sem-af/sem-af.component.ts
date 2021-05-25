@@ -64,6 +64,7 @@ export class SemAF implements OnInit, OnDestroy {
       }
     };
     this.route.queryParams.subscribe(paramObserver);
+    console.log({ 1: this.documentService.currentCAS.text })
 
     // Auf Änderungen des Dokuments reagieren
     const changeObserver: PartialObserver<void> = {
@@ -129,7 +130,7 @@ export class SemAF implements OnInit, OnDestroy {
           if (result) {
             if (result.length == 1) {
               if (this.annoData[data.id]) {
-                if(Object.entries(result[0]).length == 0) return;
+                if (Object.entries(result[0]).length == 0) return;
                 const addr = this.annoData[data.id].features["_addr"];
                 this.update_feature(addr, result[0])
               }
@@ -293,7 +294,9 @@ export class SemAF implements OnInit, OnDestroy {
       }
       this.fingerprints.set(`${elem.features.reference}`, elem);
     }
-    
+
+
+
     for (const [id, anno] of Object.entries(tokens)) {
       const token = getAnnotation(anno);
       if (!token || token.features.parent !== 'null') {
@@ -315,6 +318,7 @@ export class SemAF implements OnInit, OnDestroy {
         data: token,
       });
     }
+    console.log(data)
     // tslint:disable-next-line: max-line-length
     const types = [...defaultAnnotationClasses];
 
@@ -325,17 +329,59 @@ export class SemAF implements OnInit, OnDestroy {
       }
       for (const [annoId, anno] of Object.entries(typeAnnoations)) {
         const annotation = getAnnotation(anno);
+
         if (!annotation) {
           continue;
+        }
+
+        /** This tool was not designed for empty tokens, we create them in a hacky way. */
+        if (annotation.features.begin == annotation.features.end) {
+          const idx = data.length;
+          data.push({
+            label: "∅",
+            id: `do_not_use_${Math.floor(Math.random() * 10000)}`,
+            data: {
+              _addr: null,
+              _type: "org.texttechnologylab.annotation.type.QuickTreeNode",
+              features: {
+                begin:annotation.features.begin,
+                end:annotation.features.begin
+              }
+            },
+          });
+
+          const mapping = annotations;
+          const id = data[idx].id;
+          if (!mapping[id]) {
+            mapping[id] = {
+              rgb: [],
+              badge: 0,
+              ref: id,
+              annotations: {},
+              features: anno
+            };
+          }
+          const entry = mapping[id];
+          entry.rgb.push(rgb);
+          //entry.border = concept ? '0.2em dashed darkgrey' : undefined;
+          if (!entry.annotations[type]) {
+            entry.annotations[type] = [];
+          }
+          entry.annotations[type].push({ id: annoId, fp: this.fingerprints.has(annoId) });
+
         }
         const beginMap = tokenMap.get(annotation.features.begin);
         if (!beginMap) {
           continue;
         }
+
         const idxArray = beginMap.get(annotation.features.end);
         if (!idxArray) {
           continue;
         }
+
+
+
         for (const idx of idxArray) {
           const mapping = annotations;
           const id = data[idx].id;
