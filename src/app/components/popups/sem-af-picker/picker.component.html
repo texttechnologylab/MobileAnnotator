@@ -11,6 +11,7 @@
 
 <div>
 
+    <h2>Entities</h2>
     <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
         [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
         <span>{{ entry.name }}</span>

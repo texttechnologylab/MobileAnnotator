@@ -1,4 +1,4 @@
-export enum FeatureType{
+export enum FeatureType {
   /** Choose if There only limited options like Volume, Point, Area and Line */
   Select,
 
@@ -15,46 +15,46 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(177, 89, 40)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Place',
     name: 'Place',
     css_class: 'I-Place',
-    features:{
-      "dimensionality":{
+    features: {
+      "dimensionality": {
         display_name: "Dimensionality",
-        type:FeatureType.Select,
+        type: FeatureType.Select,
         value: "AREA",
         select_option: [{
-          display_name:"Area",
+          display_name: "Area",
           value: "AREA",
-          value_name:"AREA"
+          value_name: "AREA"
         },
         {
-          display_name:"Point",
+          display_name: "Point",
           value: "POINT",
-          value_name:"POINT"
+          value_name: "POINT"
         },
         {
-          display_name:"Line",
+          display_name: "Line",
           value: "LINE",
-          value_name:"LINE"
+          value_name: "LINE"
         },
         {
-          display_name:"Volume",
+          display_name: "Volume",
           value: "VOLUME",
-          value_name:"VOLUME"
+          value_name: "VOLUME"
         }
-      ]
-        
+        ]
+
       },
-    "comment":{
-      display_name: "Comment",
-      type: FeatureType.Text,
-      value:""
-    }
+      "comment": {
+        display_name: "Comment",
+        type: FeatureType.Text,
+        value: ""
+      }
     }
   },
 
@@ -63,14 +63,14 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
     name: 'Location',
     css_class: 'I-Location',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(120, 0, 40)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Nonmotion_Event',
     name: 'Nonmotion_Event',
     css_class: 'I-Nonmotion_Event',
-    features:{}
+    features: {}
   },
 
   {
@@ -78,73 +78,59 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
     name: 'Path',
     css_class: 'I-Path',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(250, 188, 46)',
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
     name: 'Event',
     css_class: 'I-Event',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(137,157,192)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Motion',
     name: 'Motion',
     css_class: 'I-Motion',
-    features:{}
+    features: {}
   },
-  
- 
+
+
   {
     rgb: 'rgb(131,50,50)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.URL',
     name: 'URL',
     css_class: 'URL',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(160,191,124)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
     css_class: 'I-UNK',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(252,157,154)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
     name: 'MRelation',
     css_class: 'I-UNK',
-    features:{}
+    features: {}
   },
   {
-    rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.CP',
-    name: 'CP',
-    css_class: 'I-CP',
-    features:{}
-  },
-  {
-    rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.Spatial_Signal',
+    rgb: 'purple',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialSignal',
     name: 'Spatial Signal',
-    css_class: 'I-Spatial_Signal',
-    features:{}
+    css_class: 'I-SpatialSignal',
+    features: {}
   },
   {
-    rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.Motion_Signal',
+    rgb: 'green',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.MotionSignal',
     name: 'Motion Signal',
-    css_class: 'I-Motion_Signal',
-    features:{}
-  },
-  {
-    rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.Spatial_Function',
-    name: 'Spatial Function',
-    css_class: 'I-Spatial_Function',
-    features:{}
-  },
+    css_class: 'I-MotionSignal',
+    features: {}
+  }
 ];
 
 
@@ -154,41 +140,41 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.QSLink',
     name: 'QSLink',
     css_class: 'I-QSLink',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.meta.MetaLink',
     name: 'Meta Link',
     css_class: 'I-MetaLink',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MeasureLink',
     name: 'Measure Link',
     css_class: 'I-MeasureLink',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MoveLink',
     name: 'Move Link',
     css_class: 'I-MoveLink',
-    features:{}
+    features: {}
   },
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.OLink',
     name: 'OLink',
     css_class: 'I-OLink',
-    features:{}
+    features: {}
   }
 ]
 
 
 
-export interface SelectOption{
+export interface SelectOption {
   /** Shoule be unique among the Array, does otherwise not mather */
   value_name: string
   value: boolean | string | number;
@@ -197,14 +183,14 @@ export interface SelectOption{
   display_name: string;
 }
 
-export interface Feature{
+export interface Feature {
   display_name: string;
   type: FeatureType;
   /** Should be the default to which it will be initialized */
   value: boolean | string | number;
 
   /** Options for the Select should be Empty if type is not Select */
-  select_option? : SelectOption[]
+  select_option?: SelectOption[]
 }
 
 
@@ -217,5 +203,5 @@ export interface IAnnotationClass {
   rgb: string;
   css_class: string;
   /** Should only contain features which are editable by the user like a comment for example  */
-  features: {  [name: string]: Feature  } ;
+  features: { [name: string]: Feature };
 }
