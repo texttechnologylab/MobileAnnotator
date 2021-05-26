@@ -73,12 +73,35 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     features: {}
   },
 
+/**
+ * {
+                    name: 'Dimensionality',
+                    uimaName: 'dimensionality',
+                    formElement: 'combobox',
+                    formCfg: { width: 268 },
+                    values: ['POINT', 'LINE', 'AREA', 'VOLUME']
+                }
+ */
+
   {
     rgb: 'rgb(233,234,192)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
     name: 'Path',
     css_class: 'I-Path',
-    features: {}
+    features: {
+      'dimensionality':{
+        display_name: 'Dimensionality',
+        type: FeatureType.Select,
+        value: "",
+        select_option: [
+          {
+            value: 'AREA',
+            display_name: 'Area',
+            value_name: "AREA"
+          }
+        ]
+      }
+    }
   },
   {
     rgb: 'rgb(250, 188, 46)',
