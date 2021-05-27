@@ -36,6 +36,7 @@
                     <mat-form-field [floatLabel]="true" appearance="outline">
                         <mat-label>{{feature[1].display_name}}</mat-label>
                         <mat-select formControlName={{feature[0]}}>
+                            <mat-option *ngIf="feature[1].not_nullable !== true" [value]="null"></mat-option>
                             <mat-option *ngFor="let feature_value of feature[1].select_option"
                                 [value]="feature_value.value">
                                 {{feature_value.display_name}}

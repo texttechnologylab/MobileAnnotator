@@ -17,7 +17,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
     features: {
-      
+
     }
   },
   /*place */
@@ -149,13 +149,13 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           display_name: "NAM",
           value: "NAM",
           value_name: "NAM"
-                }
+        }
         ]
       },
       "dcl": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
-        value: "False",
+        value: false,
         select_option: [{
           display_name: "False",
           value: false,
@@ -165,15 +165,17 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           display_name: "True",
           value: true,
           value_name: "TRUE"
-                }
-        ]
+        }
+        ],
+        not_nullable: true
+
       },
       "elevation": {/*option attribute*/
         display_name: "elevation",
         type: FeatureType.Text,
         value: ""
       }
-      
+
     }
   },
   /*location */
@@ -204,7 +206,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                       values: ['POINT', 'LINE', 'AREA', 'VOLUME']
                   }
    */
-/*path*/
+  /*path*/
   {
     rgb: 'rgb(233,234,192)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
@@ -244,7 +246,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             display_name: 'WATERWAY',
             value_name: "WATERWAY"
           },
-                    {
+          {
             display_name: "Railway",
             value: "RAILWAY",
             value_name: "RAILWAY"
@@ -253,12 +255,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             display_name: "Bridge",
             value: "BRIDGE",
             value_name: "BRIDGE"
-          },         
+          },
           {
             display_name: "Tunnel",
             value: "TUNNEL",
             value_name: "TUNNEL"
-          },        
+          },
           {
             display_name: "Road",
             value: "ROAD",
@@ -268,12 +270,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             display_name: "Lane",
             value: "LANE",
             value_name: "LANE"
-          },          
+          },
           {
             display_name: "Passage",
             value: "PASSAGE",
             value_name: "PASSAGE"
-          },          
+          },
           {
             display_name: "Trail",
             value: "TRAIL",
@@ -288,12 +290,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             display_name: "Margin",
             value: "MARGIN",
             value_name: "MARGIN"
-          },          
+          },
           {
             display_name: "Row",
             value: "ROW",
             value_name: "ROW"
-          },          
+          },
           {
             display_name: "Conduit",
             value: "CONDUIT",
@@ -327,13 +329,13 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: 'endID',
         type: FeatureType.Reference,
         value: "null",
-        
+
       },
       'midID': {/*Should add a list of midpoint locations*/
         display_name: 'midID',
         type: FeatureType.Reference,
         value: "null",
-        
+
       },
       "form": {
         display_name: "Form",
@@ -348,7 +350,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           display_name: "NAM",
           value: "NAM",
           value_name: "NAM"
-                }
+        }
         ]
       },
       "dcl": {/*Document Creation Location, default value：false*/
@@ -364,7 +366,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           display_name: "True",
           value: true,
           value_name: "TRUE"
-                }
+        }
         ]
       },
       "evevation": {/*option attribute*/
@@ -395,7 +397,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-Motion',
     features: {}
   },
-/*url*/
+  /*url*/
   {
     rgb: 'rgb(131,50,50)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.URL',
@@ -403,7 +405,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'URL',
     features: {}
   },
-/*measure*/
+  /*measure*/
   {
     rgb: 'rgb(160,191,124)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
@@ -495,6 +497,10 @@ export interface Feature {
 
   /** Options for the Select should be Empty if type is not Select */
   select_option?: SelectOption[]
+
+  /** There are Attributes like DCL where it can only be true or false, 
+   * null or empty is not option for these set this to true (only matters for Select)*/
+  not_nullable?: boolean;
 }
 
 

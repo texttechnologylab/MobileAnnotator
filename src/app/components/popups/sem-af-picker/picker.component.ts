@@ -92,7 +92,7 @@ export class PickerComponent implements OnInit {
           console.log("forms1: ", key, text_value)
         }
         else if (featues[key].type == FeatureType.Select) {
-          forms[key] = new FormControl(text_value)
+          forms[key] = new FormControl(text_value!== "" ? text_value : null)
           console.log("forms2: ", key, text_value,typeof(text_value))
         }
       }
