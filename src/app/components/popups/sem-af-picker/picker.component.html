@@ -31,7 +31,7 @@
                 </mat-form-field>
             </div>
 
-            <ng-container *ngFor="let feature of features_typed">
+            <div *ngFor="let feature of features_typed">
                 <ng-container *ngIf="feature[1].type == 0">
                     <mat-form-field [floatLabel]="true" appearance="outline">
                         <mat-label>{{feature[1].display_name}}</mat-label>
@@ -43,7 +43,7 @@
                         </mat-select>
                     </mat-form-field>
                 </ng-container>
-            </ng-container>
+            </div>
 
 
 
