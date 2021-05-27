@@ -152,18 +152,18 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                 }
         ]
       },
-      "DCL": {/*Document Creation Location, default value：false*/
+      "dcl": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
         value: "False",
         select_option: [{
           display_name: "False",
-          value: "FALSE",
+          value: false,
           value_name: "FALSE"
         },
         {
           display_name: "True",
-          value: "TRUE",
+          value: true,
           value_name: "TRUE"
                 }
         ]
@@ -351,18 +351,18 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                 }
         ]
       },
-      "DCL": {/*Document Creation Location, default value：false*/
+      "dcl": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
         value: "False",
         select_option: [{
           display_name: "False",
-          value: "FALSE",
+          value: false,
           value_name: "FALSE"
         },
         {
           display_name: "True",
-          value: "TRUE",
+          value: true,
           value_name: "TRUE"
                 }
         ]

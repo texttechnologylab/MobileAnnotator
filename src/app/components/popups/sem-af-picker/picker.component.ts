@@ -65,9 +65,9 @@ export class PickerComponent implements OnInit {
       console.log("featues", featues)
       for (const [key, value] of Object.entries(featues)) {
 
-        if ((features["features"]) && !features["features"][key]) {
+        if (("features" in features) && !(key in features["features"])) {
           forms[key] = new FormControl(value.value)
-          console.log("forms: ", key, value.value)
+          console.log("forms0: ", key, value.value,features["features"])
           if (featues[key].type == FeatureType.Text) {
             this.text_inputs.push({
               key: key,
@@ -89,11 +89,11 @@ export class PickerComponent implements OnInit {
             org_string: `${text_value}`,
           })
           forms[key] = new FormControl(text_value)
-          console.log("forms: ", key, text_value)
+          console.log("forms1: ", key, text_value)
         }
         else if (featues[key].type == FeatureType.Select) {
           forms[key] = new FormControl(text_value)
-          console.log("forms: ", key, text_value)
+          console.log("forms2: ", key, text_value,typeof(text_value))
         }
       }
 
