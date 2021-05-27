@@ -8,16 +8,114 @@ export enum FeatureType {
   /** Choose if the Feature is in Reference to another Entity like in Link the to and from Features*/
   Reference
 }
-
 export const defaultAnnotationClasses: IAnnotationClass[] = [
-  /*spatial entity */
+  /*spatial entity 'non-consuming tag'*/
   {
     rgb: 'rgb(235, 128, 82)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
     features: {
+      "dimensionality": {
+        display_name: "Dimensionality",
+        type: FeatureType.Select,
+        value: "Area",
+        select_option: [{
+          display_name: "Area",
+          value: "AREA",
+          value_name: "AREA"
+        },
+        {
+          display_name: "Point",
+          value: "POINT",
+          value_name: "POINT"
+        },
+        {
+          display_name: "Line",
+          value: "LINE",
+          value_name: "LINE"
+        },
+        {
+          display_name: "Volume",
+          value: "VOLUME",
+          value_name: "VOLUME"
+        }
+        ]
 
+      },
+      "comment": {
+        display_name: "Comment",
+        type: FeatureType.Text,
+        value: ""
+      },
+      "type": {
+        display_name: "Type",
+        type: FeatureType.Select,
+        value: "type",
+        select_option: [{/**maybe factor */
+          display_name: "Fac",
+          value: "FAC",
+          value_name: "FAC"
+        },
+        {
+          display_name: "Vehicle",
+          value: "VEHICLE",
+          value_name: "VEHICLE"
+        },
+        {
+          display_name: "Person",
+          value: "PERSON",
+          value_name: "PERSON"
+        },
+        {
+          display_name: "Dynamic Event",
+          value: "DYNAMIC_EVENT",
+          value_name: "DYNAMIC_EVENT"
+        },
+        {
+          display_name: "Artifact",
+          value: "ARTIFACT",
+          value_name: "ARTIFACT"
+        },
+        ]
+      },
+      "form": {
+        display_name: "Form",
+        type: FeatureType.Select,
+        value: "Form",
+        select_option: [{/*Nominal Form*/
+          display_name: "NOM",
+          value: "NOM",
+          value_name: "NOM"
+        },
+        {/*named location*/
+          display_name: "NAM",
+          value: "NAM",
+          value_name: "NAM"
+        }
+        ]
+      },
+      "countable": {
+        display_name: "Countable",
+        type: FeatureType.Select,
+        value: "Countable",
+        select_option: [{
+          display_name: "True",
+          value: true,
+          value_name: "TRUE"
+        },
+        {
+          display_name: "False",
+          value: false,
+          value_name: "FALSE"
+        }
+        ]
+      },
+      'mod': {/*a spatially relevant modifier*/
+        display_name: 'mod',
+        type: FeatureType.Text,
+        value: "",
+      },
     }
   },
   /*place */
@@ -166,9 +264,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: true,
           value_name: "TRUE"
         }
-        ],
-        not_nullable: true
-
+        ]
       },
       "elevation": {/*option attribute*/
         display_name: "elevation",
@@ -184,7 +280,93 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
     name: 'Location',
     css_class: 'I-Location',
-    features: {}
+    features: {
+      "dimensionality": {
+        display_name: "Dimensionality",
+        type: FeatureType.Select,
+        value: "Area",
+        select_option: [{
+          display_name: "Area",
+          value: "AREA",
+          value_name: "AREA"
+        },
+        {
+          display_name: "Point",
+          value: "POINT",
+          value_name: "POINT"
+        },
+        {
+          display_name: "Line",
+          value: "LINE",
+          value_name: "LINE"
+        },
+        {
+          display_name: "Volume",
+          value: "VOLUME",
+          value_name: "VOLUME"
+        }
+        ]
+
+      },
+      "comment": {
+        display_name: "Comment",
+        type: FeatureType.Text,
+        value: ""
+      },      
+      "form": {
+        display_name: "Form",
+        type: FeatureType.Select,
+        value: "Form",
+        select_option: [{/*Nominal Form*/
+          display_name: "NOM",
+          value: "NOM",
+          value_name: "NOM"
+        },
+        {/*named location*/
+          display_name: "NAM",
+          value: "NAM",
+          value_name: "NAM"
+        }
+        ]
+      },
+      "DCL": {/*Document Creation Location, default value：false*/
+        display_name: "DCL",
+        type: FeatureType.Select,
+        value: "False",
+        select_option: [{
+          display_name: "False",
+          value: false,
+          value_name: "FALSE"
+        },
+        {
+          display_name: "True",
+          value: true,
+          value_name: "TRUE"
+        }
+        ]
+      },
+      "countable": {
+        display_name: "Countable",
+        type: FeatureType.Select,
+        value: "Countable",
+        select_option: [{
+          display_name: "True",
+          value: true,
+          value_name: "TRUE"
+        },
+        {
+          display_name: "False",
+          value: false,
+          value_name: "FALSE"
+        }
+        ]
+      },
+      "evevation": {/*option attribute*/
+        display_name: "eveation",
+        type: FeatureType.Text,
+        value: ""
+      }
+    }
   },
   /*nonmotion event*/
   {
@@ -298,8 +480,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           },
           {
             display_name: "Conduit",
-            value: "CONDUIT",
-            value_name: "COUNDUIT"
+          value: "CONDUIT",
+          value_name: "COUNDUIT"
           },
           {
             display_name: "Filament",
@@ -512,6 +694,4 @@ export interface IAnnotationClass {
   /** Can be any css color, i think */
   rgb: string;
   css_class: string;
-  /** Should only contain features which are editable by the user like a comment for example  */
-  features: { [name: string]: Feature };
-}
+  /** Should only contain features which are editable by the user like a comment for example  */  features: { [name: string]: Feature };}
