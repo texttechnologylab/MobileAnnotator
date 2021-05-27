@@ -26,7 +26,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "dimensionality": {
         display_name: "Dimensionality",
         type: FeatureType.Select,
-        value: "AREA",
+        value: "Area",
         select_option: [{
           display_name: "Area",
           value: "AREA",
@@ -54,7 +54,122 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: "Comment",
         type: FeatureType.Text,
         value: ""
+      },
+      /*Refer to MAE Tool*/
+      "type": {
+        display_name: "Type",
+        type: FeatureType.Select,
+        value: "type",
+        select_option: [{
+          display_name: "Body of water",
+          value: "BODYOFWATER",
+          value_name: "BODYOFWATER"
+        },
+        {
+          display_name: "Celestial",
+          value: "CELESTIAL",
+          value_name: "CELESTIAL"
+        },
+        {
+          display_name: "Civil",
+          value: "CIVIL",
+          value_name: "CIVIL"
+        },
+        {
+          display_name: "Country",
+          value: "COUNTRY",
+          value_name: "COUNTRY"
+        },
+        {
+          display_name: "Grid",
+          value: "GRID",
+          value_name: "GRID"
+        },
+        {
+          display_name: "Latlong",
+          value: "LATLONG",
+          value_name: "LATLONG"
+        },
+        /* Didn't find any useful information to explain
+        {
+          display_name: "MTN",
+          value: "MTN",
+          value_name: "MTN"
+        },*/
+        {
+          display_name: "PostalCode",
+          value: "POSTALCODE",
+          value_name: "POSTALCODE"
+        }, {
+          display_name: "Postbox",
+          value: "POSTBOX",
+          value_name: "POSTBOX"
+        }, {/*private pilot license*/
+          display_name: "PPL",
+          value: "PPL",
+          value_name: "PPL"
+        }, {
+          display_name: "PPLA",
+          value: "PPLA",
+          value_name: "PPLA"
+        }, {
+          display_name: "PPLC",
+          value: "PPLC",
+          value_name: "PPLC"
+        }, {
+          display_name: "Region",
+          value: "REGION",
+          value_name: "REGION"
+        }, {
+          display_name: "State",
+          value: "STATE",
+          value_name: "STATE"
+        },
+        {/*Universal Transverse Mercator, UTM*/
+          display_name: "UTM",
+          value: "UTM",
+          value_name: "UTM"
+        },
+        ]
+      },
+      "form": {
+        display_name: "Form",
+        type: FeatureType.Select,
+        value: "Form",
+        select_option: [{/*Nominal Form*/
+          display_name: "NOM",
+          value: "NOM",
+          value_name: "NOM"
+        },
+        {/*named location*/
+          display_name: "NAM",
+          value: "NAM",
+          value_name: "NAM"
+                }
+        ]
+      },
+      "DCL": {/*Document Creation Location*/
+        display_name: "DCL",
+        type: FeatureType.Select,
+        value: "False",
+        select_option: [{
+          display_name: "False",
+          value: "FALSE",
+          value_name: "FALSE"
+        },
+        {
+          display_name: "True",
+          value: "TRUE",
+          value_name: "TRUE"
+                }
+        ]
+      },
+      "evevation": {/*option attribute*/
+        display_name: "eveation",
+        type: FeatureType.Text,
+        value: ""
       }
+      
     }
   },
 
@@ -70,18 +185,20 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.NonMotionEvent',
     name: 'Nonmotion_Event',
     css_class: 'I-Nonmotion_Event',
-    features: {}
+    features: {
+
+    }
   },
 
-/**
- * {
-                    name: 'Dimensionality',
-                    uimaName: 'dimensionality',
-                    formElement: 'combobox',
-                    formCfg: { width: 268 },
-                    values: ['POINT', 'LINE', 'AREA', 'VOLUME']
-                }
- */
+  /**
+   * {
+                      name: 'Dimensionality',
+                      uimaName: 'dimensionality',
+                      formElement: 'combobox',
+                      formCfg: { width: 268 },
+                      values: ['POINT', 'LINE', 'AREA', 'VOLUME']
+                  }
+   */
 
   {
     rgb: 'rgb(233,234,192)',
@@ -89,7 +206,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     name: 'Path',
     css_class: 'I-Path',
     features: {
-      'dimensionality':{
+      'dimensionality': {
         display_name: 'Dimensionality',
         type: FeatureType.Select,
         value: "",
@@ -98,8 +215,42 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             value: 'AREA',
             display_name: 'Area',
             value_name: "AREA"
+          },
+          {
+            display_name: "Point",
+            value: "POINT",
+            value_name: "POINT"
+          },
+          {
+            display_name: "Line",
+            value: "LINE",
+            value_name: "LINE"
+          },
+          {
+            display_name: "Volume",
+            value: "VOLUME",
+            value_name: "VOLUME"
           }
         ]
+
+      },
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      /*the following with 'reference' should be changed*/
+      'beginID': {
+        display_name: 'beginID',
+        type: FeatureType.Reference,
+        value: "null",
+        /*midID would be added later*/
+      },
+      'endID': {
+        display_name: 'endID',
+        type: FeatureType.Reference,
+        value: "null",
+        /*midID would be added later*/
       }
     }
   },
