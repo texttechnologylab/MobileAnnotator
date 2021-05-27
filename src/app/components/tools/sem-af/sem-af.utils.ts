@@ -363,8 +363,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         }
         ]
       },
-      "evevation": {/*option attribute*/
-        display_name: "eveation",
+      "elevation": {/*option attribute*/
+        display_name: "elevation",
         type: FeatureType.Text,
         value: ""
       }
@@ -554,8 +554,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         ],
         not_nullable: true
       },
-      "evevation": {/*option attribute*/
-        display_name: "eveation",
+      "elevation": {/*option attribute*/
+        display_name: "elevation",
         type: FeatureType.Text,
         value: ""
       },
@@ -572,7 +572,30 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
     name: 'Event',
     css_class: 'I-Event',
-    features: {}
+    features: {
+
+      'mod': {/*a spatially relevant modifier*/
+        display_name: 'mod',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "elevation": {/*option attribute*/
+        display_name: "elevation",
+        type: FeatureType.Text,
+        value: ""
+      },
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      'longtitude': {
+        display_name: 'long',
+        type: FeatureType.Text,
+        value: "",
+      },
+
+    }
   },
   /*motion*/
   {
@@ -582,13 +605,19 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-Motion',
     features: {}
   },
-  /*url*/
+  /*url Not yet defined in source file*/
   {
     rgb: 'rgb(131,50,50)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.URL',
     name: 'URL',
     css_class: 'URL',
-    features: {}
+    features: {
+      "comment": {/*option attribute*/
+        display_name: "Comment",
+        type: FeatureType.Text,
+        value: ""
+      }
+    }
   },
   /*measure*/
   {
@@ -596,7 +625,24 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
     css_class: 'I-UNK',
-    features: {}
+    features: {
+      "comment": {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      /*problem : only number allowed */
+      "value": {
+        display_name: 'Value',
+        type: FeatureType.Text,
+        value: 0,
+      },
+      "unit": {
+        display_name: 'unit',
+        type: FeatureType.Text,
+        value: "",
+      }
+    }
   },
   /*mrealation*/
   {
