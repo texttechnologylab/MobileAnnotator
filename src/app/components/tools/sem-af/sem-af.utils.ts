@@ -10,13 +10,17 @@ export enum FeatureType {
 }
 
 export const defaultAnnotationClasses: IAnnotationClass[] = [
+  /*spatial entity */
   {
     rgb: 'rgb(235, 128, 82)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
-    features: {}
+    features: {
+      
+    }
   },
+  /*place */
   {
     rgb: 'rgb(177, 89, 40)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Place',
@@ -148,7 +152,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                 }
         ]
       },
-      "DCL": {/*Document Creation Location*/
+      "DCL": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
         value: "False",
@@ -172,7 +176,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       
     }
   },
-
+  /*location */
   {
     rgb: 'rgb(120, 64, 40)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
@@ -180,6 +184,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-Location',
     features: {}
   },
+  /*nonmotion event*/
   {
     rgb: 'rgb(120, 0, 40)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.NonMotionEvent',
@@ -199,7 +204,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                       values: ['POINT', 'LINE', 'AREA', 'VOLUME']
                   }
    */
-
+/*path*/
   {
     rgb: 'rgb(233,234,192)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
@@ -216,11 +221,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             display_name: 'Area',
             value_name: "AREA"
           },
-          {
-            display_name: "Point",
-            value: "POINT",
-            value_name: "POINT"
-          },
+          /*point should never be a path* */
           {
             display_name: "Line",
             value: "LINE",
@@ -232,7 +233,83 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
             value_name: "VOLUME"
           }
         ]
-
+      },
+      'type': {
+        display_name: 'Type',
+        type: FeatureType.Select,
+        value: "",
+        select_option: [
+          {/*waterway or body of water*/
+            value: 'Waterway',
+            display_name: 'WATERWAY',
+            value_name: "WATERWAY"
+          },
+                    {
+            display_name: "Railway",
+            value: "RAILWAY",
+            value_name: "RAILWAY"
+          },
+          {
+            display_name: "Bridge",
+            value: "BRIDGE",
+            value_name: "BRIDGE"
+          },         
+          {
+            display_name: "Tunnel",
+            value: "TUNNEL",
+            value_name: "TUNNEL"
+          },        
+          {
+            display_name: "Road",
+            value: "ROAD",
+            value_name: "ROAD"
+          },
+          {
+            display_name: "Lane",
+            value: "LANE",
+            value_name: "LANE"
+          },          
+          {
+            display_name: "Passage",
+            value: "PASSAGE",
+            value_name: "PASSAGE"
+          },          
+          {
+            display_name: "Trail",
+            value: "TRAIL",
+            value_name: "TRAIL"
+          },
+          {
+            display_name: "Boundary",
+            value: "BOUNDARY",
+            value_name: "BOUNDARY"
+          },
+          {
+            display_name: "Margin",
+            value: "MARGIN",
+            value_name: "MARGIN"
+          },          
+          {
+            display_name: "Row",
+            value: "ROW",
+            value_name: "ROW"
+          },          
+          {
+            display_name: "Conduit",
+            value: "CONDUIT",
+            value_name: "COUNDUIT"
+          },
+          {
+            display_name: "Filament",
+            value: "FILAMENT",
+            value_name: "FILAMENT"
+          },
+          {
+            display_name: "Mountain",
+            value: "MOUNTAIN",
+            value_name: "MOUNTAIN"
+          }
+        ]
       },
       'comment': {
         display_name: 'Comment',
@@ -250,10 +327,59 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: 'endID',
         type: FeatureType.Reference,
         value: "null",
-        /*midID would be added later*/
-      }
+        
+      },
+      'midID': {/*Should add a list of midpoint locations*/
+        display_name: 'midID',
+        type: FeatureType.Reference,
+        value: "null",
+        
+      },
+      "form": {
+        display_name: "Form",
+        type: FeatureType.Select,
+        value: "Form",
+        select_option: [{/*Nominal Form*/
+          display_name: "NOM",
+          value: "NOM",
+          value_name: "NOM"
+        },
+        {/*named location*/
+          display_name: "NAM",
+          value: "NAM",
+          value_name: "NAM"
+                }
+        ]
+      },
+      "DCL": {/*Document Creation Location, default value：false*/
+        display_name: "DCL",
+        type: FeatureType.Select,
+        value: "False",
+        select_option: [{
+          display_name: "False",
+          value: "FALSE",
+          value_name: "FALSE"
+        },
+        {
+          display_name: "True",
+          value: "TRUE",
+          value_name: "TRUE"
+                }
+        ]
+      },
+      "evevation": {/*option attribute*/
+        display_name: "eveation",
+        type: FeatureType.Text,
+        value: ""
+      },
+      'mod': {/*a spatially relevant modifier*/
+        display_name: 'mod',
+        type: FeatureType.Text,
+        value: "",
+      },
     }
   },
+  /*event*/
   {
     rgb: 'rgb(250, 188, 46)',
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
@@ -261,6 +387,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-Event',
     features: {}
   },
+  /*motion*/
   {
     rgb: 'rgb(137,157,192)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Motion',
@@ -268,8 +395,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-Motion',
     features: {}
   },
-
-
+/*url*/
   {
     rgb: 'rgb(131,50,50)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.URL',
@@ -277,6 +403,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'URL',
     features: {}
   },
+/*measure*/
   {
     rgb: 'rgb(160,191,124)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
@@ -284,6 +411,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-UNK',
     features: {}
   },
+  /*mrealation*/
   {
     rgb: 'rgb(252,157,154)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
@@ -291,6 +419,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-UNK',
     features: {}
   },
+  /*spatial signal*/
   {
     rgb: 'purple',
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialSignal',
@@ -298,6 +427,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     css_class: 'I-SpatialSignal',
     features: {}
   },
+  /*motion signal*/
   {
     rgb: 'green',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MotionSignal',
