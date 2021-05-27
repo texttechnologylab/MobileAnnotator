@@ -264,7 +264,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: true,
           value_name: "TRUE"
         }
-        ]
+        ],
+        not_nullable: true
       },
       "elevation": {/*option attribute*/
         display_name: "elevation",
@@ -312,7 +313,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: "Comment",
         type: FeatureType.Text,
         value: ""
-      },      
+      },
       "form": {
         display_name: "Form",
         type: FeatureType.Select,
@@ -329,10 +330,10 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         }
         ]
       },
-      "DCL": {/*Document Creation Location, default value：false*/
+      "dcl": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
-        value: "False",
+        value: false,
         select_option: [{
           display_name: "False",
           value: false,
@@ -343,7 +344,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: true,
           value_name: "TRUE"
         }
-        ]
+        ],
+        not_nullable: true
       },
       "countable": {
         display_name: "Countable",
@@ -480,8 +482,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           },
           {
             display_name: "Conduit",
-          value: "CONDUIT",
-          value_name: "COUNDUIT"
+            value: "CONDUIT",
+            value_name: "COUNDUIT"
           },
           {
             display_name: "Filament",
@@ -538,7 +540,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "dcl": {/*Document Creation Location, default value：false*/
         display_name: "DCL",
         type: FeatureType.Select,
-        value: "False",
+        value: false,
         select_option: [{
           display_name: "False",
           value: false,
@@ -549,7 +551,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: true,
           value_name: "TRUE"
         }
-        ]
+        ],
+        not_nullable: true
       },
       "evevation": {/*option attribute*/
         display_name: "eveation",
@@ -694,4 +697,6 @@ export interface IAnnotationClass {
   /** Can be any css color, i think */
   rgb: string;
   css_class: string;
-  /** Should only contain features which are editable by the user like a comment for example  */  features: { [name: string]: Feature };}
+  /** Should only contain features which are editable by the user like a comment for example  */  
+  features: { [name: string]: Feature };
+}
