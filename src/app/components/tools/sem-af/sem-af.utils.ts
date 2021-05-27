@@ -101,12 +101,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "Countable",
         select_option: [{
           display_name: "True",
-          value: "TRUE",
+          value: true,
           value_name: "TRUE"
         },
         {
           display_name: "False",
-          value: "FALSE",
+          value: false,
           value_name: "FALSE"
         }
         ]
@@ -335,12 +335,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "False",
         select_option: [{
           display_name: "False",
-          value: "FALSE",
+          value: false,
           value_name: "FALSE"
         },
         {
           display_name: "True",
-          value: "TRUE",
+          value: true,
           value_name: "TRUE"
         }
         ]
@@ -351,12 +351,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "Countable",
         select_option: [{
           display_name: "True",
-          value: "TRUE",
+          value: true,
           value_name: "TRUE"
         },
         {
           display_name: "False",
-          value: "FALSE",
+          value: false,
           value_name: "FALSE"
         }
         ]
