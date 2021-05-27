@@ -168,8 +168,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                 }
         ]
       },
-      "evevation": {/*option attribute*/
-        display_name: "eveation",
+      "elevation": {/*option attribute*/
+        display_name: "elevation",
         type: FeatureType.Text,
         value: ""
       }
