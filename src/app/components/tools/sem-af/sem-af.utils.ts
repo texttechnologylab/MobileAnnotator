@@ -11,7 +11,7 @@ export enum FeatureType {
 export const defaultAnnotationClasses: IAnnotationClass[] = [
   /*spatial entity 'non-consuming tag'*/
   {
-    rgb: 'rgb(235, 128, 82)',
+    rgb: 'rgb(193,203,215)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
@@ -41,7 +41,6 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value_name: "VOLUME"
         }
         ]
-
       },
       "comment": {
         display_name: "Comment",
@@ -120,7 +119,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   /*place */
   {
-    rgb: 'rgb(177, 89, 40)',
+    rgb: 'rgb(175,176,178)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Place',
     name: 'Place',
     css_class: 'I-Place',
@@ -277,7 +276,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   /*location */
   {
-    rgb: 'rgb(120, 64, 40)',
+    rgb: 'rgb(224,229,223)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
     name: 'Location',
     css_class: 'I-Location',
@@ -339,7 +338,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: false,
           value_name: "FALSE"
         },
-        {
+         {
           display_name: "True",
           value: true,
           value_name: "TRUE"
@@ -370,13 +369,55 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       }
     }
   },
-  /*nonmotion event*/
+  /*nonmotion event<-->event path*/
   {
-    rgb: 'rgb(120, 0, 40)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.NonMotionEvent',
-    name: 'Nonmotion_Event',
-    css_class: 'I-Nonmotion_Event',
+    rgb: 'rgb(181,196,177)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
+    name: 'Event-Path',
+    css_class: 'I-eventpath',
     features: {
+      "trigger": {/*define it later */
+        display_name: "TRIGGER",
+        type: FeatureType.Reference,
+        value: "",        
+        not_nullable: true
+      },      
+      'beginID': {/*define it later */
+        display_name: 'beginID',
+        type: FeatureType.Reference,
+        value: "null",
+        /*midID would be added later*/
+      },
+      'endID': {/*define it later */
+        display_name: 'endID',
+        type: FeatureType.Reference,
+        value: "null",
+      },
+      'midID': {/*Should add a list of midpoint locations,define it later */
+        display_name: 'midID',
+        type: FeatureType.Reference,
+        value: "null",
+      },
+      "gazref": {/*define it later */
+        display_name: "GAZREF",
+        type: FeatureType.Text,
+        value: "",  
+      },
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      'longtitude': {
+        display_name: 'longtitude',
+        type: FeatureType.Text,
+        value: "",
+      },
+      'latitude': {
+        display_name: 'latitude',
+        type: FeatureType.Text,
+        value: "",
+      }
 
     }
   },
@@ -392,7 +433,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
    */
   /*path*/
   {
-    rgb: 'rgb(233,234,192)',
+    rgb: 'rgb(156,168,184)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
     name: 'Path',
     css_class: 'I-Path',
@@ -568,18 +609,17 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   /*event*/
   {
-    rgb: 'rgb(250, 188, 46)',
+    rgb: 'rgb(215,202,175)',
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
     name: 'Event',
     css_class: 'I-Event',
     features: {
-
       'mod': {/*a spatially relevant modifier*/
         display_name: 'mod',
         type: FeatureType.Text,
         value: "",
       },
-      "elevation": {/*option attribute*/
+      "elevation": {
         display_name: "elevation",
         type: FeatureType.Text,
         value: ""
@@ -590,24 +630,145 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       },
       'longtitude': {
-        display_name: 'long',
+        display_name: 'longtitude',
         type: FeatureType.Text,
         value: "",
       },
-
+      'latitude': {
+        display_name: 'latitude',
+        type: FeatureType.Text,
+        value: "",
+      }
     }
   },
   /*motion*/
   {
-    rgb: 'rgb(137,157,192)',
+    rgb: 'rgb(224,205,207)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Motion',
     name: 'Motion',
     css_class: 'I-Motion',
-    features: {}
+    features: {
+      "motion_type": {
+        display_name: "MOTION_TYPE",
+        type: FeatureType.Select,
+        value: "MOTION_TYPE",
+        select_option: [{
+          display_name: "Manner",
+          value: "MANNER",
+          value_name: "MANNER"
+        },
+        {
+          display_name: "Path",
+          value: "PATH",
+          value_name: "PATH"
+        }]
+      },
+      "motion_manner": {
+        display_name: "MOTION_MANNER",
+        type: FeatureType.Reference,
+        value: ""},
+        "motion_goal": {
+          display_name: "MOTION_GOAL",
+          type: FeatureType.Reference,
+          value: ""          
+        },
+        "motion_class": {
+          display_name: "MOTION_CLASS",
+          type: FeatureType.Select,
+          value: "MOTION_CLASS",
+          select_option: [{
+            display_name: "Move",
+            value: "MOVE",
+            value_name: "MOVE"
+          },
+          {
+            display_name: "Move External",
+            value: "MOVE_EXTERNAL",
+            value_name: "MOVE_EXTERNAL"
+          },
+          {
+            display_name: "Move Internal",
+            value: "MOVE_INTERNAL",
+            value_name: "MOVE_INTERNAL"
+          },
+          {
+            display_name: "Leave",
+            value: "LEAVE",
+            value_name: "LEAVE"
+          },
+          {
+            display_name: "Reach",
+            value: "REACH",
+            value_name: "REACH"
+          },
+          {
+            display_name: "Cross",
+            value: "CROSS",
+            value_name: "CROSS"
+          },
+          {
+            display_name: "Detach",
+            value: "DETACH",
+            value_name: "DETACH"
+          },
+          {
+            display_name: "Hit",
+            value: "HIT",
+            value_name: "HIT"
+          },
+          {
+            display_name: "Follow",
+            value: "FOLLOW",
+            value_name: "FOLLOW"
+          },
+          {
+            display_name: "Deviate",
+            value: "DEVIATE",
+            value_name: "DEVIATE"
+          },
+          {
+            display_name: "Stay",
+            value: "STAY",
+            value_name: "STAY"
+          }
+        ]
+        },
+        "motion_sense": {
+          display_name: "Motion Sense",
+          type: FeatureType.Select,
+          value: "MOTION_SENSE",
+          select_option: [{
+            display_name: "Litereal",
+            value: "LITEREAL",
+            value_name: "LITEREAL"
+          },
+          {
+            display_name: "Fictive",
+            value: "FICTIVE",
+            value_name: "FICTIVE"
+          },
+          {
+            display_name: "Intrinsic Change",
+            value: "INTRINSIC_CHANGE",
+            value_name: "INTEINSIC_CHANGE"
+          }]
+        },
+        'mod': {/*a spatially relevant modifier*/
+          display_name: 'mod',
+          type: FeatureType.Text,
+          value: "",
+        },
+        'comment': {
+          display_name: 'Comment',
+          type: FeatureType.Text,
+          value: "",
+        }
+
+    }
   },
   /*url Not yet defined in source file*/
   {
-    rgb: 'rgb(131,50,50)',
+    rgb: 'rgb(183,177,165)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.URL',
     name: 'URL',
     css_class: 'URL',
@@ -621,7 +782,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   },
   /*measure*/
   {
-    rgb: 'rgb(160,191,124)',
+    rgb: 'rgb(250,234,210)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
     css_class: 'I-UNK',
@@ -635,38 +796,94 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "value": {
         display_name: 'Value',
         type: FeatureType.Text,
-        value: 0,
+        value: "",
+        not_nullable: true
       },
       "unit": {
         display_name: 'unit',
         type: FeatureType.Text,
         value: "",
+
       }
     }
   },
-  /*mrealation*/
+  /*spatial signal<-->sRelation*/
   {
-    rgb: 'rgb(252,157,154)',
+    rgb: 'rgb(238,229,247)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.SRelation',
+    name: 'sRelation',
+    css_class: 'I-sRelation',
+    features: {
+      "comment": {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "cluster": {
+        display_name: 'Cluster',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "value": {
+        display_name: 'Value',
+        type: FeatureType.Text,
+        value: "",        
+      },
+      "type": {
+        display_name: "TYPE",
+        type: FeatureType.Select,
+        value: "TYPE",
+        select_option: [{
+          display_name: "Topological",
+          value: "TOPOLOGICAL",
+          value_name: "TOPOLOGICAL"
+        },
+        {
+          display_name: "Directional",
+          value: "DIRECTIONAL",
+          value_name: "DIRECTIONAL"
+        },
+        {
+          display_name: "Topo Directional",
+          value: "TOPO_DIRECTIONAL",
+          value_name: "TOPO_DIRECTIONAL"
+        },
+        {
+          display_name: "Path Defining",
+          value: "PATH_DEFINING",
+          value_name: "PATH_DEFINING"
+        },{
+          display_name: "Goal Defining",
+          value: "GOAL_DEFINING",
+          value_name: "GOAL_DEFINING"
+        }
+      ]
+      },
+    }
+  },
+  /*motion signal<-->mRelation*/
+  {
+    rgb: 'rgb(201,191,211)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
-    name: 'MRelation',
-    css_class: 'I-UNK',
-    features: {}
-  },
-  /*spatial signal*/
-  {
-    rgb: 'purple',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialSignal',
-    name: 'Spatial Signal',
-    css_class: 'I-SpatialSignal',
-    features: {}
-  },
-  /*motion signal*/
-  {
-    rgb: 'green',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.MotionSignal',
-    name: 'Motion Signal',
-    css_class: 'I-MotionSignal',
-    features: {}
+    name: 'mRelation',
+    css_class: 'I-mRelation',
+    features: {
+      "comment": {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "cluster": {
+        display_name: 'Cluster',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "value": {
+        display_name: 'Value',
+        type: FeatureType.Text,
+        value: "",        
+      }
+    }
   }
 ];
 
