@@ -485,20 +485,20 @@ export class SemAF implements OnInit, OnDestroy {
     const featues = {
       begin: data.data.features.begin,
       end: data.data.features.end,
-      value: this.selectedAnnotation.features,
     }
 
+    for (const [key,value] of abc) {
+      featues[key] = value
+    }
 
     console.log("data:  ", JSON.stringify(data, null, 4));
+    const features = {};
+
     const queue: IQueueElement = {
       cmd: 'create',
       data: {
         bid: '_b0_',
-        features: {
-          begin: data.data.features.begin,
-          end: data.data.features.end,
-          value: this.selectedAnnotation.features,
-        },
+        features: featues,
         _type: this.selectedAnnotation.type,
       }
     };
