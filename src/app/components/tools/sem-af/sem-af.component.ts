@@ -401,9 +401,7 @@ export class SemAF implements OnInit, OnDestroy {
             entry.annotations[type] = [];
           }
           entry.annotations[type].push({ id: annoId, fp: this.fingerprints.has(annoId) });
-          if (this.fingerprints.has(annoId)) {
-            ++entry.badge;
-          }
+          
         }
       }
     }
