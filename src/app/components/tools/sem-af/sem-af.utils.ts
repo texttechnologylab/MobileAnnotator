@@ -47,7 +47,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: ""
       },
-      "type": {
+      "spatial_entitiy_type": {
         display_name: "Type",
         type: FeatureType.Select,
         value: "type",
@@ -157,7 +157,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: ""
       },
       /*Refer to MAE Tool*/
-      "type": {
+      "spatial_entitiy_type": {
         display_name: "Type",
         type: FeatureType.Select,
         value: "type",
@@ -461,7 +461,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           }
         ]
       },
-      'type': {
+      'spatial_entitiy_type': {
         display_name: 'Type',
         type: FeatureType.Select,
         value: "",
@@ -829,7 +829,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",        
       },
-      "type": {
+      "spatial_entitiy_type": {
         display_name: "TYPE",
         type: FeatureType.Select,
         value: "TYPE",
