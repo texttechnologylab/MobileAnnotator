@@ -39,7 +39,12 @@
 
 .entryDiv {
     border-radius: 38%;
+    //set this smaller for less round
+    //border-radius:15%;
     margin: 0.2em;
+    //change margin for more space
+    //margin: 0 10px;
+    //margin-top: 1cm;
     text-align: center;
     box-shadow: 0 2px 5px 0 rgba(52,47,51,.63);
     z-index: 2;
