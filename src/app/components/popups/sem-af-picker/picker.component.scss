@@ -32,3 +32,10 @@
     flex-direction: column;
     height: 100%;
 }
+div.entry-entity {
+    display: flex;
+
+}
+div.entry-entity > div.entity{
+    flex-grow: 1;
+}

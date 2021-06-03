@@ -12,11 +12,17 @@
 <div>
 
     <h2>Entities</h2>
-    <div *ngFor="let entry of annotations" class="entryDiv" [style.background]="entry.rgb" (tap)="selected(entry)"
+    <div class="entry-entity" *ngFor="let entry of annotations">
+        <div (tap)="selected(entry)"  class="entryDiv entity" [style.background]="entry.rgb" 
         [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
-        <span>{{ entry.name }}</span>
-        <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+            <span>{{ entry.name }}</span>
+            <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+        </div>
+        <div (tap)="selected_after(entry)"  class="entryDiv entity-after" [style.background]="entry.rgb" >
+            <span>&#8631;</span>
+        </div>
     </div>
+
 
 
     <ng-container *ngIf="index != -1">

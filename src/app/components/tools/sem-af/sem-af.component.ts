@@ -14,6 +14,8 @@ import { getAnnotation, quickTreeType, commentType, IFingerprint, fingerprintTyp
 import { CommentsComponent, ICommentData } from '../../popups/comments/comments.component';
 import { IMenuListing, IMenuAction, returnEventId } from '../../menu/tool-bar/tool-bar.component';
 
+import {return_type} from '../../popups/sem-af-picker/picker.component'
+
 @Component({
   selector: 'app-sem-af',
   templateUrl: './sem-af.component.html',
@@ -124,19 +126,44 @@ export class SemAF implements OnInit, OnDestroy {
           height: 'inherit',
 
         });
-        picker.afterClosed().subscribe((result) => {
+        picker.afterClosed().subscribe((result:{type:return_type,[id: string]:any}) => {
           console.log("CLOSED!")
           var new_features;
+          
+
           if (result) {
-            if (result.length == 1) {
+            if (result.type == return_type.change_attribute) {
               if (this.annoData[data.id]) {
-                if (Object.entries(result[0]).length == 0) return;
+                if (Object.entries(result.data).length == 0) return;
                 const addr = this.annoData[data.id].features["_addr"];
-                this.update_feature(addr, result[0])
+                this.update_feature(addr, result.data)
               }
-            } else {
-              [this.selectedAnnotation, new_features] = result;
+            } else if (return_type.selected == result.type) {
+              this.selectedAnnotation = result.entry;
+              new_features = result.features;
               this.handleAnnotationSelect(data, this.selectedAnnotation);
+            }
+            else if(return_type.selected_after == result.type){
+              this.selectedAnnotation = result.entry;
+              const featues = {
+                begin: data.data.features.end,
+                end: data.data.features.end,
+              }
+          
+          
+              console.log("data:  ", JSON.stringify(data, null, 4));
+              const features = {};
+          
+              const queue: IQueueElement = {
+                cmd: 'create',
+                data: {
+                  bid: '_b0_',
+                  features: featues,
+                  _type: this.selectedAnnotation.type,
+                }
+              };
+              console.log("queue11:  ", JSON.stringify(queue, null, 4));
+              this.sendBatch([queue]);
             }
 
           }
@@ -488,7 +515,7 @@ export class SemAF implements OnInit, OnDestroy {
     }
 
     for (const [key,value] of abc) {
-      featues[key] = value
+      //featues[key] = value
     }
 
     console.log("data:  ", JSON.stringify(data, null, 4));

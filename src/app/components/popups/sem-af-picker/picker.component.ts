@@ -5,6 +5,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature } from '../../tools/sem-af/sem-af.utils';
 
 
+export enum return_type{
+  change_attribute,
+  selected,
+  selected_after
+}
+
+
 @Component({
   selector: 'app-picker',
   templateUrl: './picker.component.html',
@@ -44,8 +51,8 @@ export class PickerComponent implements OnInit {
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
-      this.gather();
-      this.dialogRef.close([this.gather()]);
+      //this.gather();
+      this.dialogRef.close({type:return_type.change_attribute, data: this.gather()});
     });
 
 
@@ -149,7 +156,11 @@ export class PickerComponent implements OnInit {
    * Schließen des Dialogs mit Übergabe der gewählten Kategorie
    */
   public selected(entry: IPickerEntryData): void {
-    this.dialogRef.close([entry, this.new_features]);
+    this.dialogRef.close({type:return_type.selected,  entry: entry, features: this.new_features});
+  }
+
+  public selected_after(entry: IPickerEntryData): void {
+    this.dialogRef.close({type:return_type.selected_after,  entry: entry, features: this.new_features});
   }
 
 
