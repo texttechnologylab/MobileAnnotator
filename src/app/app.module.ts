@@ -9,6 +9,7 @@ import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { MenuBarComponent } from './components/menu/menu-bar/menu-bar.component';
 import { ContentholderComponent } from './components/content/contentholder/contentholder.component';
+import { ContentholderComponentSemAF  } from './components/content/contentholderSemAF/contentholder.component';
 import { CookieService } from 'ngx-cookie-service';
 import { DashboardComponent } from './components/user/dashboard/dashboard.component';
 import { MaterialModule } from './modules/material/material.module';
@@ -44,6 +45,7 @@ import { SemAF } from './components/tools/sem-af/sem-af.component';
     AppComponent,
     MenuBarComponent,
     ContentholderComponent,
+    ContentholderComponentSemAF,
     DashboardComponent,
     LoginComponent,
     SnackBarComponent,

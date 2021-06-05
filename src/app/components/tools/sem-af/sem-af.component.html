@@ -1,10 +1,10 @@
 <app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-SEM-AF.TITLE'" (menuEvent)="onMenuSelect($event)">
 </app-tool-bar>
 
-<app-contentholder class="content" [inData]="data" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
+<app-contentholder-semaf class="content" [inData]="data" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
     (createMultiToken)="createMultiToken($event)" (removeMultiToken)="removeMultiToken($event)"
     [inAnnotations]="mode === 2 ? commentData : annoData" [filters]="mode != 2 ? activeFilters : []">
-</app-contentholder>
+</app-contentholder-semaf>
 
 <div class="footer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode === 0">
     <button mat-stroked-button fxFlex="grow" style="margin: 1%;"
