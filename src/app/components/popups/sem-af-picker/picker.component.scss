@@ -39,3 +39,22 @@ div.entry-entity {
 div.entry-entity > div.entity{
     flex-grow: 1;
 }
+
+.backspace-icon{
+    width: unset;
+    height: unset;
+    font-size: 15px;
+    vertical-align: middle;
+}
+.item-ref-button{
+    background-color: #cacaca;
+    border: #a29e9e solid 2px;
+    padding: 6px;
+    border-radius: 7px;
+}
+.item-ref{
+    border: 1px solid rgba(0, 0, 0, 0.12);
+flex: 1;
+padding: 4px;
+border-radius: 5px;
+}

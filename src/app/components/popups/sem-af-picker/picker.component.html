@@ -13,12 +13,12 @@
 
     <h2>Entities</h2>
     <div class="entry-entity" *ngFor="let entry of annotations">
-        <div (tap)="selected(entry)"  class="entryDiv entity" [style.background]="entry.rgb" 
-        [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
+        <div (tap)="selected(entry)" class="entryDiv entity" [style.background]="entry.rgb"
+            [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
             <span>{{ entry.name }}</span>
             <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
         </div>
-        <div (tap)="selected_after(entry)"  class="entryDiv entity-after" [style.background]="entry.rgb" >
+        <div (tap)="selected_after(entry)" class="entryDiv entity-after" [style.background]="entry.rgb">
             <span>&#8631;</span>
         </div>
     </div>
@@ -50,6 +50,27 @@
                         </mat-select>
                     </mat-form-field>
                 </ng-container>
+            </div>
+
+            <hr>
+            <div *ngFor="let refe of reference">
+                <span>{{refe.feature_name}}</span><br>
+                <ng-container>
+                    <div style="width:100%; display: flex">
+                        <div class="item-ref">
+                            <button (tap)="refe.text=null" class="item-ref-button" *ngIf="refe.text!=null">
+                                <span>{{refe.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                                        aria-label="Delete">backspace</mat-icon></span>
+                            </button>
+                        </div>
+                        <button style="margin-left:5px" class="item-ref-button" (tap)="selected_ref(refe.feature_name)">
+                            Select
+                        </button>
+                    </div>
+
+                </ng-container>
+
+                <hr>
             </div>
 
 

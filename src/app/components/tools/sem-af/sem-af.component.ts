@@ -14,7 +14,7 @@ import { getAnnotation, quickTreeType, commentType, IFingerprint, fingerprintTyp
 import { CommentsComponent, ICommentData } from '../../popups/comments/comments.component';
 import { IMenuListing, IMenuAction, returnEventId } from '../../menu/tool-bar/tool-bar.component';
 
-import {return_type} from '../../popups/sem-af-picker/picker.component'
+import { return_type } from '../../popups/sem-af-picker/picker.component'
 
 @Component({
   selector: 'app-sem-af',
@@ -38,6 +38,11 @@ export class SemAF implements OnInit, OnDestroy {
   private casId: string;
   private viewId: string;
   private tool: ITool;
+
+  public selected_reference: {
+    feature_name: any;
+    addr: any;
+  } = null;
 
 
   private subscriptions: Subscription[] = [];
@@ -104,6 +109,19 @@ export class SemAF implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.selected_reference != null) {
+      const st: string =  this.selected_reference.feature_name;
+      const feature = {};
+      feature[st] = this.annoData[data.id].features._addr
+      this.activeFilters = [];
+      console.log("feature: ",feature,data)
+      
+      
+      this.update_feature(Number.parseInt(this.selected_reference.addr), feature);
+      this.selected_reference = null;
+      return;
+    }
+
     switch (this.mode) {
       case 0:
         // Modus: Mehrfache Annotation (Auswahl der Kategorie über Schaltfläche am unteren Rand)
@@ -122,14 +140,16 @@ export class SemAF implements OnInit, OnDestroy {
             last: this.lastAnnations,
             highlights: this.annoData[data.id] &&
               Object.entries(this.annoData[data.id].annotations).map(([type, array]) => [type, array.some(({ fp }) => fp)]) || [],
+            annoData: this.tool.toolElements,
+            text: this.documentService.currentCAS.text
           },
           height: 'inherit',
 
         });
-        picker.afterClosed().subscribe((result:{type:return_type,[id: string]:any}) => {
+        picker.afterClosed().subscribe((result: { type: return_type, [id: string]: any }) => {
           console.log("CLOSED!")
           var new_features;
-          
+
 
           if (result) {
             if (result.type == return_type.change_attribute) {
@@ -143,17 +163,18 @@ export class SemAF implements OnInit, OnDestroy {
               new_features = result.features;
               this.handleAnnotationSelect(data, this.selectedAnnotation);
             }
-            else if(return_type.selected_after == result.type){
+            else if (return_type.selected_after == result.type) {
               this.selectedAnnotation = result.entry;
               const featues = {
                 begin: data.data.features.end,
                 end: data.data.features.end,
               }
-          
-          
+
+
+
               console.log("data:  ", JSON.stringify(data, null, 4));
               const features = {};
-          
+
               const queue: IQueueElement = {
                 cmd: 'create',
                 data: {
@@ -164,6 +185,18 @@ export class SemAF implements OnInit, OnDestroy {
               };
               console.log("queue11:  ", JSON.stringify(queue, null, 4));
               this.sendBatch([queue]);
+            }
+            else if (return_type.selected_ref == result.type) {
+              const addr = this.annoData[data.id].features["_addr"];
+              console.log("resxx", result)
+              this.selected_reference = { feature_name: result.feature_name, addr: addr }
+              if(result.allowed_type !== null){
+                this.activeFilters = result.allowed_type;
+              }
+              if (this.annoData[data.id]) {
+                if (Object.entries(result.data).length == 0) return;
+                this.update_feature(addr, result.data)
+              }
             }
 
           }
@@ -181,7 +214,7 @@ export class SemAF implements OnInit, OnDestroy {
   public openFilterSelection(): void {
     const filterData = {
       type: 'multi',
-      data: {},
+      data: { 'POPUP-FILTER.ANNOTATION-LABEL': defaultAnnotationClasses },
     };
 
     const filter = this.dialog.open(FilterComponent, {
@@ -191,6 +224,7 @@ export class SemAF implements OnInit, OnDestroy {
     filter.afterClosed().subscribe((result) => {
       if (result) {
         this.activeFilters = Array.from(result);
+        console.log(this.activeFilters)
       }
     });
   }
@@ -314,6 +348,7 @@ export class SemAF implements OnInit, OnDestroy {
     const data: IContentholderData[] = [];
     const annotations: { [id: string]: IContentholderAnnotation } = {};
 
+
     for (const fingerprint of Object.values(this.tool.toolElements[fingerprintType] || {})) {
       const elem = getTypedAnnotation<IFingerprint>(fingerprint);
       if (!elem) {
@@ -371,8 +406,8 @@ export class SemAF implements OnInit, OnDestroy {
               _addr: null,
               _type: "org.texttechnologylab.annotation.type.QuickTreeNode",
               features: {
-                begin:annotation.features.begin,
-                end:annotation.features.begin
+                begin: annotation.features.begin,
+                end: annotation.features.begin
               }
             },
           });
@@ -428,7 +463,7 @@ export class SemAF implements OnInit, OnDestroy {
             entry.annotations[type] = [];
           }
           entry.annotations[type].push({ id: annoId, fp: this.fingerprints.has(annoId) });
-          
+
         }
       }
     }
@@ -514,7 +549,7 @@ export class SemAF implements OnInit, OnDestroy {
       end: data.data.features.end,
     }
 
-    for (const [key,value] of abc) {
+    for (const [key, value] of abc) {
       //featues[key] = value
     }
 

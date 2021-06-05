@@ -547,6 +547,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       'beginID': {
         display_name: 'beginID',
         type: FeatureType.Reference,
+        reference_option:[ "org.texttechnologylab.annotation.semaf.isospace.Place" ],
         value: "null",
         /*midID would be added later*/
       },
@@ -944,7 +945,14 @@ export interface Feature {
   value: boolean | string | number;
 
   /** Options for the Select should be Empty if type is not Select */
-  select_option?: SelectOption[]
+  select_option?: SelectOption[];
+
+  /** Which Type is a valid reference [] or leaving it empty means all 
+   * Should be empty if not FeatureType.Reference 
+   * Example: ['org.texttechnologylab.annotation.semaf.isospace.OLink']
+  */
+  reference_option?: String[]; 
+  
 
   /** There are Attributes like DCL where it can only be true or false, 
    * null or empty is not option for these set this to true (only matters for Select)*/
