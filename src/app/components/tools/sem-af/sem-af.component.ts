@@ -44,6 +44,12 @@ export class SemAF implements OnInit, OnDestroy {
     addr: any;
   } = null;
 
+  public selected_reference_multi: {
+    feature_name: any;
+    addr: any;
+    current_ids: number[];
+  } = null;
+
 
   private subscriptions: Subscription[] = [];
   private lastAnnations: IAnnotationClass[] = [];
@@ -109,7 +115,7 @@ export class SemAF implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.selected_reference != null) {
+    if (this.selected_reference !== null) {
       const st: string =  this.selected_reference.feature_name;
       const feature = {};
       feature[st] = this.annoData[data.id].features._addr
@@ -119,6 +125,20 @@ export class SemAF implements OnInit, OnDestroy {
       
       this.update_feature(Number.parseInt(this.selected_reference.addr), feature);
       this.selected_reference = null;
+      return;
+    }
+
+    else if (this.selected_reference_multi !== null) {
+      const st: string =  this.selected_reference_multi.feature_name;
+      const feature = {};
+      this.selected_reference_multi.current_ids.push(this.annoData[data.id].features._addr)
+      feature[st] = this.selected_reference_multi.current_ids;
+      this.activeFilters = [];
+      console.log("feature: ",feature,data)
+      
+      
+      this.update_feature(Number.parseInt(this.selected_reference_multi.addr), feature);
+      this.selected_reference_multi = null;
       return;
     }
 
@@ -190,6 +210,18 @@ export class SemAF implements OnInit, OnDestroy {
               const addr = this.annoData[data.id].features["_addr"];
               console.log("resxx", result)
               this.selected_reference = { feature_name: result.feature_name, addr: addr }
+              if(result.allowed_type !== null){
+                this.activeFilters = result.allowed_type;
+              }
+              if (this.annoData[data.id]) {
+                if (Object.entries(result.data).length == 0) return;
+                this.update_feature(addr, result.data)
+              }
+            }
+            else if (return_type.selected_ref_multi == result.type) {
+              const addr = this.annoData[data.id].features["_addr"];
+              console.log("resxx", result)
+              this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids:result.current_ids }
               if(result.allowed_type !== null){
                 this.activeFilters = result.allowed_type;
               }
@@ -540,7 +572,7 @@ export class SemAF implements OnInit, OnDestroy {
    * Erzeugt eine Annotation
    */
   private createAnnotation(data: IContentholderData): void {
-    const abc: [string, (string | number | boolean)][]
+    const abc: [string, (string | number | boolean|number[])][]
       = Object.entries(this.selectedAnnotation.features).map((x) => [x[0], x[1].value]);
     // Convert (string,Feature)[] to (string,(string | number | boolean))[]
 

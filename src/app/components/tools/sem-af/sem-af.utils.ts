@@ -6,7 +6,8 @@ export enum FeatureType {
   Text,
 
   /** Choose if the Feature is in Reference to another Entity like in Link the to and from Features*/
-  Reference
+  Reference,
+  ReferenceMulti
 }
 export const defaultAnnotationClasses: IAnnotationClass[] = [
   /*spatial entity 'non-consuming tag'*/
@@ -338,7 +339,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value: false,
           value_name: "FALSE"
         },
-         {
+        {
           display_name: "True",
           value: true,
           value_name: "TRUE"
@@ -379,9 +380,9 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "trigger": {/*define it later */
         display_name: "TRIGGER",
         type: FeatureType.Reference,
-        value: "",        
+        value: "",
         not_nullable: true
-      },      
+      },
       'beginID': {/*define it later */
         display_name: 'beginID',
         type: FeatureType.Reference,
@@ -401,7 +402,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "gazref": {/*define it later */
         display_name: "GAZREF",
         type: FeatureType.Text,
-        value: "",  
+        value: "",
       },
       'comment': {
         display_name: 'Comment',
@@ -547,7 +548,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       'beginID': {
         display_name: 'beginID',
         type: FeatureType.Reference,
-        reference_option:[ "org.texttechnologylab.annotation.semaf.isospace.Place" ],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",
         /*midID would be added later*/
       },
@@ -557,9 +558,10 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "null",
 
       },
-      'midID': {/*Should add a list of midpoint locations*/
-        display_name: 'midID',
-        type: FeatureType.Reference,
+      'midID_array': {/*Should add a list of midpoint locations*/
+        display_name: 'midIDs',
+        type: FeatureType.ReferenceMulti,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",
 
       },
@@ -667,103 +669,104 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "motion_manner": {
         display_name: "MOTION_MANNER",
         type: FeatureType.Reference,
-        value: ""},
-        "motion_goal": {
-          display_name: "MOTION_GOAL",
-          type: FeatureType.Reference,
-          value: ""          
+        value: ""
+      },
+      "motion_goal": {
+        display_name: "MOTION_GOAL",
+        type: FeatureType.Reference,
+        value: ""
+      },
+      "motion_class": {
+        display_name: "MOTION_CLASS",
+        type: FeatureType.Select,
+        value: "MOTION_CLASS",
+        select_option: [{
+          display_name: "Move",
+          value: "MOVE",
+          value_name: "MOVE"
         },
-        "motion_class": {
-          display_name: "MOTION_CLASS",
-          type: FeatureType.Select,
-          value: "MOTION_CLASS",
-          select_option: [{
-            display_name: "Move",
-            value: "MOVE",
-            value_name: "MOVE"
-          },
-          {
-            display_name: "Move External",
-            value: "MOVE_EXTERNAL",
-            value_name: "MOVE_EXTERNAL"
-          },
-          {
-            display_name: "Move Internal",
-            value: "MOVE_INTERNAL",
-            value_name: "MOVE_INTERNAL"
-          },
-          {
-            display_name: "Leave",
-            value: "LEAVE",
-            value_name: "LEAVE"
-          },
-          {
-            display_name: "Reach",
-            value: "REACH",
-            value_name: "REACH"
-          },
-          {
-            display_name: "Cross",
-            value: "CROSS",
-            value_name: "CROSS"
-          },
-          {
-            display_name: "Detach",
-            value: "DETACH",
-            value_name: "DETACH"
-          },
-          {
-            display_name: "Hit",
-            value: "HIT",
-            value_name: "HIT"
-          },
-          {
-            display_name: "Follow",
-            value: "FOLLOW",
-            value_name: "FOLLOW"
-          },
-          {
-            display_name: "Deviate",
-            value: "DEVIATE",
-            value_name: "DEVIATE"
-          },
-          {
-            display_name: "Stay",
-            value: "STAY",
-            value_name: "STAY"
-          }
-        ]
+        {
+          display_name: "Move External",
+          value: "MOVE_EXTERNAL",
+          value_name: "MOVE_EXTERNAL"
         },
-        "motion_sense": {
-          display_name: "Motion Sense",
-          type: FeatureType.Select,
-          value: "MOTION_SENSE",
-          select_option: [{
-            display_name: "Litereal",
-            value: "LITEREAL",
-            value_name: "LITEREAL"
-          },
-          {
-            display_name: "Fictive",
-            value: "FICTIVE",
-            value_name: "FICTIVE"
-          },
-          {
-            display_name: "Intrinsic Change",
-            value: "INTRINSIC_CHANGE",
-            value_name: "INTEINSIC_CHANGE"
-          }]
+        {
+          display_name: "Move Internal",
+          value: "MOVE_INTERNAL",
+          value_name: "MOVE_INTERNAL"
         },
-        'mod': {/*a spatially relevant modifier*/
-          display_name: 'mod',
-          type: FeatureType.Text,
-          value: "",
+        {
+          display_name: "Leave",
+          value: "LEAVE",
+          value_name: "LEAVE"
         },
-        'comment': {
-          display_name: 'Comment',
-          type: FeatureType.Text,
-          value: "",
+        {
+          display_name: "Reach",
+          value: "REACH",
+          value_name: "REACH"
+        },
+        {
+          display_name: "Cross",
+          value: "CROSS",
+          value_name: "CROSS"
+        },
+        {
+          display_name: "Detach",
+          value: "DETACH",
+          value_name: "DETACH"
+        },
+        {
+          display_name: "Hit",
+          value: "HIT",
+          value_name: "HIT"
+        },
+        {
+          display_name: "Follow",
+          value: "FOLLOW",
+          value_name: "FOLLOW"
+        },
+        {
+          display_name: "Deviate",
+          value: "DEVIATE",
+          value_name: "DEVIATE"
+        },
+        {
+          display_name: "Stay",
+          value: "STAY",
+          value_name: "STAY"
         }
+        ]
+      },
+      "motion_sense": {
+        display_name: "Motion Sense",
+        type: FeatureType.Select,
+        value: "MOTION_SENSE",
+        select_option: [{
+          display_name: "Litereal",
+          value: "LITEREAL",
+          value_name: "LITEREAL"
+        },
+        {
+          display_name: "Fictive",
+          value: "FICTIVE",
+          value_name: "FICTIVE"
+        },
+        {
+          display_name: "Intrinsic Change",
+          value: "INTRINSIC_CHANGE",
+          value_name: "INTEINSIC_CHANGE"
+        }]
+      },
+      'mod': {/*a spatially relevant modifier*/
+        display_name: 'mod',
+        type: FeatureType.Text,
+        value: "",
+      },
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      }
 
     }
   },
@@ -828,7 +831,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "value": {
         display_name: 'Value',
         type: FeatureType.Text,
-        value: "",        
+        value: "",
       },
       "spatial_entitiy_type": {
         display_name: "TYPE",
@@ -853,12 +856,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           display_name: "Path Defining",
           value: "PATH_DEFINING",
           value_name: "PATH_DEFINING"
-        },{
+        }, {
           display_name: "Goal Defining",
           value: "GOAL_DEFINING",
           value_name: "GOAL_DEFINING"
         }
-      ]
+        ]
       },
     }
   },
@@ -882,7 +885,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "value": {
         display_name: 'Value',
         type: FeatureType.Text,
-        value: "",        
+        value: "",
       }
     }
   }
@@ -942,7 +945,7 @@ export interface Feature {
   display_name: string;
   type: FeatureType;
   /** Should be the default to which it will be initialized */
-  value: boolean | string | number;
+  value: boolean | string | number | number[];
 
   /** Options for the Select should be Empty if type is not Select */
   select_option?: SelectOption[];
@@ -951,8 +954,8 @@ export interface Feature {
    * Should be empty if not FeatureType.Reference 
    * Example: ['org.texttechnologylab.annotation.semaf.isospace.OLink']
   */
-  reference_option?: String[]; 
-  
+  reference_option?: String[];
+
 
   /** There are Attributes like DCL where it can only be true or false, 
    * null or empty is not option for these set this to true (only matters for Select)*/
@@ -968,6 +971,6 @@ export interface IAnnotationClass {
   /** Can be any css color, i think */
   rgb: string;
   css_class: string;
-  /** Should only contain features which are editable by the user like a comment for example  */  
+  /** Should only contain features which are editable by the user like a comment for example  */
   features: { [name: string]: Feature };
 }

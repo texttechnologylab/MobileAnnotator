@@ -54,7 +54,7 @@
 
             <hr>
             <div *ngFor="let refe of reference">
-                <span>{{refe.feature_name}}</span><br>
+                <span>{{refe.display_name}}</span><br>
                 <ng-container>
                     <div style="width:100%; display: flex">
                         <div class="item-ref">
@@ -64,6 +64,29 @@
                             </button>
                         </div>
                         <button style="margin-left:5px" class="item-ref-button" (tap)="selected_ref(refe.feature_name)">
+                            Select
+                        </button>
+                    </div>
+
+                </ng-container>
+
+                <hr>
+            </div>
+
+
+            <div *ngFor="let refe of referenceMulti">
+                <span>{{refe.display_name}}</span><br>
+                <ng-container>
+                    <div style="width:100%; display: flex">
+                        <div class="item-ref">
+                            <ng-container *ngFor="let value of refe.values">
+                                <button (tap)="value.text=null" class="item-ref-button" *ngIf="value.text!=null">
+                                    <span>{{value.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                                            aria-label="Delete">backspace</mat-icon></span>
+                                </button>
+                            </ng-container>
+                        </div>
+                        <button style="margin-left:5px" class="item-ref-button" (tap)="selected_ref_multi(refe.feature_name)">
                             Select
                         </button>
                     </div>

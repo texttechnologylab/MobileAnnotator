@@ -20,8 +20,12 @@ export enum return_type {
   selected,
   selected_after,
   selected_ref,
+  selected_ref_multi
 }
 
+type SingleRef = { text_org: string, text: string, id: number };
+type Reference = { text: string, feature_name: string, text_org: string, display_name: string };
+type ReferenceMulti = { feature_name: string, display_name: string, values: SingleRef[] };
 
 export function find_id(x: {}, id: number) {
   for (const [key, val] of Object.entries(x)) {
@@ -50,7 +54,8 @@ export class PickerComponent implements OnInit {
 
   public ft = FeatureType;
 
-  public reference: { text: string, feature_name: string, text_org: string }[]
+  public reference: Reference[]
+  public referenceMulti: ReferenceMulti[]
 
   public features_typed: [string, Feature][]
   public features_dict: {
@@ -99,11 +104,8 @@ export class PickerComponent implements OnInit {
 
 
       console.log("featues", featues, features)
-      let reference: {
-        text: string;
-        feature_name: string;
-        text_org: string;
-      }[] = [];
+      let reference: Reference[] = [];
+      let referenceMulti: ReferenceMulti[] = [];
       for (const [key, value] of Object.entries(featues)) {
 
         /**
@@ -159,12 +161,43 @@ export class PickerComponent implements OnInit {
 
           }
 
-          reference.push({ feature_name: key, text: text_, text_org: text_ })
+          reference.push({ feature_name: key, text: text_, text_org: text_, display_name: value.display_name })
           console.log("forms3: ", key, text_value, typeof (text_value), text_)
+        }
+        else if (featues[key].type == FeatureType.ReferenceMulti) {
+          let text_: SingleRef[] = [];
+
+
+          if (text_value !== null) {
+            let values = text_value as number[];
+
+            for (const valu of values) {
+              try {
+                const m = find_id(annoData, valu);
+                if (m) {
+                  const { begin, end } = m["features"]
+                  const txt = text.slice(begin, end);
+                  text_.push({ text_org: txt, text: txt, id: valu });
+                }
+
+              } catch (error) {
+                //console.log("error:",error)
+              }
+            }
+
+
+          }
+
+
+
+          referenceMulti.push({ feature_name: key, display_name: value.display_name, values: text_ })
+          console.log("forms4: ", key, text_, text_value)
         }
       }
       console.log("reference", reference)
+      console.log("referenceMulti", referenceMulti)
       this.reference = reference;
+      this.referenceMulti = referenceMulti;
 
       this.features_typed = Object.entries(featues);
       this.features_dict = featues;
@@ -236,6 +269,23 @@ export class PickerComponent implements OnInit {
       type: return_type.selected_ref,
       data: this.gather(feature_name),
       feature_name: feature_name,
+      allowed_type: this.features_dict[feature_name].reference_option
+    });
+    //console.log("xx1",feature_name);
+  }
+
+  public selected_ref_multi(feature_name: string): void {
+    //console.log("xx1",{ type: return_type.change_attribute, data: this.gather() });
+    const feat = this.referenceMulti.find((x) => { return x.feature_name == feature_name });
+    const current_id = feat.values.filter((x) => (x.text !== null)).map((x) => x.id)
+
+    //console.log(current_id)
+
+    this.dialogRef.close({
+      type: return_type.selected_ref_multi,
+      data: this.gather(feature_name),
+      feature_name: feature_name,
+      current_ids: current_id,
       allowed_type: this.features_dict[feature_name].reference_option
     });
     //console.log("xx1",feature_name);
