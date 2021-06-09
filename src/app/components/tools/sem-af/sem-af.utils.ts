@@ -561,7 +561,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       'midID_array': {/*Should add a list of midpoint locations*/
         display_name: 'midIDs',
         type: FeatureType.ReferenceMulti,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
         value: "null",
 
       },
@@ -898,7 +898,14 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.QSLink',
     name: 'QSLink',
     css_class: 'I-QSLink',
-    features: {}
+    features: {
+      "Trigger": {
+        display_name: "Trigger",
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
+        value: "null",
+      }
+    }
   },
   {
     rgb: 'rgb(131,120,120)',
