@@ -796,7 +796,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },
-      /*problem : only number allowed */
+      
       "value": {
         display_name: 'Value',
         type: FeatureType.Text,
