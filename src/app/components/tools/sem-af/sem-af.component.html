@@ -1,8 +1,8 @@
 <app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-SEM-AF.TITLE'" (menuEvent)="onMenuSelect($event)">
 </app-tool-bar>
 
-<app-contentholder-semaf class="content" [inData]="data" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
-    (createMultiToken)="createMultiToken($event)" (removeMultiToken)="removeMultiToken($event)"
+<app-contentholder-semaf class="content" [inData]="data" [links]="links" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
+    (createMultiToken)="createMultiToken($event)" (removeMultiToken)="removeMultiToken($event)" (selectionLinkChanged)="select_link($event)"
     [inAnnotations]="mode === 2 ? commentData : annoData" [filters]="mode != 2 ? activeFilters : []">
 </app-contentholder-semaf>
 

@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DocumentService, } from 'src/app/services/document.service';
 import { ITool, IToolElement } from 'src/app/services/interfaces';
-import { IContentholderData, IContentholderAnnotation } from '../../content/contentholderSemAF/contentholder.component';
+import { IContentholderData, IContentholderAnnotation, Link, LabelAndId } from '../../content/contentholderSemAF/contentholder.component';
 import { PickerComponent } from '../../popups/sem-af-picker/picker.component';
 import { IAnnotationClass, defaultAnnotationClasses, defaultLinkClasses } from './sem-af.utils';
 import { WebsocketService } from 'src/app/services/websocket.service';
@@ -34,6 +34,8 @@ export class SemAF implements OnInit, OnDestroy {
   public activeFilters: string[] = [];
   public selectedAnnotation: IAnnotationClass;
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
+
+  public links: Link[];
 
   private casId: string;
   private viewId: string;
@@ -100,6 +102,11 @@ export class SemAF implements OnInit, OnDestroy {
     this.documentService.saveCas(this.casId);
   }
 
+  public select_link(id: number){
+    console.log(`Link Selected: ${id}`)
+
+  }
+
   /**
    * Navigiere zur Dokumenten Ansicht
    */
@@ -116,27 +123,27 @@ export class SemAF implements OnInit, OnDestroy {
     }
 
     if (this.selected_reference !== null) {
-      const st: string =  this.selected_reference.feature_name;
+      const st: string = this.selected_reference.feature_name;
       const feature = {};
       feature[st] = this.annoData[data.id].features._addr
       this.activeFilters = [];
-      console.log("feature: ",feature,data)
-      
-      
+      console.log("feature: ", feature, data)
+
+
       this.update_feature(Number.parseInt(this.selected_reference.addr), feature);
       this.selected_reference = null;
       return;
     }
 
     else if (this.selected_reference_multi !== null) {
-      const st: string =  this.selected_reference_multi.feature_name;
+      const st: string = this.selected_reference_multi.feature_name;
       const feature = {};
       this.selected_reference_multi.current_ids.push(this.annoData[data.id].features._addr)
       feature[st] = this.selected_reference_multi.current_ids;
       this.activeFilters = [];
-      console.log("feature: ",feature,data)
-      
-      
+      console.log("feature: ", feature, data)
+
+
       this.update_feature(Number.parseInt(this.selected_reference_multi.addr), feature);
       this.selected_reference_multi = null;
       return;
@@ -210,7 +217,7 @@ export class SemAF implements OnInit, OnDestroy {
               const addr = this.annoData[data.id].features["_addr"];
               console.log("resxx", result)
               this.selected_reference = { feature_name: result.feature_name, addr: addr }
-              if(result.allowed_type !== null){
+              if (result.allowed_type !== null) {
                 this.activeFilters = result.allowed_type;
               }
               if (this.annoData[data.id]) {
@@ -221,8 +228,8 @@ export class SemAF implements OnInit, OnDestroy {
             else if (return_type.selected_ref_multi == result.type) {
               const addr = this.annoData[data.id].features["_addr"];
               console.log("resxx", result)
-              this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids:result.current_ids }
-              if(result.allowed_type !== null){
+              this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
+              if (result.allowed_type !== null) {
                 this.activeFilters = result.allowed_type;
               }
               if (this.annoData[data.id]) {
@@ -389,6 +396,8 @@ export class SemAF implements OnInit, OnDestroy {
       this.fingerprints.set(`${elem.features.reference}`, elem);
     }
 
+    console.log("this.tool.toolElements", this.tool.toolElements)
+
 
 
     for (const [id, anno] of Object.entries(tokens)) {
@@ -414,6 +423,11 @@ export class SemAF implements OnInit, OnDestroy {
     }
     console.log(data)
     // tslint:disable-next-line: max-line-length
+
+
+    //console.log("LINKS",this.links)
+
+
     const types = [...defaultAnnotationClasses];
 
     for (const { type, rgb } of types) {
@@ -501,6 +515,57 @@ export class SemAF implements OnInit, OnDestroy {
     }
 
     this.data = data.sort((a, b) => a.data.features.begin - b.data.features.begin);
+
+    const find_id = (id: number) => {
+      if(id === null || id == undefined) return null;
+      const [cc] = Object.values(this.tool.toolElements).map((val) => val[id]).filter((x)=>x!==undefined)
+      return cc as IToolElement
+    }
+
+    /**
+     * The following lines convert this.tool.toolElements to Link[]
+     * so they extract all links and save them in this.links
+     */
+    const link_types = [...defaultLinkClasses];
+    this.links = []
+    for (const { type, rgb } of link_types) {
+      // Not all Files need to have all types of links
+      // In that case the cas does not contain them
+
+      if (this.tool.toolElements[type] === undefined) continue;
+
+      const links_of_type = Object.values(this.tool.toolElements[type])
+      const links: Link[] = links_of_type.map((x) => {
+        if (Object.values(x).length == 0) return null;
+        const link = x as IToolElement;
+        const figure = find_id(link.features["figure"] as number)
+        const ground = find_id(link.features["ground"] as number)
+        const flabel: IContentholderData= {id: null,label: null,data: null} 
+        const glabel: IContentholderData= {id: null,label: null,data: null} 
+        
+        if(figure !== null){
+          flabel.id    = figure._addr.toString();
+          flabel.label = this.documentService.currentCAS.text.slice(figure.features.begin,figure.features.end)
+          flabel.data  = figure;
+        } 
+        if(ground !== null){
+          glabel.id    = ground._addr.toString();
+          glabel.label = this.documentService.currentCAS.text.slice(ground.features.begin,ground.features.end)
+          glabel.data  = ground;
+          console.log("ground",ground)
+        } 
+        return {
+          id: link._addr,
+          type: link._type,
+          from: flabel,
+          to: glabel, 
+        }
+      })
+      this.links = this.links.concat(links);
+
+
+    }
+
     this.annoData = annotations;
   }
 
@@ -572,7 +637,7 @@ export class SemAF implements OnInit, OnDestroy {
    * Erzeugt eine Annotation
    */
   private createAnnotation(data: IContentholderData): void {
-    const abc: [string, (string | number | boolean|number[])][]
+    const abc: [string, (string | number | boolean | number[])][]
       = Object.entries(this.selectedAnnotation.features).map((x) => [x[0], x[1].value]);
     // Convert (string,Feature)[] to (string,(string | number | boolean))[]
 

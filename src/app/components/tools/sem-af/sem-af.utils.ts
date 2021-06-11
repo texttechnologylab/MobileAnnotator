@@ -904,7 +904,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   /*QS link complete*/
   {      
     rgb: 'rgb(131,120,120)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.QSLink',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.QsLink',
     name: 'QSLink',
     css_class: 'I-QSLink',
     features: {

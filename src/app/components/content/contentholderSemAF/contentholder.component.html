@@ -7,7 +7,33 @@
             {{entry.label}} </div>
     </div>
     <div class="spacer" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')"> </div>
+    <div id="links contentholder">
+        <div *ngFor="let link of links"  class="isolink entryDiv" [style.background]="'lightgreen'"
+            style="border: 4px solid lightgreen; display: flex; width: max-content" (click)="onSelectLink(link.id, $event)"
+            matBadgeSize="small" >
+
+
+            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
+                [ngClass]="getClassesForEntry(link.from)" 
+                 [matBadge]="getBadgeValue(link.from)"
+                [matBadgeHidden]="isBadgeHidden(link.from)" matBadgeSize="small">
+                {{link.from.label}} </div> ->
+
+
+            <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
+                [ngClass]="getClassesForEntry(link.to)" 
+                 [matBadge]="getBadgeValue(link.to)"
+                [matBadgeHidden]="isBadgeHidden(link.to)" matBadgeSize="small">
+                {{link.to.label}} </div>
+
+        </div>
+    </div>
 </div>
+
+
+
+
+
 
 <div class="footer" fxLayout="row" fxLayoutAlign="center center">
     <button mat-icon-button fxFlex="none" [disabled]="page === 0" (click)="switchPage('fst')">
@@ -28,7 +54,7 @@
 
 <div class="contextMenuContainer" #contextMenuContainer [matMenuTriggerFor]="contextMenu">
     <mat-menu #contextMenu="matMenu">
-        <button mat-menu-item *ngFor="let entry of contextMenuEntries"
-            (click)="contextMenuEvent(entry)">{{entry | translate}}</button>
+        <button mat-menu-item *ngFor="let entry of contextMenuEntries" (click)="contextMenuEvent(entry)">{{entry |
+            translate}}</button>
     </mat-menu>
 </div>

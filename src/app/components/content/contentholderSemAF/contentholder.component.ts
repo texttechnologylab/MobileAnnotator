@@ -32,6 +32,7 @@ export class ContentholderComponentSemAF implements OnChanges {
   @ViewChild(MatMenuTrigger, { static: true }) private readonly contextMenuTrigger: MatMenuTrigger;
 
   @Input() inData: IContentholderData[];
+  @Input() links: Link[];
   @Input() inAnnotations: { [id: string]: IContentholderAnnotation } = {};
   @Input() pageSize = 50;
   @Input() page = 0;
@@ -39,6 +40,7 @@ export class ContentholderComponentSemAF implements OnChanges {
   @Input() showLastTapped = false;
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
+  @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
   @Output() createMultiToken = new EventEmitter<[string, string]>();
   @Output() removeMultiToken = new EventEmitter<string>();
   constructor(
@@ -46,6 +48,7 @@ export class ContentholderComponentSemAF implements OnChanges {
   ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
+    
     if (changes) {
       if (changes.pageSize != null || changes.page != null || changes.inData != null) {
         if (changes.inData != null || changes.pageSize != null) {
@@ -63,6 +66,7 @@ export class ContentholderComponentSemAF implements OnChanges {
    * Händelt die Auswahl eines Tokens
    */
   public onSelect(entry: IContentholderData, event: MouseEvent) {
+    console.log("enty",JSON.stringify(entry,null,4))
     event.preventDefault();
     this.preventDefault(event);
     if (this.longpress) {
@@ -82,6 +86,14 @@ export class ContentholderComponentSemAF implements OnChanges {
       this.lastTapped = entry.id;
     }
   }
+
+  public onSelectLink(id:number, event: MouseEvent){
+    event.preventDefault();
+    this.preventDefault(event);
+    this.selectionLinkChanged.emit(id)
+  }
+
+
 
   /**
    * Verhindert das ungewollte weiterlaufen eines Mausevents
@@ -214,6 +226,9 @@ export class ContentholderComponentSemAF implements OnChanges {
     }
     return !this.inAnnotations[entry.id].badge;
   }
+  public links_to_string(){
+   return JSON.stringify(this.links,null,4);
+  }
 
   /**
    * Gibt den Zahlenwert für die Anzeige innerhalb der Badge zurück
@@ -235,6 +250,18 @@ export class ContentholderComponentSemAF implements OnChanges {
 
     this.data = this.inData.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize);
   }
+}
+
+export interface LabelAndId{
+  id: number;
+  label: string;
+}
+
+export interface Link {
+  from: IContentholderData;
+  type: string;
+  to: IContentholderData;
+  id: number;
 }
 
 export interface IContentholderData {
