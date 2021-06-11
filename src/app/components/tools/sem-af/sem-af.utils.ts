@@ -150,7 +150,6 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value_name: "VOLUME"
         }
         ]
-
       },
       "comment": {
         display_name: "Comment",
@@ -269,9 +268,10 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       },
       "elevation": {/*option attribute*/
         display_name: "elevation",
-        type: FeatureType.Text,
+        type: FeatureType.Reference,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
         value: ""
-      }
+      },
 
     }
   },
@@ -383,22 +383,24 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
         not_nullable: true
       },
-      'beginID': {/*define it later */
+      'beginID': {
         display_name: 'beginID',
         type: FeatureType.Reference,
-        value: "null",
-        /*midID would be added later*/
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
+        value: "null",        
       },
-      'endID': {/*define it later */
+      'endID': {
         display_name: 'endID',
         type: FeatureType.Reference,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
         value: "null",
       },
-      'midID': {/*Should add a list of midpoint locations,define it later */
-        display_name: 'midID',
-        type: FeatureType.Reference,
+      'midID_array': {/*Should add a list of midpoint locations*/
+        display_name: 'midIDs',
+        type: FeatureType.ReferenceMulti,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
         value: "null",
-      },
+      }, 
       "gazref": {/*define it later */
         display_name: "GAZREF",
         type: FeatureType.Text,
@@ -543,27 +545,24 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: 'Comment',
         type: FeatureType.Text,
         value: "",
-      },
-      /*the following with 'reference' should be changed*/
+      },   
       'beginID': {
         display_name: 'beginID',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
-        value: "null",
-        /*midID would be added later*/
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
+        value: "null",        
       },
       'endID': {
         display_name: 'endID',
         type: FeatureType.Reference,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
         value: "null",
-
       },
       'midID_array': {/*Should add a list of midpoint locations*/
         display_name: 'midIDs',
         type: FeatureType.ReferenceMulti,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
         value: "null",
-
       },
       "form": {
         display_name: "Form",
@@ -600,7 +599,8 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       },
       "elevation": {/*option attribute*/
         display_name: "elevation",
-        type: FeatureType.Text,
+        type: FeatureType.Reference,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
         value: ""
       },
       'mod': {/*a spatially relevant modifier*/
@@ -865,7 +865,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       },
     }
   },
-  /*motion signal<-->mRelation need to complete trigger here*/
+  /*motion signal<-->mRelation */
   {
     rgb: 'rgb(201,191,211)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
@@ -993,30 +993,260 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     name: 'Meta Link',
     css_class: 'I-MetaLink',
     features: {
-      "Trigger": {
-        display_name: "Trigger",
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
-        value: "null",
-      }
+      "objectID1": {
+        display_name: "objectID1",
+         /*refer to location/(spatial)entity/event tag*/
+         type: FeatureType.Reference,      
+         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+         value: "null",
+      },
+      "objectID2": {
+        display_name: "objectID2",
+         /*refer to location/(spatial)entity/event tag*/
+         type: FeatureType.Reference,      
+         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+         value: "null",
+      },
+      "relType": {
+        display_name: "relation type",
+        type: FeatureType.Select,
+        value: "",
+        select_option: [{
+          display_name: "Coreference",
+          value: "COREFERENCE",
+          value_name: "COREFERENCE"
+        },
+        {
+          display_name: "Subcoreference",
+          value: "SUBCOREFFERENCE",
+          value_name: "SUBCOREFFERENCE"
+        },
+        {
+          display_name: " In Front Of",
+          value: "IN FRONT OF",
+          value_name: "IN FRONT OF"
+        },]}
     }
   },
-  /*measure link*/
+  /* measure link*/
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MeasureLink',
     name: 'Measure Link',
     css_class: 'I-MeasureLink',
     features: {
-      "Trigger": {
-        display_name: "Trigger",
+      "trajector": {
+        display_name: "Trajector",
+        /*refer to location/(spatial)entity/event tag*/
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
         value: "null",
-      }
+      },
+      "landmark": {
+        display_name: "Landmark",
+        /*refer to location/(spatial)entity/event tag*/
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+        value: "null",
+      },
+      /*relation type*/
+      "relType": {
+        display_name: "relation type",
+        type: FeatureType.Select,
+        value: "",
+        select_option: [{
+          display_name: "Above",
+          value: "ABOVE",
+          value_name: "ABOVE"
+        },
+        {
+          display_name: "On",
+          value: "ON",
+          value_name: "ON"
+        },
+        {
+          display_name: " In Front Of",
+          value: "IN FRONT OF",
+          value_name: "IN FRONT OF"
+        },
+        {
+          display_name: "In The Front Of",
+          value: "IN THE FRONT OF",
+          value_name: "IN THE FRONT OF"
+        },
+
+        {
+          display_name: "Behind",
+          value: "BEHIND",
+          value_name: "BEHIND"
+        },
+        {
+          display_name: "Below",
+          value: "BELOW",
+          value_name: "BELOW"
+        },
+        {
+          display_name: "Under",
+          value: "UNDER",
+          value_name: "UNDER"
+        },
+        {
+          display_name: "Over",
+          value: "OVER",
+          value_name: "OVER"
+        },
+        {
+          display_name: "Outside",
+          value: "OUTSIDE",
+          value_name: "OUTSIDE"
+        },
+        {
+          display_name: "Inside",
+          value: "INSIDE",
+          value_name: "INSIDE"
+        },
+        {
+          display_name: "Between",
+          value: "BETWEEN",
+          value_name: "BETWEEN"
+        },        
+        {
+          display_name: "Beside",
+          value: "BESIDE",
+          value_name: "BESIDE"
+        },
+
+        {
+          display_name: "Next To",
+          value: "NEXT TO",
+          value_name: "NEXT TO"
+        },
+        {
+          display_name: "Before",
+          value: "BEFORE",
+          value_name: "BEFORE"
+        },
+        {
+          display_name: "North",
+          value: "NORTH",
+          value_name: "NORTH"
+        },
+        {
+          display_name: "South",
+          value: "SOUTH",
+          value_name: "SOUTH"
+        },        
+        {
+          display_name: "West",
+          value: "WEST",
+          value_name: "WEST"
+        },        
+        {
+          display_name: "East",
+          value: "EAST",
+          value_name: "EAST"
+        },
+        {
+          display_name: "Northeast",
+          value: "NORTHEAST",
+          value_name: "NORTHEAST"
+        },
+        {
+          display_name: "Northwest",
+          value: "NORTHWEST",
+          value_name: "NORTHWEST"
+        },
+        {
+          display_name: "Southeast",
+          value: "SOUTHEAST",
+          value_name: "SOUTHEAST"
+        },
+        {
+          display_name: "Southwest",
+          value: "SOUTHWEST",
+          value_name: "SOUTHWEST"
+        },
+        {
+          display_name: "Right",
+          value: "RIGHT",
+          value_name: "RIGHT"
+        },
+        {
+          display_name: "Left",
+          value: "LEFT",
+          value_name: "LEFT"
+        },
+        {
+          display_name: "Opposite",
+          value: "OPPOSITE",
+          value_name: "OPPOSITE"
+        },
+        {
+          display_name: "At",
+          value: "AT",
+          value_name: "AT"
+        },
+        {
+          display_name: "In",
+          value: "IN",
+          value_name: "IN"
+        }       
+        ]},
+        /*val describes the actual measurement*/
+        "val": {
+          display_name: "Val",
+          type: FeatureType.Select,
+          value: "",
+          select_option: [{
+            display_name: "Near",
+            value: "NEAR",
+            value_name: "NEAR"
+          },
+          {
+            display_name: "Far",
+            value: "FAR",
+            value_name: "FAR"
+          },
+          {
+            display_name: "Shorter",
+            value: "SHORTER",
+            value_name: "SHORTER"
+          },
+          {
+            display_name: "Taller",
+            value: "TALLER",
+            value_name: "TALLER"
+          },
+          {
+            display_name: "Others Refer to Text",
+            value: "OTHERS",
+            value_name: "OTHERS"
+          },
+        ]},
+        "Val_refer_to_Text": {
+          display_name: "Val refer to Text",
+          /*refer to a measure tag*/
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
+          value: "null",
+        },
+        "endPoint1": {
+          display_name: "endPoint1",
+          /*refer to location/(spatial)entity/event tag*/
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+          value: "null",
+        },
+        "endPoint2": {
+          display_name: "endPoint2",
+          /*refer to location/(spatial)entity/event tag*/
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+          value: "null",
+        },
     }
   },
-   /* working move link problem with source,goal and midPoint*/
+   /* move link problem with source,goal and midPoint*/
   {
     rgb: 'rgb(131,120,120)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MoveLink',
