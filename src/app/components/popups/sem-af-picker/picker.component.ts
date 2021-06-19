@@ -46,8 +46,11 @@ export function find_id(x: {}, id: number) {
 export class PickerComponent implements OnInit {
 
   public annotations: IPickerEntryData[] = [];
+  public links: IPickerEntryData[] = [];
   public highlightAnnotation = new Map<string, boolean>();
+  public highlightLink = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
+  public lastLink: IPickerEntryData[] = [];
   public features_json: string = "";
   public new_features = {}
   public text_inputs: { key: string, value: string, org_string: string }[] = []
@@ -70,19 +73,28 @@ export class PickerComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PickerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IPickerData,
+    @Inject(MAT_DIALOG_DATA) public data: IPickerData
   ) { }
 
   public ngOnInit(): void {
     const annotationList = [];
+    const linkList= [];
     const { entries, highlights, last, features, annoData, text } = this.data;
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>(highlights || []);
 
+    for (const entry of entries) {
+      if (entry.is_entity) {
+        annotationList.push(entry);
+      } else {
+        linkList.push(entry);
+      }
+    }
+    this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
+    this.links = linkList.sort((a, b) => a.name < b.name ? -1 : 1);
+  
 
-
-
-
+    
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
       //this.gather();
@@ -226,11 +238,11 @@ export class PickerComponent implements OnInit {
     }
 
 
-    for (const entry of entries) {
-      annotationList.push(entry);
-    }
-    this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
+    
   }
+
+
+
 
   private gather(ignore_select: string = null) {
     if (this.index == -1) return {};
@@ -301,8 +313,6 @@ export class PickerComponent implements OnInit {
 
 export interface IPickerData {
   entries: IPickerEntryData[];
-  metonym: boolean;
-  methapher: boolean;
   highlights?: Array<[string, boolean]>;
   last: IPickerEntryData[];
   features?: any;
@@ -313,5 +323,6 @@ export interface IPickerData {
 export interface IPickerEntryData {
   name: string;
   rgb?: string;
-  concept: boolean;
+  is_entity:boolean;
+  
 }
