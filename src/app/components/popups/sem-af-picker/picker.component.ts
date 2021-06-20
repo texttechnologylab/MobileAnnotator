@@ -50,9 +50,7 @@ export class PickerComponent implements OnInit {
   public annotations: IPickerEntryData[] = [];
   public links: IAnnotationClass[] = [];
   public highlightAnnotation = new Map<string, boolean>();
-  public highlightLink = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
-  public lastLink: IPickerEntryData[] = [];
   public features_json: string = "";
   public new_features = {}
   public text_inputs: { key: string, value: string, org_string: string }[] = []
@@ -77,13 +75,12 @@ export class PickerComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PickerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IPickerData
+    @Inject(MAT_DIALOG_DATA) public data: IPickerData,
   ) { }
 
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
     const annotationList = [];
-    const linkList= [];
     const { entries, highlights, last, features, annoData, text } = this.data;
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>();
@@ -254,9 +251,6 @@ export class PickerComponent implements OnInit {
     console.log("1")
   }
 
-
-
-
   private gather(ignore_select: string = null) {
     if (this.index == -1) return {};
     var new_features = {}
@@ -353,6 +347,5 @@ export interface IPickerData {
 export interface IPickerEntryData {
   name: string;
   rgb?: string;
-  is_entity:boolean;
-  
+  concept: boolean;
 }
