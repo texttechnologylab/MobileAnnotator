@@ -27,10 +27,11 @@ import { return_type } from '../../popups/sem-af-picker/picker.component'
 export class SemAF implements OnInit, OnDestroy {
 
   public data: IContentholderData[] = [];
-  public annoData: { [id: string]: IContentholderAnnotation } = {};
+  public new_link: IAnnotationClass;
+  public help_text = "Hello There";
+  public link_start_end: number[] = null;
   public pageSizes = [35, 60, 100, 150, 250];
-  public pageSize = this.pageSizes[0];
-  public mode = 1;
+  public pageSize = this.pageSizes[3];
   public activeFilters: string[] = [];
   public selectedAnnotation: IAnnotationClass;
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
@@ -55,7 +56,6 @@ export class SemAF implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   private lastAnnations: IAnnotationClass[] = [];
-  private fingerprints = new Map<string, IFingerprint>();
 
   constructor(
     private router: Router,
@@ -102,8 +102,9 @@ export class SemAF implements OnInit, OnDestroy {
     this.documentService.saveCas(this.casId);
   }
 
-  public select_link(id: number){
+  public select_link(id: number) {
     console.log(`Link Selected: ${id}`)
+
 
   }
 
@@ -125,7 +126,7 @@ export class SemAF implements OnInit, OnDestroy {
     if (this.selected_reference !== null) {
       const st: string = this.selected_reference.feature_name;
       const feature = {};
-      feature[st] = this.annoData[data.id].features._addr
+      feature[st] = data.id
       this.activeFilters = [];
       console.log("feature: ", feature, data)
 
@@ -135,10 +136,11 @@ export class SemAF implements OnInit, OnDestroy {
       return;
     }
 
+
     else if (this.selected_reference_multi !== null) {
       const st: string = this.selected_reference_multi.feature_name;
       const feature = {};
-      this.selected_reference_multi.current_ids.push(this.annoData[data.id].features._addr)
+      this.selected_reference_multi.current_ids.push(data.id)
       feature[st] = this.selected_reference_multi.current_ids;
       this.activeFilters = [];
       console.log("feature: ", feature, data)
@@ -149,98 +151,148 @@ export class SemAF implements OnInit, OnDestroy {
       return;
     }
 
-    switch (this.mode) {
-      case 0:
-        // Modus: Mehrfache Annotation (Auswahl der Kategorie über Schaltfläche am unteren Rand)
-        if (!this.selectedAnnotation) {
-          return;
-        }
-        this.handleAnnotationSelect(data, this.selectedAnnotation);
-        break;
+    if (this.link_start_end !== null) {
 
-      case 1:
-        // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
-        const picker = this.dialog.open(PickerComponent, {
-          data: {
-            features: (this.annoData[data.id] || { features: {} }).features,
-            entries: defaultAnnotationClasses,
-            last: this.lastAnnations,
-            highlights: this.annoData[data.id] &&
-              Object.entries(this.annoData[data.id].annotations).map(([type, array]) => [type, array.some(({ fp }) => fp)]) || [],
-            annoData: this.tool.toolElements,
-            text: this.documentService.currentCAS.text
-          },
-          height: 'inherit',
+      console.log("HIIIII")
+      const id = data.id;
+      if (id === undefined) return;
 
-        });
-        picker.afterClosed().subscribe((result: { type: return_type, [id: string]: any }) => {
-          console.log("CLOSED!")
-          var new_features;
+      this.link_start_end.push(id)
+      this.help_text = `Select End for ${this.new_link.name}`;
+      if (this.link_start_end.length == 2) {
+        console.log("start_end:", JSON.stringify(this.link_start_end, null, 4))
+        const [a, b] = this.link_start_end
+        this.createLink(this.new_link.type, a, b)
+
+        this.link_start_end = null;
+        this.help_text = null;
+
+      }
+      return;
+    }
+
+    {
+
+      // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
+      console.log("data.data.features", data.data.features)
+      const picker = this.dialog.open(PickerComponent, {
+        data: {
+          features: data.data.features,
+          entries: defaultAnnotationClasses,
+          last: this.lastAnnations,
+          highlights: data.data._type,
+          annoData: this.tool.toolElements,
+          text: this.documentService.currentCAS.text
+        },
+        height: 'inherit',
+
+      });
+      picker.afterClosed().subscribe((result: { type: return_type, [id: string]: any }) => {
+        console.log("CLOSED!")
+        var new_features;
 
 
-          if (result) {
-            if (result.type == return_type.change_attribute) {
-              if (this.annoData[data.id]) {
-                if (Object.entries(result.data).length == 0) return;
-                const addr = this.annoData[data.id].features["_addr"];
-                this.update_feature(addr, result.data)
-              }
-            } else if (return_type.selected == result.type) {
-              this.selectedAnnotation = result.entry;
-              new_features = result.features;
-              this.handleAnnotationSelect(data, this.selectedAnnotation);
+        if (result) {
+          if (result.type == return_type.change_attribute) {
+            {
+              if (Object.entries(result.data).length == 0) return;
+              const addr = data.id;
+              this.update_feature(addr, result.data)
             }
-            else if (return_type.selected_after == result.type) {
-              this.selectedAnnotation = result.entry;
-              const featues = {
-                begin: data.data.features.end,
-                end: data.data.features.end,
+          } else if (return_type.selected == result.type) {
+            this.selectedAnnotation = result.entry;
+            new_features = result.features; 
+
+            const queue = [this.removeallAnnotations(data.id),this.createAnnotation(data)]
+            this.sendBatch(queue)
+          }
+          else if (return_type.selected_after == result.type) {
+            this.selectedAnnotation = result.entry;
+            const featues = {
+              begin: data.data.features.end,
+              end: data.data.features.end,
+            }
+
+
+
+            console.log("data:  ", JSON.stringify(data, null, 4));
+            const features = {};
+
+            const queue: IQueueElement = {
+              cmd: 'create',
+              data: {
+                bid: '_b0_',
+                features: featues,
+                _type: this.selectedAnnotation.type,
               }
+            };
+            console.log("queue11:  ", JSON.stringify(queue, null, 4));
+            this.sendBatch([queue]);
+          }
+          else if (return_type.selected_ref == result.type) {
+            const addr = data.id;
+            console.log("resxx", result)
+            this.selected_reference = { feature_name: result.feature_name, addr: addr }
+            if (result.allowed_type !== null) {
+              this.activeFilters = result.allowed_type;
+            }
+            {
+              if (Object.entries(result.data).length == 0) return;
+              this.update_feature(addr, result.data)
+            }
+          }
+          else if (return_type.selected_ref_multi == result.type) {
+            const addr = data.id;
+            console.log("resxx", result)
+            this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
+            if (result.allowed_type !== null) {
+              this.activeFilters = result.allowed_type;
+            }
+            {
+              if (Object.entries(result.data).length == 0) return;
+              this.update_feature(addr, result.data)
+            }
+          }
 
-
-
-              console.log("data:  ", JSON.stringify(data, null, 4));
-              const features = {};
-
-              const queue: IQueueElement = {
-                cmd: 'create',
+          else if (return_type.add_link == result.type) {
+            const link = result.entry as IAnnotationClass;
+            console.log("link:   a", link);
+            this.link_start_end = [];
+            this.help_text = `Select Start for ${link.name}`
+            this.new_link = link;
+          }
+          else if(return_type.remove_selected == result.type){ 
+            const {begin, end} = result.features
+            console.log("data{{{{",data)
+            const queue: IQueueElement[] = [
+              {
+                cmd: 'remove',
                 data: {
                   bid: '_b0_',
-                  features: featues,
-                  _type: this.selectedAnnotation.type,
+                  addr: `${data.id}`,
                 }
-              };
-              console.log("queue11:  ", JSON.stringify(queue, null, 4));
-              this.sendBatch([queue]);
-            }
-            else if (return_type.selected_ref == result.type) {
-              const addr = this.annoData[data.id].features["_addr"];
-              console.log("resxx", result)
-              this.selected_reference = { feature_name: result.feature_name, addr: addr }
-              if (result.allowed_type !== null) {
-                this.activeFilters = result.allowed_type;
+              },
+              {
+              cmd: 'create',
+              data: {
+                bid: '_b1_',
+                features: {begin: begin, end: end},
+                _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
               }
-              if (this.annoData[data.id]) {
-                if (Object.entries(result.data).length == 0) return;
-                this.update_feature(addr, result.data)
-              }
-            }
-            else if (return_type.selected_ref_multi == result.type) {
-              const addr = this.annoData[data.id].features["_addr"];
-              console.log("resxx", result)
-              this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
-              if (result.allowed_type !== null) {
-                this.activeFilters = result.allowed_type;
-              }
-              if (this.annoData[data.id]) {
-                if (Object.entries(result.data).length == 0) return;
-                this.update_feature(addr, result.data)
-              }
-            }
+            }];
 
+            this.sendBatch(queue);
           }
-        });
-        break;
+
+
+
+
+
+
+
+        }
+      });
+
     }
   }
 
@@ -366,12 +418,6 @@ export class SemAF implements OnInit, OnDestroy {
               this.genearteToolbarMenu();
             }
             break;
-
-          case 'modes':
-            if (num < 4 && num >= 0) {
-              this.mode = num;
-              this.genearteToolbarMenu();
-            }
         }
     }
   }
@@ -381,144 +427,46 @@ export class SemAF implements OnInit, OnDestroy {
    */
   private generateData(): void {
     this.tool = this.documentService.currentTool;
-    const tokenMap = new Map<number, Map<number, number[]>>();
     const text = this.documentService.currentCAS.text;
-    const tokens = this.tool.toolElements[quickTreeType] || {};
+    const tokens = this.tool.toolElements["org.texttechnologylab.annotation.semaf.isobase.Entity"] || {};
     const data: IContentholderData[] = [];
-    const annotations: { [id: string]: IContentholderAnnotation } = {};
-
-
-    for (const fingerprint of Object.values(this.tool.toolElements[fingerprintType] || {})) {
-      const elem = getTypedAnnotation<IFingerprint>(fingerprint);
-      if (!elem) {
-        continue;
-      }
-      this.fingerprints.set(`${elem.features.reference}`, elem);
-    }
-
-    console.log("this.tool.toolElements", this.tool.toolElements)
-
-
-
-    for (const [id, anno] of Object.entries(tokens)) {
-      const token = getAnnotation(anno);
-      if (!token || token.features.parent !== 'null') {
-        continue;
-      }
-      const begin = token.features.begin;
-      const end = token.features.end;
-      if (!tokenMap.has(begin)) {
-        tokenMap.set(begin, new Map<number, number[]>());
-      }
-      const beginMap = tokenMap.get(begin);
-      if (!beginMap.has(end)) {
-        beginMap.set(end, []);
-      }
-      beginMap.get(end).push(data.length);
-      data.push({
-        label: text.slice(begin, end),
-        id,
-        data: token,
-      });
-    }
-    console.log(data)
-    // tslint:disable-next-line: max-line-length
-
-
-    //console.log("LINKS",this.links)
 
 
     const types = [...defaultAnnotationClasses];
 
-    for (const { type, rgb } of types) {
-      const typeAnnoations = this.tool.toolElements[type];
-      if (!typeAnnoations) {
-        continue;
-      }
-      for (const [annoId, anno] of Object.entries(typeAnnoations)) {
-        const annotation = getAnnotation(anno);
 
-        if (!annotation) {
-          continue;
-        }
+    const annon_types = defaultAnnotationClasses.map((x) => x.type);
+    annon_types.push('org.texttechnologylab.annotation.semaf.isobase.Entity')
 
-        /** This tool was not designed for empty tokens, we create them in a hacky way. */
-        if (annotation.features.begin == annotation.features.end) {
-          const idx = data.length;
-          data.push({
-            label: "∅",
-            id: `do_not_use_${Math.floor(Math.random() * 10000)}`,
-            data: {
-              _addr: null,
-              _type: "org.texttechnologylab.annotation.type.QuickTreeNode",
-              features: {
-                begin: annotation.features.begin,
-                end: annotation.features.begin
-              }
-            },
-          });
-
-          const mapping = annotations;
-          const id = data[idx].id;
-          if (!mapping[id]) {
-            mapping[id] = {
-              rgb: [],
-              badge: 0,
-              ref: id,
-              annotations: {},
-              features: anno
-            };
-          }
-          const entry = mapping[id];
-          entry.rgb.push(rgb);
-          //entry.border = concept ? '0.2em dashed darkgrey' : undefined;
-          if (!entry.annotations[type]) {
-            entry.annotations[type] = [];
-          }
-          entry.annotations[type].push({ id: annoId, fp: this.fingerprints.has(annoId) });
-          continue;
-        }
-        const beginMap = tokenMap.get(annotation.features.begin);
-        if (!beginMap) {
-          continue;
-        }
-
-        const idxArray = beginMap.get(annotation.features.end);
-        if (!idxArray) {
-          continue;
-        }
-
-
-
-        for (const idx of idxArray) {
-          const mapping = annotations;
-          const id = data[idx].id;
-          if (!mapping[id]) {
-            mapping[id] = {
-              rgb: [],
-              badge: 0,
-              ref: id,
-              annotations: {},
-              features: anno
-            };
-          }
-          const entry = mapping[id];
-          entry.rgb.push(rgb);
-          //entry.border = concept ? '0.2em dashed darkgrey' : undefined;
-          if (!entry.annotations[type]) {
-            entry.annotations[type] = [];
-          }
-          entry.annotations[type].push({ id: annoId, fp: this.fingerprints.has(annoId) });
-
-        }
+    for (const item of annon_types) {
+      for (const token_ of Object.values(this.tool.toolElements[item] || {})) {
+        if(Object.values(token_).length == 0) continue;
+        const token = token_ as IToolElement;
+        const { begin, end } = token.features;
+        
+        data.push({
+          label: (begin !== end) ? text.slice(begin, end) : "∅",
+          id: token._addr,
+          data: {
+            _addr: null,
+            _type: token._type,
+            features: token.features
+          },
+        });
       }
     }
+
+
+
+
+
+
 
     this.data = data.sort((a, b) => a.data.features.begin - b.data.features.begin);
 
     const find_id = (id: number) => {
-      if(id === null || id == undefined) return null;
-      const [cc] = Object.values(this.tool.toolElements).map((val) => val[id]).filter((x)=>x!==undefined)
+      if (id === null || id == undefined) return null;
+      const [cc] = Object.values(this.tool.toolElements).map((val) => val[id]).filter((x) => x !== undefined)
       return cc as IToolElement
     }
 
@@ -540,25 +488,25 @@ export class SemAF implements OnInit, OnDestroy {
         const link = x as IToolElement;
         const figure = find_id(link.features["figure"] as number)
         const ground = find_id(link.features["ground"] as number)
-        const flabel: IContentholderData= {id: null,label: null,data: null} 
-        const glabel: IContentholderData= {id: null,label: null,data: null} 
-        
-        if(figure !== null){
-          flabel.id    = figure._addr.toString();
-          flabel.label = this.documentService.currentCAS.text.slice(figure.features.begin,figure.features.end)
-          flabel.data  = figure;
-        } 
-        if(ground !== null){
-          glabel.id    = ground._addr.toString();
-          glabel.label = this.documentService.currentCAS.text.slice(ground.features.begin,ground.features.end)
-          glabel.data  = ground;
-          console.log("ground",ground)
-        } 
+        const flabel: IContentholderData = { id: null, label: null, data: null }
+        const glabel: IContentholderData = { id: null, label: null, data: null }
+
+        if (figure !== null) {
+          flabel.id = figure._addr;
+          flabel.label = this.documentService.currentCAS.text.slice(figure.features.begin, figure.features.end)
+          flabel.data = figure;
+        }
+        if (ground !== null) {
+          glabel.id = ground._addr;
+          glabel.label = this.documentService.currentCAS.text.slice(ground.features.begin, ground.features.end)
+          glabel.data = ground;
+          console.log("ground", ground)
+        }
         return {
           id: link._addr,
           type: link._type,
           from: flabel,
-          to: glabel, 
+          to: glabel,
         }
       })
       this.links = this.links.concat(links);
@@ -566,54 +514,6 @@ export class SemAF implements OnInit, OnDestroy {
 
     }
 
-    this.annoData = annotations;
-  }
-
-  private handleAnnotationSelect(data: IContentholderData, annotationClass: IAnnotationClass): void {
-    let toRemove: IToolElement;
-
-    const annotations = this.tool.toolElements[annotationClass.type];
-    if (annotations) {
-      for (const anno of Object.values(annotations)) {
-        const annotation = getAnnotation(anno);
-        if (!annotation) {
-          continue;
-        }
-        if (annotation.features.begin === data.data.features.begin && annotation.features.end === data.data.features.end) {
-          toRemove = annotation;
-          break;
-        }
-      }
-    }
-
-
-    const index = this.lastAnnations.findIndex(({ type }) => type === annotationClass.type);
-    if (index !== -1) {
-      this.lastAnnations = [annotationClass, ...this.lastAnnations.filter(({ type }) => type !== annotationClass.type)];
-    } else {
-      this.lastAnnations.unshift(annotationClass);
-      this.lastAnnations = this.lastAnnations.slice(0, 3);
-    }
-
-    if (toRemove) {
-      this.removeAnnotation(toRemove);
-      //console.log("data remove:  ",JSON.stringify(toRemove));
-    } else {
-      const all_annotations = this.annoData;
-      //for annotation check if there are other annotations saved *by annoID, if yes remove, if no continue
-      //console.log("alle",all_annotations);
-      //console.log("data id", data.id);
-      for (const obj in all_annotations) {
-        if (obj == data.id) {
-          for (const obj in all_annotations[data.id].annotations) {
-            //console.log("annoids", all_annotations[data.id].annotations[obj][0].id);
-            this.removeallAnnotations(all_annotations[data.id].annotations[obj][0].id);
-          }
-        }
-      }
-
-      this.createAnnotation(data);
-    }
   }
 
 
@@ -636,22 +536,12 @@ export class SemAF implements OnInit, OnDestroy {
   /**
    * Erzeugt eine Annotation
    */
-  private createAnnotation(data: IContentholderData): void {
-    const abc: [string, (string | number | boolean | number[])][]
-      = Object.entries(this.selectedAnnotation.features).map((x) => [x[0], x[1].value]);
-    // Convert (string,Feature)[] to (string,(string | number | boolean))[]
-
+  private createAnnotation(data: IContentholderData): IQueueElement {
     const featues = {
       begin: data.data.features.begin,
       end: data.data.features.end,
     }
 
-    for (const [key, value] of abc) {
-      //featues[key] = value
-    }
-
-    console.log("data:  ", JSON.stringify(data, null, 4));
-    const features = {};
 
     const queue: IQueueElement = {
       cmd: 'create',
@@ -661,21 +551,23 @@ export class SemAF implements OnInit, OnDestroy {
         _type: this.selectedAnnotation.type,
       }
     };
-    console.log("queue:  ", JSON.stringify(queue, null, 4));
-    this.sendBatch([queue]);
+    return queue;
   }
 
-  /**
-   * Entferne eine Annotation
-   */
-  private removeAnnotation(data: IToolElement): void {
+
+  private createLink(type: string, start: number, end: number) {
     const queue: IQueueElement = {
-      cmd: 'remove',
+      cmd: 'create',
       data: {
         bid: '_b0_',
-        addr: `${data._addr}`,
+        features: {
+          figure: start,
+          ground: end,
+        },
+        _type: type,
       }
     };
+    console.log("queuex:  ", JSON.stringify(queue, null, 4));
     this.sendBatch([queue]);
   }
 
@@ -683,10 +575,7 @@ export class SemAF implements OnInit, OnDestroy {
   /**
    * Remove all annotations
    */
-  private removeallAnnotations(addr: string): void {
-    //console.log("Remove");
-    //console.log("data remove:  ",JSON.stringify(data,null,4));
-    //console.log(`${data._addr}`);
+  private removeallAnnotations(addr: string | number): IQueueElement {
     const queue: IQueueElement = {
       cmd: 'remove',
       data: {
@@ -694,8 +583,7 @@ export class SemAF implements OnInit, OnDestroy {
         addr: `${addr}`,
       }
     };
-    //console.log("queue:  ",JSON.stringify(queue,null,4));
-    this.sendBatch([queue]);
+    return queue
   }
 
   private sendBatch(queue: IQueueElement[]): void {
@@ -729,21 +617,8 @@ export class SemAF implements OnInit, OnDestroy {
         selected: size === this.pageSize,
       });
     }
-    const modes: IMenuListing = {
-      type: 'listing',
-      id: 'modes',
-      name: 'TOOL-QUICKANNO.MODES',
-      list: [],
-    };
-    for (const [id, name] of ['TOOL-QUICKANNO.MODE-ONE', 'TOOL-QUICKANNO.MODE-TWO', 'TOOL-QUICKANNO.MODE-THREE'].entries()) {
-      modes.list.push({
-        type: 'action',
-        id: `${id}`,
-        name,
-        selected: id === this.mode,
-      });
-    }
-    const retval: Array<IMenuListing | IMenuAction> = [items, modes];
+
+    const retval: Array<IMenuListing | IMenuAction> = [items];
     retval.push({
       type: 'action',
       id: 'filter',

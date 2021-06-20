@@ -12,7 +12,7 @@ import {
   MatInputModule
 } from '@angular/material';
 
-import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature } from '../../tools/sem-af/sem-af.utils';
+import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature, defaultLinkClasses } from '../../tools/sem-af/sem-af.utils';
 
 
 export enum return_type {
@@ -20,7 +20,9 @@ export enum return_type {
   selected,
   selected_after,
   selected_ref,
-  selected_ref_multi
+  selected_ref_multi,
+  add_link,
+  remove_selected
 }
 
 type SingleRef = { text_org: string, text: string, id: number };
@@ -46,11 +48,14 @@ export function find_id(x: {}, id: number) {
 export class PickerComponent implements OnInit {
 
   public annotations: IPickerEntryData[] = [];
+  public links: IAnnotationClass[] = [];
   public highlightAnnotation = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
   public features_json: string = "";
   public new_features = {}
   public text_inputs: { key: string, value: string, org_string: string }[] = []
+  public current_sel: string = null;
+  public features;
 
   public ft = FeatureType;
 
@@ -74,14 +79,24 @@ export class PickerComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.links = defaultLinkClasses;
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text } = this.data;
     this.lastAnnotations = last;
-    this.highlightAnnotation = new Map<string, boolean>(highlights || []);
+    this.highlightAnnotation = new Map<string, boolean>();
+    if(highlights != null){
+      this.highlightAnnotation.set(highlights,true)
+    }
+
+    this.features = features;
+  
+    console.log("this.datathis.data",this.data)
+
+    this.current_sel = highlights;
 
 
 
-
+    console.log("1")
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
@@ -91,15 +106,16 @@ export class PickerComponent implements OnInit {
 
 
     var forms = {}
+    console.log("1")
 
 
-    this.index = defaultAnnotationClasses.findIndex((x) => { return x.type == features["_type"] })
+    this.index = defaultAnnotationClasses.findIndex((x) => { return x.type == highlights })
     if (this.index != -1) {
 
       const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
       const featues = annon.features
 
-
+      
 
 
 
@@ -112,11 +128,11 @@ export class PickerComponent implements OnInit {
          * Sometimes the an Attribute send by uima is not present but should be
          * Manily observed with Comment
          */
-        if (("features" in features) && !(key in features["features"])) {
+        if (!(key in features)) {
 
           if (featues[key].type == FeatureType.Text) {
             forms[key] = new FormControl(value.value)
-            console.log("forms0: ", key, value.value, features["features"])
+            console.log("forms0: ", key, value.value, features)
             this.text_inputs.push({
               key: key,
               value: `${value.value}`,
@@ -129,7 +145,7 @@ export class PickerComponent implements OnInit {
         }
 
 
-        featues[key].value = features["features"][key]
+        featues[key].value = features[key]
         const text_value: string | number | boolean | number[] = featues[key].value;
         if (featues[key].type == FeatureType.Text) {
           this.text_inputs.push({
@@ -201,6 +217,7 @@ export class PickerComponent implements OnInit {
 
       this.features_typed = Object.entries(featues);
       this.features_dict = featues;
+      
 
       const t = featues[0]
 
@@ -224,12 +241,14 @@ export class PickerComponent implements OnInit {
     else {
       this.profileForm = new FormGroup({})
     }
+    console.log("1")
 
 
     for (const entry of entries) {
       annotationList.push(entry);
     }
     this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
+    console.log("1")
   }
 
   private gather(ignore_select: string = null) {
@@ -259,8 +278,23 @@ export class PickerComponent implements OnInit {
   /**
    * Schließen des Dialogs mit Übergabe der gewählten Kategorie
    */
-  public selected(entry: IPickerEntryData): void {
+  public selected(entry: any): void {
+    const e = entry as any;
+    
+    if(this.current_sel === e.type){
+      this.dialogRef.close({ type: return_type.remove_selected, entry: entry, features: this.features });
+      return;
+    }
+    
+
     this.dialogRef.close({ type: return_type.selected, entry: entry, features: this.new_features });
+  }
+
+  /**
+   * Close the Dialog and make the user select start and end of the link
+   */
+   public add_link(entry: IAnnotationClass): void {
+    this.dialogRef.close({ type: return_type.add_link, entry: entry });
   }
 
   public selected_ref(feature_name: string): void {
@@ -303,7 +337,7 @@ export interface IPickerData {
   entries: IPickerEntryData[];
   metonym: boolean;
   methapher: boolean;
-  highlights?: Array<[string, boolean]>;
+  highlights?: string;
   last: IPickerEntryData[];
   features?: any;
   annoData?: any;

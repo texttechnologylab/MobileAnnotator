@@ -1,9 +1,13 @@
 <app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-SEM-AF.TITLE'" (menuEvent)="onMenuSelect($event)">
 </app-tool-bar>
 
+<div style="font-size: large; text-align: center;" *ngIf="help_text !== null">
+    <span>{{help_text}}</span>
+</div>
+
 <app-contentholder-semaf class="content" [inData]="data" [links]="links" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
-    (createMultiToken)="createMultiToken($event)" (removeMultiToken)="removeMultiToken($event)" (selectionLinkChanged)="select_link($event)"
-    [inAnnotations]="mode === 2 ? commentData : annoData" [filters]="mode != 2 ? activeFilters : []">
+    (selectionLinkChanged)="select_link($event)"
+    [filters]="activeFilters">
 </app-contentholder-semaf>
 
 <div class="footer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode === 0">

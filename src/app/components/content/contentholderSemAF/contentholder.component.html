@@ -1,9 +1,8 @@
 <div class="content">
     <div class="contentholder" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')">
         <div *ngFor="let entry of data" class="entryDiv" [style.background]="getBackground(entry)"
-            [style.border]="entry.border" [ngClass]="getClassesForEntry(entry)" (press)="multiSelect(entry, $event)"
-            (click)="onSelect(entry, $event)" [matBadge]="getBadgeValue(entry)" [matBadgeHidden]="isBadgeHidden(entry)"
-            matBadgeSize="small">
+            [style.border]="entry.border" [ngClass]="getClassesForEntry(entry)"
+            (click)="onSelect(entry, $event)">
             {{entry.label}} </div>
     </div>
     <div class="spacer" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')"> </div>
@@ -14,16 +13,12 @@
 
 
             <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
-                [ngClass]="getClassesForEntry(link.from)" 
-                 [matBadge]="getBadgeValue(link.from)"
-                [matBadgeHidden]="isBadgeHidden(link.from)" matBadgeSize="small">
+                [ngClass]="getClassesForEntry(link.from)">
                 {{link.from.label}} </div> ->
 
 
             <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
-                [ngClass]="getClassesForEntry(link.to)" 
-                 [matBadge]="getBadgeValue(link.to)"
-                [matBadgeHidden]="isBadgeHidden(link.to)" matBadgeSize="small">
+                [ngClass]="getClassesForEntry(link.to)">
                 {{link.to.label}} </div>
 
         </div>

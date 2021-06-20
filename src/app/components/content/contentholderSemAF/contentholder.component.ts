@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, Eleme
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { defaultAnnotationClasses } from '../../tools/sem-af/sem-af.utils';
 
 enum eContextMenu {
   DeleteMulti = 'CONTENT-CONTENTHOLDER.DELETE-MULTI'
@@ -18,13 +19,13 @@ enum eContextMenu {
 export class ContentholderComponentSemAF implements OnChanges {
 
   public data: IContentholderData[] = [];
-  public currentSelected: string = undefined;
-  public lastTapped: string = undefined;
+  public currentSelected: number = undefined;
+  public lastTapped: number = undefined;
   public pageSizes = [50, 100, 150];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
 
-  private filterSet: Set<string>;
+  private filterSet: Set<string> = new Set();
 
   private longpress = false;
 
@@ -33,7 +34,6 @@ export class ContentholderComponentSemAF implements OnChanges {
 
   @Input() inData: IContentholderData[];
   @Input() links: Link[];
-  @Input() inAnnotations: { [id: string]: IContentholderAnnotation } = {};
   @Input() pageSize = 50;
   @Input() page = 0;
   @Input() filters: string[] = [];
@@ -41,14 +41,12 @@ export class ContentholderComponentSemAF implements OnChanges {
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
   @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
-  @Output() createMultiToken = new EventEmitter<[string, string]>();
-  @Output() removeMultiToken = new EventEmitter<string>();
   constructor(
     private sanitizer: DomSanitizer,
   ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    
+    console.log("ngOnChanges", changes)
     if (changes) {
       if (changes.pageSize != null || changes.page != null || changes.inData != null) {
         if (changes.inData != null || changes.pageSize != null) {
@@ -69,6 +67,9 @@ export class ContentholderComponentSemAF implements OnChanges {
     console.log("enty",JSON.stringify(entry,null,4))
     event.preventDefault();
     this.preventDefault(event);
+
+    if(!this.filterSet.has(entry.data._type) && this.filterSet.size) return;
+
     if (this.longpress) {
       this.longpress = false;
       return;
@@ -79,7 +80,6 @@ export class ContentholderComponentSemAF implements OnChanges {
         return;
       }
 
-      this.createMultiToken.emit([this.currentSelected, entry.id]);
       this.currentSelected = undefined;
     } else {
       this.selectionChanged.emit(entry);
@@ -139,30 +139,6 @@ export class ContentholderComponentSemAF implements OnChanges {
     this.pageChanged();
   }
 
-  /**
-   * Markiert ein Token als "longpress"-gewählt
-   */
-  public multiSelect(entry: IContentholderData, event: PointerEventInput & { timeStamp: number }): void {
-    this.longpress = true;
-    event.preventDefault();
-    this.preventDefault(event.srcEvent as MouseEvent);
-    this.lastTapped = undefined;
-    this.selectionChanged.emit(undefined);
-    this.currentSelected = entry.id;
-    this.contextMenuRef.nativeElement.style.left = event.center.x + 'px';
-    this.contextMenuRef.nativeElement.style.top = event.center.y + 'px';
-
-    this.contextMenuEntries = [];
-
-    const childs = entry.data.features.children;
-    if (childs && Array.isArray(childs) && childs.length) {
-      this.contextMenuEntries.push(eContextMenu.DeleteMulti);
-    }
-
-    if (this.contextMenuEntries.length) {
-      this.contextMenuTrigger.openMenu();
-    }
-  }
 
   /**
    * Wird aufgerufen sollte ein Kontextmenü Eintrag gewählt werden
@@ -171,7 +147,6 @@ export class ContentholderComponentSemAF implements OnChanges {
     this.contextMenuTrigger.closeMenu();
     switch (event) {
       case eContextMenu.DeleteMulti:
-        this.removeMultiToken.emit(this.currentSelected);
         this.currentSelected = undefined;
         break;
     }
@@ -182,8 +157,8 @@ export class ContentholderComponentSemAF implements OnChanges {
    */
   public getClassesForEntry(entry: IContentholderData): string {
     let retval = '';
-    const annoData = this.inAnnotations[entry.id];
-    if (this.filterSet.size && (!annoData || !Object.keys(annoData.annotations).some((a) => this.filterSet.has(a)))) {
+    const annoData = {};
+    if (this.filterSet.size && !this.filterSet.has(entry.data._type)) {
       retval += 'filtered ';
     }
     if (entry.id === this.currentSelected) {
@@ -201,31 +176,19 @@ export class ContentholderComponentSemAF implements OnChanges {
    * Gibt einen Farbwert oder Style für den Background zurück
    */
   public getBackground(entry: IContentholderData): string | SafeStyle {
-    const rgbs = this.inAnnotations[entry.id] && this.inAnnotations[entry.id].rgb || [];
-    if (rgbs.length < 2) {
-      // Fall: es gibt (k)einen Farbwert durch Annotationen
-      return rgbs[0] || '#ffffff';
-    }
-    // Fall: es gibt mehr als zwei Farbwerte durch Annotationen
-    let retval = 'linear-gradient(45deg, ';
-
-    const percent = 100 / rgbs.length;
-    for (const [idx, color] of rgbs.entries()) {
-      retval += color + ` ${percent * idx}%, ` + color + ` ${percent * (idx + 1)}%`;
-      retval += (idx !== rgbs.length - 1 ? ', ' : ')');
-    }
-    return this.sanitizer.bypassSecurityTrustStyle(retval);
+    
+    const val = defaultAnnotationClasses.find((x)=>x.type == entry.data._type);
+    return (val===undefined)? "#fff": val.rgb;
   }
 
   /**
    * Ob die Badge des Tokens unsichtbar sein soll
    */
   public isBadgeHidden(entry: IContentholderData): boolean {
-    if (!this.inAnnotations[entry.id]) {
-      return true;
-    }
-    return !this.inAnnotations[entry.id].badge;
+    /** */
+    return true // Delete this later not nessacary anymore
   }
+
   public links_to_string(){
    return JSON.stringify(this.links,null,4);
   }
@@ -234,10 +197,8 @@ export class ContentholderComponentSemAF implements OnChanges {
    * Gibt den Zahlenwert für die Anzeige innerhalb der Badge zurück
    */
   public getBadgeValue(entry: IContentholderData): number {
-    if (!this.inAnnotations[entry.id]) {
-      return 0;
-    }
-    return this.inAnnotations[entry.id].badge || 0;
+    return 0;
+    // Delete this later not nessacary anymore
   }
 
   private pageChanged() {
@@ -266,7 +227,7 @@ export interface Link {
 
 export interface IContentholderData {
   label: string;
-  id: string;
+  id: number;
   data: IToolElement;
 }
 
