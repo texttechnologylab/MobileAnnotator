@@ -6,7 +6,7 @@ import { DocumentService, } from 'src/app/services/document.service';
 import { ITool, IToolElement } from 'src/app/services/interfaces';
 import { IContentholderData, IContentholderAnnotation, Link, LabelAndId } from '../../content/contentholderSemAF/contentholder.component';
 import { PickerComponent } from '../../popups/sem-af-picker/picker.component';
-import { IAnnotationClass, defaultAnnotationClasses, defaultLinkClasses } from './sem-af.utils';
+import { IAnnotationClass, defaultAnnotationClasses } from './sem-af.utils';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { Subscription, PartialObserver } from 'rxjs';
 import { FilterComponent } from '../../popups/filter/filter.component';
@@ -305,7 +305,10 @@ export class SemAF implements OnInit, OnDestroy {
   public openFilterSelection(): void {
     const filterData = {
       type: 'multi',
-      data: { 'POPUP-FILTER.ANNOTATION-LABEL': defaultAnnotationClasses },
+      data: { 
+        'POPUP-FILTER.ENTITY-LABEL': defaultAnnotationClasses.filter(({ is_entity }) => is_entity),
+        'POPUP-FILTER.LINK-LABEL': defaultAnnotationClasses.filter(({ is_entity }) => !is_entity),
+         },
     };
 
     const filter = this.dialog.open(FilterComponent, {
@@ -473,7 +476,7 @@ export class SemAF implements OnInit, OnDestroy {
     /**
      * The following lines convert this.tool.toolElements to Link[]
      * so they extract all links and save them in this.links
-     */
+     
     const link_types = [...defaultLinkClasses];
     this.links = []
     for (const { type, rgb } of link_types) {
@@ -512,7 +515,7 @@ export class SemAF implements OnInit, OnDestroy {
       this.links = this.links.concat(links);
 
 
-    }
+    }*/
 
   }
 

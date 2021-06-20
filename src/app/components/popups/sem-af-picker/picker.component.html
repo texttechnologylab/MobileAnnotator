@@ -9,10 +9,11 @@
 </div>
 
 <mat-tab-group class="content">
-    <mat-tab label="Entities">
+    <mat-tab label = "Entities">
         <div>
             <h2>Entities</h2>
-            <div class="entry-entity" *ngFor="let entry of annotations">
+            
+            <div class="entry-entity" *ngFor="let entry of annotations" [style.background]="entry.rgb" (tap)="selected(entry)">
                 <div (tap)="selected(entry)" class="entryDiv entity" [style.background]="entry.rgb"
                     [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
                     <span>{{ entry.name }}</span>
@@ -115,3 +116,4 @@
     </div>
     </mat-tab>
 </mat-tab-group>
+
