@@ -71,7 +71,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: [],
         /*only number allowed*/
       },
-      "Countable": {/*default value should be true ?*/
+      "Countable": {
         display_name: "countable",
         type: FeatureType.Select,
         value: 'countable',
@@ -86,14 +86,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value_name: "TRUE"
         }
         ]
-      },     
-      
+      },           
       "comment": {
         display_name: "Comment",
         type: FeatureType.Text,
         value: ""
-      },
-     
+      },     
     }
   },
   /*place complete*/
@@ -363,133 +361,39 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         not_nullable: true
       },
     }
-  },
-  /*location NOT EXIST  */
-  {
-    rgb: 'rgb(224,229,223)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
-    name: 'Location',
-    css_class: 'I-Location',
-    features: {
-      "dimensionality": {
-        display_name: "Dimensionality",
-        type: FeatureType.Select,
-        value: "Area",
-        select_option: [{
-          display_name: "Area",
-          value: "AREA",
-          value_name: "AREA"
-        },
-        {
-          display_name: "Point",
-          value: "POINT",
-          value_name: "POINT"
-        },
-        {
-          display_name: "Line",
-          value: "LINE",
-          value_name: "LINE"
-        },
-        {
-          display_name: "Volume",
-          value: "VOLUME",
-          value_name: "VOLUME"
-        }
-        ]
-
-      },
-      "comment": {
-        display_name: "Comment",
-        type: FeatureType.Text,
-        value: ""
-      },
-      "form": {
-        display_name: "Form",
-        type: FeatureType.Select,
-        value: "Form",
-        select_option: [{/*Nominal Form*/
-          display_name: "NOM",
-          value: "NOM",
-          value_name: "NOM"
-        },
-        {/*named location*/
-          display_name: "NAM",
-          value: "NAM",
-          value_name: "NAM"
-        }
-        ]
-      },
-      "dcl": {/*Document Creation Location, default value：false*/
-        display_name: "DCL",
-        type: FeatureType.Select,
-        value: false,
-        select_option: [{
-          display_name: "False",
-          value: false,
-          value_name: "FALSE"
-        },
-        {
-          display_name: "True",
-          value: true,
-          value_name: "TRUE"
-        }
-        ],
-        not_nullable: true
-      },
-      "countable": {
-        display_name: "Countable",
-        type: FeatureType.Select,
-        value: "Countable",
-        select_option: [{
-          display_name: "True",
-          value: true,
-          value_name: "TRUE"
-        },
-        {
-          display_name: "False",
-          value: false,
-          value_name: "FALSE"
-        }
-        ]
-      },
-      "elevation": {/*option attribute*/
-        display_name: "elevation",
-        type: FeatureType.Text,
-        value: ""
-      }
-    }
-  },
-  /*nonmotion event<-->event path*/
+  },  
+  /*nonmotion event<-->event path problem in startID AND endID */
   {
     rgb: 'rgb(218,247,220)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
     name: 'Event-Path',
     css_class: 'I-eventpath',
     features: {
-      "trigger": {/*define it later */
+      "trigger": {
         display_name: "TRIGGER",
         type: FeatureType.Reference,
-        value: "",
-        not_nullable: true
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Motion"],
+        value: ""      
       },
-      'beginID': {
-        display_name: 'beginID',
+      'startID': {
+        display_name: 'Start',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",        
       },
       'endID': {
-        display_name: 'endID',
+        display_name: 'End',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",
       },
       'midID_array': {/*Should add a list of midpoint locations*/
-        display_name: 'midIDs',
+        display_name: 'Mids',
         type: FeatureType.ReferenceMulti,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place","org.texttechnologylab.annotation.semaf.isospace.Location"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",
       }, 
+      
       "gazref": {/*define it later */
         display_name: "GAZREF",
         type: FeatureType.Text,
@@ -509,6 +413,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: 'latitude',
         type: FeatureType.Text,
         value: "",
+      }, 
+       "elevation": {/*option attribute*/
+        display_name: "elevation",
+        type: FeatureType.Reference,
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
+        value: ""
       }
 
     }
@@ -523,7 +433,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
                       values: ['POINT', 'LINE', 'AREA', 'VOLUME']
                   }
    */
-  /*path problem: doesnt work */
+  /*path complete */
   {
     rgb: 'rgb(68,207,108)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
@@ -558,7 +468,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },   
-      'beginID': {
+      'startID': {
         display_name: 'Start',
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
@@ -570,12 +480,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",
       },
-      'mids': {/*Should add a list of midpoint locations*/
+      'midID_array': {/*Should add a list of midpoint locations*/
         display_name: 'Mids',
         type: FeatureType.ReferenceMulti,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",
-      },
+      }, 
       "form": {
         display_name: "Form",
         type: FeatureType.Select,
@@ -802,55 +712,34 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
 
     }
   },
-  /*measure finish with a problem*/
+  /*measure complete*/
   {
     rgb: 'rgb(187,172,193)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
-    css_class: 'I-UNK',
-    features: {
-      "countable": {
-        display_name: "Countable",
-        type: FeatureType.Select,
-        value: "Countable",
-        select_option: [{
-          display_name: "True",
-          value: true,
-          value_name: "TRUE"
-        },
-        {
-          display_name: "False",
-          value: false,
-          value_name: "FALSE"
-        }
-        ]
-      },
-      "gquant": {
-        display_name: 'gquant',
+    css_class: 'I-Measure',
+    features: {      
+      "value": {
+        display_name: 'Value(req)',
+        type: FeatureType.Text,
+        value: "",
+      },     
+       "unit": {
+        display_name: 'Unit',
         type: FeatureType.Text,
         value: "",
       },
-      /*uima line 70*/    
-      "scopes": {
-        display_name: "Scopes",
-        /*refer to entity*/
-        type: FeatureType.Reference,      
-        reference_option: [],
-        value: "null",
-      },
-      /*Problem: Need to create a list? refer to line 78 */
-      "scopes_array": {
-        display_name: "Scopes Array",
-        /*refer to location/(spatial)entity/event tag*/
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
-        value: "null",
-      },
-      "cardinality": {
-        display_name: 'Cardinality',
+      "mod": {
+        display_name: 'Mod',
         type: FeatureType.Text,
         value: "",
       },
+      "comment": {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+
     }
   },
   /*spatial signal<-->sRelation complete */
@@ -1292,8 +1181,8 @@ export const defaultLinkClasses: IAnnotationClass[] = [
       "Source": {
         display_name: "Source",
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.beginID"],
-        /* problem : only want to refer beginID from EventPath*/
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.startID"],
+        /* problem : only want to refer startID from EventPath*/
         value: "null",
       },
       "Goal": {
@@ -1795,3 +1684,98 @@ export interface IAnnotationClass {
   /** Should only contain features which are editable by the user like a comment for example  */
   features: { [name: string]: Feature };
 }
+/*location NOT EXIST 
+  {
+    rgb: 'rgb(224,229,223)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.Location',
+    name: 'Location',
+    css_class: 'I-Location',
+    features: {
+      "dimensionality": {
+        display_name: "Dimensionality",
+        type: FeatureType.Select,
+        value: "Area",
+        select_option: [{
+          display_name: "Area",
+          value: "AREA",
+          value_name: "AREA"
+        },
+        {
+          display_name: "Point",
+          value: "POINT",
+          value_name: "POINT"
+        },
+        {
+          display_name: "Line",
+          value: "LINE",
+          value_name: "LINE"
+        },
+        {
+          display_name: "Volume",
+          value: "VOLUME",
+          value_name: "VOLUME"
+        }
+        ]
+
+      },
+      "comment": {
+        display_name: "Comment",
+        type: FeatureType.Text,
+        value: ""
+      },
+      "form": {
+        display_name: "Form",
+        type: FeatureType.Select,
+        value: "Form",
+        select_option: [{
+          display_name: "NOM",
+          value: "NOM",
+          value_name: "NOM"
+        },
+        {
+          display_name: "NAM",
+          value: "NAM",
+          value_name: "NAM"
+        }
+        ]
+      },
+      "dcl": {
+        display_name: "DCL",
+        type: FeatureType.Select,
+        value: false,
+        select_option: [{
+          display_name: "False",
+          value: false,
+          value_name: "FALSE"
+        },
+        {
+          display_name: "True",
+          value: true,
+          value_name: "TRUE"
+        }
+        ],
+        not_nullable: true
+      },
+      "countable": {
+        display_name: "Countable",
+        type: FeatureType.Select,
+        value: "Countable",
+        select_option: [{
+          display_name: "True",
+          value: true,
+          value_name: "TRUE"
+        },
+        {
+          display_name: "False",
+          value: false,
+          value_name: "FALSE"
+        }
+        ]
+      },
+      "elevation": {
+        display_name: "elevation",
+        type: FeatureType.Text,
+        value: ""
+      }
+    }
+  },*/
