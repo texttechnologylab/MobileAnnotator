@@ -558,13 +558,13 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },   
-      'start': {
+      'beginID': {
         display_name: 'Start',
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
         value: "null",        
       },
-      'end': {
+      'endID': {
         display_name: 'End',
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
@@ -835,7 +835,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         display_name: "Scopes",
         /*refer to entity*/
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        reference_option: [],
         value: "null",
       },
       /*Problem: Need to create a list? refer to line 78 */

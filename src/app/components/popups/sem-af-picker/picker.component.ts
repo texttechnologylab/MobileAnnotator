@@ -123,6 +123,7 @@ export class PickerComponent implements OnInit {
       let reference: Reference[] = [];
       let referenceMulti: ReferenceMulti[] = [];
       for (const [key, value] of Object.entries(featues)) {
+        if(key in ["begin","end"]) continue; // begin and end are not changeable by the user
 
         /**
          * Sometimes the an Attribute send by uima is not present but should be
@@ -184,7 +185,7 @@ export class PickerComponent implements OnInit {
           let text_: SingleRef[] = [];
 
 
-          if (text_value !== null) {
+          if (text_value !== null && text_value !== undefined) {
             let values = text_value as number[];
 
             for (const valu of values) {
