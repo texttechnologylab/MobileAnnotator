@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges,AfterViewInit , SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -10,6 +10,16 @@ enum eContextMenu {
   DeleteMulti = 'CONTENT-CONTENTHOLDER.DELETE-MULTI'
 }
 
+interface Pos{
+  x: number,
+  y: number
+}
+
+interface LinkPos{
+  start: Pos,
+  end: Pos
+}
+
 @Component({
   selector: 'app-contentholder-semaf',
   templateUrl: './contentholder.component.html',
@@ -18,7 +28,7 @@ enum eContextMenu {
 /**
  * Komponente für die tokenweise Darstellung der Texte
  */
-export class ContentholderComponentSemAF implements OnChanges {
+export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
 
   public data: IContentholderData[] = [];
   public currentSelected: number = undefined;
@@ -26,6 +36,8 @@ export class ContentholderComponentSemAF implements OnChanges {
   public pageSizes = [50, 100, 150];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
+
+  public linksPos: LinkPos[] =[];
 
   private filterSet: Set<string> = new Set();
 
@@ -35,7 +47,7 @@ export class ContentholderComponentSemAF implements OnChanges {
   @ViewChild(MatMenuTrigger, { static: true }) private readonly contextMenuTrigger: MatMenuTrigger;
 
   @Input() inData: IContentholderData[];
-  @Input() links: Link[];
+  @Input() links: Link[] = [];
   @Input() pageSize = 50;
   @Input() page = 0;
   @Input() filters: string[] = [];
@@ -59,7 +71,44 @@ export class ContentholderComponentSemAF implements OnChanges {
       if (changes.filters) {
         this.filterSet = make_filter(this.filters);
       }
+      if(changes.links){
+        setTimeout(()=>{this.test(this.links)}, 100); // Ensure entities are rendered
+      }
     }
+  }
+
+  public test(links: Link[]){
+    const li: LinkPos[] = []
+    if(this.links === undefined) return;
+    for (const link of links) {
+      const from_ = document.querySelector(`#entity${link.from.id}`)
+      const to_   = document.querySelector(`#entity${link.to.id}`)
+      if(!from_ || !to_) return; // maybe something else here
+
+      const from = from_.getBoundingClientRect();
+      const to = to_.getBoundingClientRect();
+
+      li.push({
+        start:{
+          x: from.x +  from.width/2,
+          y: from.y + from.height
+        },
+        end:{
+          x: to.x +  to.width/2,
+          y: to.y
+        }
+      })
+
+      console.log("link",from,to,link)
+    }
+
+    this.linksPos = li;
+    console.log("document.getElementById('loginInput')",li)
+  }
+
+  public ngAfterViewInit(){
+
+
   }
 
   /**

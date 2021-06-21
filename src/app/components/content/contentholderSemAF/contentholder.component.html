@@ -1,6 +1,21 @@
+<svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none;">
+
+
+      <line 
+      *ngFor="let link of linksPos; index as i"
+      [attr.x1]="link.start.x" [attr.y1]="link.start.y"
+      [attr.x2]="link.end.x" [attr.y2]="link.end.y"
+      stroke="black" />
+
+      <line  stroke="black" />
+  </svg>
+
+
+  
 <div class="content">
     <div class="contentholder" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')">
-        <div *ngFor="let entry of data" class="entryDiv" [style.background]="getBackground(entry)"
+        <div *ngFor="let entry of data; index as i" class="entryDiv"  [style.background]="getBackground(entry)"
+            [id]="'entity'+entry.id.toString()"
             [style.border]="entry.border" [ngClass]="getClassesForEntry(entry)"
             (click)="onSelect(entry, $event)">
             {{entry.label}} </div>
