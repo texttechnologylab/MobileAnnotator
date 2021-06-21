@@ -4,6 +4,8 @@ import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { defaultAnnotationClasses } from '../../tools/sem-af/sem-af.utils';
 
+import { inhe, make_filter } from '../../tools/sem-af/uima';
+
 enum eContextMenu {
   DeleteMulti = 'CONTENT-CONTENTHOLDER.DELETE-MULTI'
 }
@@ -55,7 +57,7 @@ export class ContentholderComponentSemAF implements OnChanges {
         this.pageChanged();
       }
       if (changes.filters) {
-        this.filterSet = new Set(this.filters);
+        this.filterSet = make_filter(this.filters);
       }
     }
   }

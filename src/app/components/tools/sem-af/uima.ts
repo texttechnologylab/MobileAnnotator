@@ -1,4 +1,4 @@
-{
+ export const data = {
   "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.APPOS": {
     "parent": "de.tudarmstadt.ukp.dkpro.core.api.syntax.type.dependency.Dependency",
     "features": [
@@ -28530,3 +28530,38 @@
     "primitive": false
   }
 }
+
+
+
+
+
+function make_inhe(){
+  const inhe = {}
+  for (const [k,v] of Object.entries(data)) {
+    let val: string[]  = inhe[v["parent"]]
+    if(val === undefined) val = []
+    val.push(k) 
+    inhe[v["parent"]] = val
+  }
+  return inhe
+}
+
+export const inhe = make_inhe()
+
+export function make_filter(filter: string[]){
+  let filtercopy = [... filter]
+  let i = 0;
+  while (i < filtercopy.length) {
+    if(inhe[filtercopy[i]] !== undefined)
+      for (const elem of inhe[filtercopy[i]]) {
+        if(!(elem in filtercopy)){
+          filtercopy.push(elem)
+        }
+      }
+    i+=1;
+  }
+  return new Set(filtercopy)
+}
+
+
+
