@@ -362,7 +362,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       },
     }
   },  
-  /*nonmotion event<-->event path problem in beginID AND endID */
+  /*nonmotion event<-->event path problem in startID AND endID */
   {
     rgb: 'rgb(218,247,220)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
@@ -375,16 +375,16 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Motion"],
         value: ""      
       },
-      'beginID': {
+      'startID': {
         display_name: 'Start',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",        
       },
       'endID': {
         display_name: 'End',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",
       },
       'midID_array': {/*Should add a list of midpoint locations*/
@@ -468,7 +468,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },   
-      'beginID': {
+      'startID': {
         display_name: 'Start',
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
@@ -1181,8 +1181,8 @@ export const defaultLinkClasses: IAnnotationClass[] = [
       "Source": {
         display_name: "Source",
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.beginID"],
-        /* problem : only want to refer beginID from EventPath*/
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.startID"],
+        /* problem : only want to refer startID from EventPath*/
         value: "null",
       },
       "Goal": {
