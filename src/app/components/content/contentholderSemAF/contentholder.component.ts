@@ -85,8 +85,8 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       const to_   = document.querySelector(`#entity${link.to.id}`)
       if(!from_ || !to_) return; // maybe something else here
 
-      const from = from_.getBoundingClientRect();
-      const to = to_.getBoundingClientRect();
+      const from = from_.getBoundingClientRect() as DOMRect;
+      const to = to_.getBoundingClientRect() as DOMRect;
 
       li.push({
         start:{
