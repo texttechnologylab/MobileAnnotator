@@ -72,12 +72,13 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
         this.filterSet = make_filter(this.filters);
       }
       if(changes.links){
-        setTimeout(()=>{this.test(this.links)}, 100); // Ensure entities are rendered
+        setTimeout(()=>{this.test(this.links)}, 2000); // Ensure entities are rendered
       }
     }
   }
 
   public test(links: Link[]){
+    const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
     if(this.links === undefined) return;
     for (const link of links) {
@@ -90,12 +91,12 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
 
       li.push({
         start:{
-          x: from.x +  from.width/2,
-          y: from.y + from.height
+          x: from.x +  from.width/2 + window.scrollX, 
+          y: from.y + from.height -base.y  + window.scrollY
         },
         end:{
-          x: to.x +  to.width/2,
-          y: to.y
+          x: to.x +  to.width/2 + window.scrollX,
+          y: to.y - base.y + window.scrollY
         }
       })
 

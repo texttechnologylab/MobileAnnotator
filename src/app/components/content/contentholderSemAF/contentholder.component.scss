@@ -52,11 +52,10 @@
 }
 
 .content {
-    overflow-y: auto;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: visible;
     z-index: 0;
 }
 
@@ -69,6 +68,10 @@
     flex-shrink: 0;
     color: #ffffff;
     background-color: #00618F;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 :host {
