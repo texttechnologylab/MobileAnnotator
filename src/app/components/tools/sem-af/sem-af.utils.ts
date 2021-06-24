@@ -9,7 +9,6 @@ export enum FeatureType {
   Reference,
   ReferenceMulti
 }
-/*problem: shape net object not found*/
 export const defaultAnnotationClasses: IAnnotationClass[] = [
   /*COMPLETE spatial entity 'non-consuming tag'*/
   {
@@ -820,35 +819,48 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
   /*spatial relationships class*/
 
 export const defaultLinkClasses: IAnnotationClass[] = [
-  /*QS link */
+  /*QS link complete*/
   {      
     rgb: 'rgb(204,204,204)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.QsLink',
     name: 'QSLink',
-    css_class: 'I-QSLink',
+    css_class: 'I-QsLink',
     features: {
-      "Trigger": {
+      "trigger": {
         display_name: "Trigger",
         /*refer to spatial signal*/
         type: FeatureType.Reference,      
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SRelation"],
         value: "null",
+      },      
+      "figure": {
+        display_name: "Figure(req)",
+        type: FeatureType.Reference,      
+        reference_option: [],
+        value: "null",
+      },      
+      "ground": {
+        display_name: "Ground(req)",              
+        type: FeatureType.Reference,      
+        reference_option: [],
+        value: "null",
       },
+      /** 
       "trajector": {
         display_name: "Trajector",
-        /*refer to location/(spatial)entity/event tag*/
+       
         type: FeatureType.Reference,      
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
         value: "null",
       },
       "landmark": {
         display_name: "Landmark",
-        /*refer to location/(spatial)entity/event tag*/
+       
         type: FeatureType.Reference,      
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
         value: "null",
-      },
-      "relType": {
+      },**/
+      "rel_type": {
         display_name: "relation type",
         type: FeatureType.Select,
         value: "",
@@ -1165,86 +1177,96 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         },
     }
   },
-   /* move link problem with source,goal and midPoint*/
+   /* move link */
   {
     rgb: 'rgb(204,204,204)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MoveLink',
     name: 'Move Link',
     css_class: 'I-MoveLink',
     features: {
-      "Trigger": {
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },   
+      "figure": {
+        display_name: "Figure(req)",
+        type: FeatureType.Reference,      
+        reference_option: [],
+        value: "null",
+      }, 
+      "ground": {
+        display_name: "Ground(req)",              
+        type: FeatureType.Reference,      
+        reference_option: [],
+        value: "null",
+      }, 
+      "trigger": {
         display_name: "Trigger",
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Motion"],
+        reference_option: [],
+        /*no restrict to select */
         value: "null",
-      },
-      "Source": {
-        display_name: "Source",
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.startID"],
-        /* problem : only want to refer startID from EventPath*/
-        value: "null",
-      },
-      "Goal": {
-        display_name: "Goal",
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.endID"],
-        /* problem : only want to refer endID from EventPath*/
-        value: "null",
-      },
-      "midPoint": {
-        display_name: "Mid Point",
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.midID"],
-        /* problem : only want to refer midID from EventPath*/
-        value: "null",
-      },
-      "mover": {
-        display_name: "Mover",              
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
-        value: "null",
-      },
-      /*problem: want to refer the tags only from mover*/
-      "ground": {
-        display_name: "ground",              
-        type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.MoveLink.mover"],
-        value: "null",
-      },
-      "goal_reached": {
-        display_name: "Goal Reached",
+      },      
+      "rel_type": {
+        display_name: "Relation Type(req)",
         type: FeatureType.Select,
         value: "",
         select_option: [{
-          display_name: "True",
-          value: "TRUE",
-          value_name: "TRUE"
+          display_name: "traverse",
+          value: "TRAVERSE",
+          value_name: "TRAVERSE"
+        }]},
+        "midPoint": {
+          display_name: "Mid Point",
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.midID"],
+          /*  only want to refer midID from EventPath*/
+          value: "null",
         },
-        {
-          display_name: "False",
-          value: "FALSE",
-          value_name: "FALSE"
+        "mover": {
+          display_name: "Mover",              
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
+          value: "null",
+        },          
+        "goal_reached": {
+          display_name: "Goal Reached",
+          type: FeatureType.Select,
+          value: "",
+          select_option: [{
+            display_name: "True",
+            value: "TRUE",
+            value_name: "TRUE"
+          },
+          {
+            display_name: "False",
+            value: "FALSE",
+            value_name: "FALSE"
+          },
+          {
+            display_name: "Uncertain",
+            value: "UNCERTAIN",
+            value_name: "UNCERTAIN"
+          }]},
+
+        "pathID": {
+          display_name: "PathID",              
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.trigger"],
+          value: "null",
         },
-        {
-          display_name: "Uncertain",
-          value: "UNCERTAIN",
-          value_name: "UNCERTAIN"
-        },
-      ]      
-    },
-    "pathID": {
-      display_name: "PathID",              
-      type: FeatureType.Reference,      
-      reference_option: ["org.texttechnologylab.annotation.semaf.isospace.EventPath.trigger"],
-      value: "null",
-    },
-    "motion_signalID": {
-      display_name: "ground",              
-      type: FeatureType.Reference,      
-      reference_option: ["org.texttechnologylab.annotation.semaf.isospace.MRelation.trigger"],
-      value: "null",
+        "motion_signalID": {
+          display_name: "ground",              
+          type: FeatureType.Reference,      
+          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.MRelation.trigger"],
+          value: "null",
+    
+
+       
+            
     }
+    
   },
 },
    /*orientation link complete but one question about "referencePt_viewer_entity" */
