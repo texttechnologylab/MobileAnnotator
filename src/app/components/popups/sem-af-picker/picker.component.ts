@@ -256,6 +256,11 @@ export class PickerComponent implements OnInit {
     console.log("1")
   }
 
+  public onSelectLink(id:number, event: MouseEvent){
+    event.preventDefault();
+    //this.selectionLinkChanged.emit(id)
+  }
+
   private gather(ignore_select: string = null) {
     if (this.index == -1) return {};
     var new_features = {}
