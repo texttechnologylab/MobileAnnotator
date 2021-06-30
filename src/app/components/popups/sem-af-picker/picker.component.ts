@@ -28,9 +28,12 @@ export enum return_type {
   remove_selected
 }
 
-type SingleRef = { text_org: string, text: string, id: number };
+type SingleRef = { text_org: string, text: string, id: number, color?: string };
 type Reference = { text: string, feature_name: string, text_org: string, display_name: string };
 type ReferenceMulti = { feature_name: string, display_name: string, values: SingleRef[] };
+
+
+type FeatureVisu = { key: string, display_name: string, data: any, type: FeatureType }
 
 export function find_id(x: {}, id: number) {
   for (const [key, val] of Object.entries(x)) {
@@ -49,7 +52,7 @@ export function find_id(x: {}, id: number) {
  * Komponente für die Auswahl einer Kategorie des QuickAnnotators
  */
 export class PickerComponent implements OnInit {
-  
+
 
   public annotations: IPickerEntryData[] = [];
   public links: IAnnotationClass[] = [];
@@ -64,10 +67,10 @@ export class PickerComponent implements OnInit {
 
   public ft = FeatureType;
 
-  public reference: Reference[]
-  public referenceMulti: ReferenceMulti[]
 
   public features_typed: [string, Feature][]
+
+  public feature_visu: FeatureVisu[];
   public features_dict: {
     [name: string]: Feature;
   };
@@ -83,32 +86,32 @@ export class PickerComponent implements OnInit {
     public dialogRef: MatDialogRef<PickerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IPickerData,
   ) { }
-  
-/* Function to open the Link picker menu via button*/
+
+  /* Function to open the Link picker menu via button*/
   openDialog(): void {
     let dialogRef = this.dialog.open(semafLinkPickerComponent, {
     });
-  
-    }
+
+  }
 
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id } = this.data;
-    console.log("links.fi",links.filter((x)=>{return x.from.id ===id || x.to.id === id}))
+    console.log("links.fi", links.filter((x) => { return x.from.id === id || x.to.id === id }))
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>();
-    if(highlights != null){
-      this.highlightAnnotation.set(highlights,true)
+    if (highlights != null) {
+      this.highlightAnnotation.set(highlights, true)
     }
 
     this.features = features;
-  
-    console.log("this.datathis.data",this.data)
+
+    console.log("this.datathis.data", this.data)
 
     this.current_sel = highlights;
 
-    this.links_containing_self = links.filter((x)=>{return x.from.id ===id || x.to.id === id});
+    this.links_containing_self = links.filter((x) => { return x.from.id === id || x.to.id === id });
 
     console.log("1")
 
@@ -122,6 +125,7 @@ export class PickerComponent implements OnInit {
     var forms = {}
     console.log("1")
 
+    const feature_visu: FeatureVisu[] = []
 
     this.index = defaultAnnotationClasses.findIndex((x) => { return x.type == highlights })
     if (this.index != -1) {
@@ -129,54 +133,29 @@ export class PickerComponent implements OnInit {
       const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
       const featues = annon.features
 
-      
 
 
 
-      console.log("featues", featues, features)
-      let reference: Reference[] = [];
-      let referenceMulti: ReferenceMulti[] = [];
+
       for (const [key, value] of Object.entries(featues)) {
-        if(key in ["begin","end"]) continue; // begin and end are not changeable by the user
+        if (key in ["begin", "end"]) continue; // begin and end are not changeable by the user
 
-        /**
-         * Sometimes the an Attribute send by uima is not present but should be
-         * Manily observed with Comment
-         */
-        if (!(key in features)) {
-
-          if (featues[key].type == FeatureType.Text) {
-            forms[key] = new FormControl(value.value)
-            console.log("forms0: ", key, value.value, features)
-            this.text_inputs.push({
-              key: key,
-              value: `${value.value}`,
-              org_string: `${value.value}`,
-            })
-            continue;
-          }
-
-
+        if (!(Object.keys(features).includes(key))){
+          features[key] = null
         }
 
 
-        featues[key].value = features[key]
-        const text_value: string | number | boolean | number[] = featues[key].value;
+        const text_value: string | number | boolean | number[] = features[key];
         if (featues[key].type == FeatureType.Text) {
-          this.text_inputs.push({
-            key: key,
-            value: `${text_value}`,
-            org_string: `${text_value}`,
-          })
-          forms[key] = new FormControl(text_value)
-          console.log("forms1: ", key, text_value)
+          feature_visu.push(this.createTextInput(key, text_value as string, featues[key].display_name, forms))
+
         }
         else if (featues[key].type == FeatureType.Select) {
-          forms[key] = new FormControl(text_value !== "" ? text_value : null)
-          console.log("forms2: ", key, text_value, typeof (text_value))
+          feature_visu.push(this.createSelectInput(key, text_value as string, featues[key].display_name, forms, value))
         }
         else if (featues[key].type == FeatureType.Reference) {
           let text_ = null;
+          let color = null;
 
           try {
             if (text_value !== "null") {
@@ -186,14 +165,23 @@ export class PickerComponent implements OnInit {
               if (m) {
                 const { begin, end } = m["features"]
                 text_ = text.slice(begin, end);
+                color = defaultAnnotationClasses.find((x)=>x.type === m["_type"]).rgb
+                
               }
             }
           } catch (error) {
 
           }
 
-          reference.push({ feature_name: key, text: text_, text_org: text_, display_name: value.display_name })
-          console.log("forms3: ", key, text_value, typeof (text_value), text_)
+
+
+          feature_visu.push({
+            type: FeatureType.Reference,
+            key: key,
+            display_name: value.display_name,
+            data: { feature_name: key, text: text_, text_org: text_, display_name: value.display_name,color: color } as Reference
+          })
+
         }
         else if (featues[key].type == FeatureType.ReferenceMulti) {
           let text_: SingleRef[] = [];
@@ -201,14 +189,16 @@ export class PickerComponent implements OnInit {
 
           if (text_value !== null && text_value !== undefined) {
             let values = text_value as number[];
-
+            let color  = null;
+            
             for (const valu of values) {
               try {
                 const m = find_id(annoData, valu);
                 if (m) {
                   const { begin, end } = m["features"]
                   const txt = text.slice(begin, end);
-                  text_.push({ text_org: txt, text: txt, id: valu });
+                  color = defaultAnnotationClasses.find((x)=>x.type === m["_type"]).rgb
+                  text_.push({ text_org: txt, text: txt, id: valu,color: color });
                 }
 
               } catch (error) {
@@ -220,53 +210,81 @@ export class PickerComponent implements OnInit {
           }
 
 
+          feature_visu.push({
+            type: FeatureType.ReferenceMulti,
+            key: key,
+            display_name: value.display_name,
+            data: { feature_name: key, display_name: value.display_name, values: text_ } as ReferenceMulti
+          })
 
-          referenceMulti.push({ feature_name: key, display_name: value.display_name, values: text_ })
-          console.log("forms4: ", key, text_, text_value)
         }
       }
-      console.log("reference", reference)
-      console.log("referenceMulti", referenceMulti)
-      this.reference = reference;
-      this.referenceMulti = referenceMulti;
+      this.feature_visu = feature_visu;
 
-      this.features_typed = Object.entries(featues);
       this.features_dict = featues;
-      
-
-      const t = featues[0]
 
 
-
-      console.log("annon", JSON.stringify(this.text_inputs, null, 4));
-
-
-
-
+      console.log("feature_visu",feature_visu)
 
       this.profileForm = new FormGroup(forms);
-      console.log(this.profileForm)
-
-
-      this.features_json = JSON.stringify(features, null, 4);
-      console.log(this.features_json)
 
       this.new_features = features;
     }
     else {
       this.profileForm = new FormGroup({})
     }
-    console.log("1")
+
 
 
     for (const entry of entries) {
       annotationList.push(entry);
     }
     this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
-    console.log("1")
+
   }
 
-  public onSelectLink(id:number, event: MouseEvent){
+  public createTextInput(key: string, value: string, display_name: string, forms: {}): FeatureVisu {
+    const t: FeatureVisu = {
+      key: key, data: {
+        org_value: `${value}`,
+        value: `${value}`
+      },
+      display_name: display_name,
+      type: FeatureType.Text
+    }
+
+    forms[key] = new FormControl(value)
+    return t
+  }
+
+  public createSelectInput(key: string, value: string, display_name: string, forms: {}, feature: Feature): FeatureVisu {
+
+    const t: FeatureVisu = {
+      key: key,
+      data: feature.select_option,
+      display_name: display_name,
+      type: FeatureType.Select
+    }
+
+    forms[key] = new FormControl(value !== "" ? value : null)
+    return t
+  }
+
+  public createReferenceInput(key: string, value: string, display_name: string, forms: {}, feature: Feature): FeatureVisu {
+
+    const t: FeatureVisu = {
+      key: key,
+      data: feature.select_option,
+      display_name: display_name,
+      type: FeatureType.Reference
+    }
+
+    forms[key] = new FormControl(value !== "" ? value : null)
+    return t
+  }
+
+
+  public onSelectLink(id: number, event: MouseEvent) {
     event.preventDefault();
     //this.selectionLinkChanged.emit(id)
   }
@@ -284,21 +302,29 @@ export class PickerComponent implements OnInit {
       }
     }
 
-    for (const refe of this.reference) {
-      if (refe.text != refe.text_org && refe.text === null && refe.feature_name !== ignore_select) {
-        new_features[refe.feature_name] = null;
+    for (const fe of this.feature_visu) {
+      if(fe.type === FeatureType.Reference) {
+        const refe = fe.data;
+        if (refe.text != refe.text_org && refe.text === null && refe.feature_name !== ignore_select) {
+          new_features[refe.feature_name] = null;
+        }
       }
+      if(fe.type === FeatureType.ReferenceMulti){
+        const non_removed = (fe.data.values as SingleRef[]).filter((x)=>x.text !== null)
+        if(non_removed.length !== fe.data.length){
+          new_features[fe.key] = non_removed.map((x)=>x.id);
+        }
+      }
+
     }
 
-    console.log("Gather", JSON.stringify(new_features, null, 4))
     return new_features;
-    console.log("Gather", JSON.stringify(new_features, null, 4))
   }
 
   public getBackground(entry: IContentholderData): string {
-    
-    const val = defaultAnnotationClasses.find((x)=>x.type == entry.data._type);
-    return (val===undefined)? "#fff": val.rgb;
+
+    const val = defaultAnnotationClasses.find((x) => x.type == entry.data._type);
+    return (val === undefined) ? "#fff" : val.rgb;
   }
 
   /**
@@ -306,12 +332,12 @@ export class PickerComponent implements OnInit {
    */
   public selected(entry: any): void {
     const e = entry as any;
-    
-    if(this.current_sel === e.type){
+
+    if (this.current_sel === e.type) {
       this.dialogRef.close({ type: return_type.remove_selected, entry: entry, features: this.features });
       return;
     }
-    
+
 
     this.dialogRef.close({ type: return_type.selected, entry: entry, features: this.new_features });
   }
@@ -319,7 +345,7 @@ export class PickerComponent implements OnInit {
   /**
    * Close the Dialog and make the user select start and end of the link
    */
-   public add_link(entry: IAnnotationClass): void {
+  public add_link(entry: IAnnotationClass): void {
     this.dialogRef.close({ type: return_type.add_link, entry: entry });
   }
 
@@ -336,8 +362,8 @@ export class PickerComponent implements OnInit {
 
   public selected_ref_multi(feature_name: string): void {
     //console.log("xx1",{ type: return_type.change_attribute, data: this.gather() });
-    const feat = this.referenceMulti.find((x) => { return x.feature_name == feature_name });
-    const current_id = feat.values.filter((x) => (x.text !== null)).map((x) => x.id)
+    const feat = this.feature_visu.find((x) => { return x.key == feature_name });
+    const current_id = feat.data.values.filter((x) => (x.text !== null)).map((x) => x.id)
 
     //console.log(current_id)
 

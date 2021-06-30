@@ -16,126 +16,129 @@
                 <div (tap)="selected(entry)" class="entryDiv entity" [style.background]="entry.rgb"
                     [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
                     <span>{{ entry.name }}</span>
-                    <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
+                    <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person
+                    </mat-icon>
                 </div>
                 <div (tap)="selected_after(entry)" class="entryDiv entity-after" [style.background]="entry.rgb">
                     <span>&#8631;</span>
                 </div>
             </div>
-        
-        
-        
+
+
+
             <ng-container *ngIf="index != -1">
                 <h2>Attributes</h2>
                 <form [formGroup]="profileForm">
-        
-                    <div *ngFor="let inp of text_inputs; index as i">
-                        <mat-form-field [floatLabel]="true" appearance="outline">
-                            <mat-label>{{inp.key}}</mat-label>
-                            <input matInput formControlName={{inp.key}} placeholder="Just a placeholder">
-                            <br />
-                        </mat-form-field>
-                    </div>
-        
-                    <div *ngFor="let feature of features_typed">
-                        <ng-container *ngIf="feature[1].type == 0">
+
+                    <ng-container *ngFor="let feature of feature_visu; index as i">
+                        <div *ngIf="feature.type == ft.Text">
                             <mat-form-field [floatLabel]="true" appearance="outline">
-                                <mat-label>{{feature[1].display_name}}</mat-label>
-                                <mat-select formControlName={{feature[0]}}>
-                                    <mat-option *ngIf="feature[1].not_nullable !== true" [value]="null"></mat-option>
-                                    <mat-option *ngFor="let feature_value of feature[1].select_option"
+                                <mat-label>{{feature.display_name}}</mat-label>
+                                <input matInput formControlName={{feature.key}} placeholder="Just a placeholder">
+                                <br />
+                            </mat-form-field>
+                        </div>
+
+
+                        <div *ngIf="feature.type == ft.Select">
+                            <mat-form-field [floatLabel]="true" appearance="outline">
+                                <mat-label>{{feature.display_name}}</mat-label>
+                                <mat-select formControlName={{feature.key}}>
+                                    <mat-option *ngIf="feature.data.not_nullable !== true" [value]="null"></mat-option>
+                                    <mat-option *ngFor="let feature_value of feature.data"
                                         [value]="feature_value.value">
                                         {{feature_value.display_name}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                        </ng-container>
-                    </div>
-        
-                    <hr>
-                    <div *ngFor="let refe of reference">
-                        <span>{{refe.display_name}}</span><br>
-                        <ng-container>
-                            <div style="width:100%; display: flex">
-                                <div class="item-ref">
-                                    <button (tap)="refe.text=null" class="item-ref-button" *ngIf="refe.text!=null">
-                                        <span>{{refe.text}} <mat-icon class="backspace-icon" aria-hidden="false"
-                                                aria-label="Delete">backspace</mat-icon></span>
-                                    </button>
-                                </div>
-                                <button style="margin-left:5px" class="item-ref-button" (tap)="selected_ref(refe.feature_name)">
-                                    Select
-                                </button>
-                            </div>
-        
-                        </ng-container>
-        
-                        <hr>
-                    </div>
-        
-        
-                    <div *ngFor="let refe of referenceMulti">
-                        <span>{{refe.display_name}}</span><br>
-                        <ng-container>
-                            <div style="width:100%; display: flex">
-                                <div class="item-ref">
-                                    <ng-container *ngFor="let value of refe.values">
-                                        <button (tap)="value.text=null" class="item-ref-button" *ngIf="value.text!=null">
-                                            <span>{{value.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                        </div>
+
+                        <div *ngIf="feature.type == ft.Reference">
+                            <span>{{feature.display_name}}</span><br>
+                            <ng-container>
+                                <div style="width:100%; display: flex">
+                                    <div class="item-ref">
+                                        <button (tap)="feature.data.text=null" [style.background]="feature.data.color" 
+                                        class="item-ref-button" *ngIf="feature.data.text!=null">
+                                            <span>{{feature.data.text}} <mat-icon class="backspace-icon" aria-hidden="false"
                                                     aria-label="Delete">backspace</mat-icon></span>
                                         </button>
-                                    </ng-container>
+                                    </div>
+                                    <button style="margin-left:5px" class="item-ref-button"
+                                        (tap)="selected_ref(feature.data.feature_name)">
+                                        Select
+                                    </button>
                                 </div>
-                                <button style="margin-left:5px" class="item-ref-button" (tap)="selected_ref_multi(refe.feature_name)">
-                                    Select
-                                </button>
-                            </div>
-        
-                        </ng-container>
-        
-                        <hr>
-                    </div>
-        
-        
-        
-        
+    
+                            </ng-container>
+                            <br>
+                            
+                        </div>
+
+                        <div *ngIf="feature.type == ft.ReferenceMulti">
+                            <span>{{feature.data.display_name}}</span><br>
+                            <ng-container>
+                                <div style="width:100%; display: flex">
+                                    <div class="item-ref">
+                                        <ng-container *ngFor="let value of feature.data.values; index as i">
+                                            <button (tap)="value.text=null" class="item-ref-button"
+                                                *ngIf="value.text!=null" [style.background]="value.color" >
+                                                <span>{{value.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                                                        aria-label="Delete">backspace</mat-icon></span>
+                                            </button>
+                                        </ng-container>
+                                    </div>
+                                    <button style="margin-left:5px" class="item-ref-button"
+                                        (tap)="selected_ref_multi(feature.data.feature_name)">
+                                        Select
+                                    </button>
+                                </div>
+    
+                            </ng-container>
+                            <br>
+                        </div>
+
+                    </ng-container>
+
+
                 </form>
             </ng-container>
-        
+
         </div>
-        
+
     </mat-tab>
-    
+
     <mat-tab label="Link">
         <div>
-        <h2>Add Link Starting here</h2>
-        <div *ngFor="let link of links" class="entryDiv" [style.background]="link.rgb" (tap)="add_link(link)">
-            <span>{{ link.name }}</span>
+            <h2>Add Link Starting here</h2>
+            <div *ngFor="let link of links" class="entryDiv" [style.background]="link.rgb" (tap)="add_link(link)">
+                <span>{{ link.name }}</span>
+            </div>
         </div>
-    </div>
 
 
-    <h2>Links Starting here</h2>
+        <h2>Links Starting here</h2>
 
-    <div id="links contentholder">
-        <div *ngFor="let link of links_containing_self"  class="isolink entryDiv" [style.background]="'lightgreen'"
-            style="border: 4px solid lightgreen; display: flex; width: max-content" (click)="onSelectLink(link.id, $event)"
-            matBadgeSize="small" >
-
-
-            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
-                >
-                {{link.from.label}} </div> ->
+        <div id="links contentholder">
+            <div *ngFor="let link of links_containing_self" class="isolink entryDiv" [style.background]="'lightgreen'"
+                style="border: 4px solid lightgreen; display: flex; width: max-content"
+                (click)="onSelectLink(link.id, $event)" matBadgeSize="small">
 
 
-            <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
-                >
-                {{link.to.label}} </div>
+                <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
+                    [style.border]="link.from.border">
+                    {{link.from.label}} </div> ->
 
-            <button mat-raised-button (click)="openDialog()"[style.background]="'orange'" >Change Attributes</button>
 
+                <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
+                    [style.border]="link.to.border">
+                    {{link.to.label}} </div>
+
+                <button mat-raised-button (click)="openDialog()" [style.background]="'orange'">Change
+                    Attributes</button>
+
+            </div>
         </div>
-    </div>
 
     </mat-tab>
 </mat-tab-group>
