@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PickerComponent as semafLinkPickerComponent } from 'src/app/components/popups/sem-af-link-picker/picker.component';
+
 import {
   MatToolbarModule,
   MatButtonModule,
@@ -84,12 +84,8 @@ export class PickerComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: IPickerData,
   ) { }
   
-/* Function to open the Link picker menu via button*/
-  openDialog(): void {
-    let dialogRef = this.dialog.open(semafLinkPickerComponent, {
-    });
-  
-    }
+
+
 
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
