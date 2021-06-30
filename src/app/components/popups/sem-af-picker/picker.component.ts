@@ -13,6 +13,8 @@ import {
 } from '@angular/material';
 
 import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature, defaultLinkClasses } from '../../tools/sem-af/sem-af.utils';
+import { Link } from '../../content/contentholderSemAF/contentholder.component';
+import { IContentholderData } from '../../content/contentholder/contentholder.component';
 
 
 export enum return_type {
@@ -56,6 +58,7 @@ export class PickerComponent implements OnInit {
   public text_inputs: { key: string, value: string, org_string: string }[] = []
   public current_sel: string = null;
   public features;
+  public links_containing_self: Link[];
 
   public ft = FeatureType;
 
@@ -81,7 +84,8 @@ export class PickerComponent implements OnInit {
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
     const annotationList = [];
-    const { entries, highlights, last, features, annoData, text } = this.data;
+    const { entries, highlights, last, features, annoData, text, links, id } = this.data;
+    console.log("links.fi",links.filter((x)=>{return x.from.id ===id || x.to.id === id}))
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>();
     if(highlights != null){
@@ -94,7 +98,7 @@ export class PickerComponent implements OnInit {
 
     this.current_sel = highlights;
 
-
+    this.links_containing_self = links.filter((x)=>{return x.from.id ===id || x.to.id === id});
 
     console.log("1")
 
@@ -276,6 +280,12 @@ export class PickerComponent implements OnInit {
     console.log("Gather", JSON.stringify(new_features, null, 4))
   }
 
+  public getBackground(entry: IContentholderData): string {
+    
+    const val = defaultAnnotationClasses.find((x)=>x.type == entry.data._type);
+    return (val===undefined)? "#fff": val.rgb;
+  }
+
   /**
    * Schließen des Dialogs mit Übergabe der gewählten Kategorie
    */
@@ -343,6 +353,8 @@ export interface IPickerData {
   features?: any;
   annoData?: any;
   text?: string;
+  links?: Link[];
+  id: number; // Id of the Selected Elem
 }
 
 export interface IPickerEntryData {

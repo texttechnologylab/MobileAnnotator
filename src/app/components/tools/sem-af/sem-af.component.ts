@@ -182,7 +182,9 @@ export class SemAF implements OnInit, OnDestroy {
           last: this.lastAnnations,
           highlights: data.data._type,
           annoData: this.tool.toolElements,
-          text: this.documentService.currentCAS.text
+          text: this.documentService.currentCAS.text,
+          links: this.links,
+          id: data.id
         },
         height: 'inherit',
 
