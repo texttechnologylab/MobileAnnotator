@@ -15,6 +15,7 @@ import { CommentsComponent, ICommentData } from '../../popups/comments/comments.
 import { IMenuListing, IMenuAction, returnEventId } from '../../menu/tool-bar/tool-bar.component';
 
 import { return_type } from '../../popups/sem-af-picker/picker.component'
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-sem-af',
@@ -64,6 +65,7 @@ export class SemAF implements OnInit, OnDestroy {
     private documentService: DocumentService,
     private websocketService: WebsocketService,
     public dialog: MatDialog,
+    public snackBar: MatSnackBar,
   ) { }
 
   public ngOnInit(): void {
@@ -259,8 +261,8 @@ export class SemAF implements OnInit, OnDestroy {
           else if (return_type.add_link == result.type) {
             const link = result.entry as IAnnotationClass;
             console.log("link:   a", link);
-            this.link_start_end = [];
-            this.help_text = `Select Start for ${link.name}`
+            this.link_start_end = [data.id];
+            this.snackBar.open(`Select End for ${link.name}`,null,{ duration: 2000,})
             this.new_link = link;
           }
           else if(return_type.remove_selected == result.type){ 

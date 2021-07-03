@@ -1,16 +1,20 @@
 
 
 
-  
+
 <div id="mainContent" class="content" style="overflow-y: visible  !important; position: relative; margin-bottom: 40px;">
     <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none;">
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="3" refY="4" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><polyline points="0,0 6,4, 0,8, 0,0"></polyline></marker>
+        </defs>
 
 
-        <line 
-        *ngFor="let link of linksPos; index as i"
-        [attr.x1]="link.start.x" [attr.y1]="link.start.y"
-        [attr.x2]="link.end.x" [attr.y2]="link.end.y"
-        stroke="black" />
+
+        <path *ngFor="let link of link_visu; index as i" class="svg-arrow"
+            [attr.d]="link"></path>
+
+
+        
   
         <line  stroke="black" />
     </svg>
@@ -23,7 +27,7 @@
     </div>
     <div class="spacer" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')"> </div>
     <div id="links contentholder">
-        <div *ngFor="let link of links"  class="isolink entryDiv" [style.background]="'lightgreen'"
+        <div *ngFor="let link of []"  class="isolink entryDiv" [style.background]="'lightgreen'"
             style="border: 4px solid lightgreen; display: flex; width: max-content" (click)="onSelectLink(link.id, $event)"
             matBadgeSize="small" >
 
