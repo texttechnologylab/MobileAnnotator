@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: yarn prodbuildgit
       - name: Copy index to 404
-        run: cp dist/index.html 404.html
+        run: cp dist/textanno/index.html dist/textanno/404.html
       - name: Archive build
         if: success()
         uses: actions/upload-artifact@v1
