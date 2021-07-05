@@ -9,22 +9,28 @@
 </div>
 
 <mat-tab-group class="content">
-    <mat-tab label="Entities">
+    <mat-tab label="Link Attributes">
         <div>
-            <h2>Entities</h2>
-            <div class="entry-entity" *ngFor="let entry of annotations">
-                <div (tap)="selected(entry)" class="entryDiv entity" [style.background]="entry.rgb"
-                    [ngClass]="highlightAnnotation.has(entry.type) ? 'highlight' : ''">
-                    <span>{{ entry.name }}</span>
-                    <mat-icon *ngIf="highlightAnnotation.get(entry.type)" style="vertical-align: bottom;">person</mat-icon>
-                </div>
-                <div (tap)="selected_after(entry)" class="entryDiv entity-after" [style.background]="entry.rgb">
-                    <span>&#8631;</span>
-                </div>
+
+        
+            <div class="isolink entryDiv" [style.background]="'lightgreen'"
+            style="border: 4px solid lightgreen; display: flex; width: max-content" 
+            matBadgeSize="small" >
+
+
+                <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
+                    >
+                    {{link.from.label}} </div> ->
+
+
+                <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
+                    >
+                    {{link.to.label}} </div>
+
+                <button mat-raised-button (click)="deleteThis()"[style.background]="'orange'" >Delete Link</button>
+
             </div>
-        
-        
-        
+            
             <ng-container *ngIf="index != -1">
                 <h2>Attributes</h2>
                 <form [formGroup]="profileForm">
@@ -106,36 +112,4 @@
         
     </mat-tab>
     
-    <mat-tab label="Link">
-        <div>
-        <h2>Add Link Starting here</h2>
-        <div *ngFor="let link of links" class="entryDiv" [style.background]="link.rgb" (tap)="add_link(link)">
-            <span>{{ link.name }}</span>
-        </div>
-    </div>
-
-
-    <h2>Links Starting here</h2>
-
-    <div id="links contentholder">
-        <div *ngFor="let link of links_containing_self"  class="isolink entryDiv" [style.background]="'lightgreen'"
-            style="border: 4px solid lightgreen; display: flex; width: max-content" (click)="onSelectLink(link.id, $event)"
-            matBadgeSize="small" >
-
-
-            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
-                >
-                {{link.from.label}} </div> ->
-
-
-            <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
-                >
-                {{link.to.label}} </div>
-
-            <button mat-raised-button (click)="openDialog()"[style.background]="'orange'" >Change Attributes</button>
-
-        </div>
-    </div>
-
-    </mat-tab>
 </mat-tab-group>

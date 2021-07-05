@@ -62,6 +62,9 @@
     <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('+1')">
         <mat-icon>chevron_right</mat-icon>
     </button>
+    <span *ngIf="showCancelSelection">
+         <button (click)="selectionCanceled.emit()">Cancel Selection </button>
+    </span>
     <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('lst')">
         <mat-icon>skip_next</mat-icon>
     </button>

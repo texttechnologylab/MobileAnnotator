@@ -118,6 +118,17 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
   /**
+   * Called when the user cancels the selection of a the Start/End of the Link or an Attribute
+   */
+  public selectionCanceled(): void{
+    console.log("Canceled Selection")
+    this.selected_reference  =null;
+    this.selected_reference_multi  =null;
+    this.link_start_end  =null;
+    this.activeFilters = []
+  }
+
+  /**
    * Markiere ein Token als ausgewähltes Element
    */
   public tokenSelect(data: IContentholderData): void {
@@ -177,37 +188,23 @@ export class SemAF implements OnInit, OnDestroy {
 
       // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
       console.log("data.data.features", data.data.features)
-      const picker = this.dialog.open(PickerComponent, {
-        data: {
-          features: data.data.features,
-          entries: defaultAnnotationClasses,
-          last: this.lastAnnations,
-          highlights: data.data._type,
-          annoData: this.tool.toolElements,
-          text: this.documentService.currentCAS.text,
-          links: this.links,
-          id: data.id
-        },
-        height: 'inherit',
 
-      });
-      picker.afterClosed().subscribe((result: { type: return_type, [id: string]: any }) => {
+      const after_closed = (result: { type: return_type, [id: string]: any }) => {
         console.log("CLOSED!")
         var new_features;
-
+        const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : data.id;
 
         if (result) {
           if (result.type == return_type.change_attribute) {
             {
               if (Object.entries(result.data).length == 0) return;
-              const addr = data.id;
               this.update_feature(addr, result.data)
             }
           } else if (return_type.selected == result.type) {
             this.selectedAnnotation = result.entry;
             new_features = result.features; 
 
-            const queue = [this.removeallAnnotations(data.id),this.createAnnotation(data)]
+            const queue = [this.removeallAnnotations(addr),this.createAnnotation(data)]
             this.sendBatch(queue)
           }
           else if (return_type.selected_after == result.type) {
@@ -234,7 +231,6 @@ export class SemAF implements OnInit, OnDestroy {
             this.sendBatch([queue]);
           }
           else if (return_type.selected_ref == result.type) {
-            const addr = data.id;
             console.log("resxx", result)
             this.selected_reference = { feature_name: result.feature_name, addr: addr }
             if (result.allowed_type !== null) {
@@ -246,7 +242,6 @@ export class SemAF implements OnInit, OnDestroy {
             }
           }
           else if (return_type.selected_ref_multi == result.type) {
-            const addr = data.id;
             console.log("resxx", result)
             this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
             if (result.allowed_type !== null) {
@@ -261,7 +256,7 @@ export class SemAF implements OnInit, OnDestroy {
           else if (return_type.add_link == result.type) {
             const link = result.entry as IAnnotationClass;
             console.log("link:   a", link);
-            this.link_start_end = [data.id];
+            this.link_start_end = [addr];
             this.snackBar.open(`Select End for ${link.name}`,null,{ duration: 2000,})
             this.new_link = link;
           }
@@ -273,7 +268,7 @@ export class SemAF implements OnInit, OnDestroy {
                 cmd: 'remove',
                 data: {
                   bid: '_b0_',
-                  addr: `${data.id}`,
+                  addr: `${addr}`,
                 }
               },
               {
@@ -295,7 +290,23 @@ export class SemAF implements OnInit, OnDestroy {
 
 
         }
+      }
+      const picker = this.dialog.open(PickerComponent, {
+        data: {
+          features: data.data.features,
+          entries: defaultAnnotationClasses,
+          last: this.lastAnnations,
+          highlights: data.data._type,
+          annoData: this.tool.toolElements,
+          text: this.documentService.currentCAS.text,
+          links: this.links,
+          id: data.id,
+          after_closed: after_closed
+        },
+        height: 'inherit',
+
       });
+      picker.afterClosed().subscribe(after_closed);
 
     }
   }

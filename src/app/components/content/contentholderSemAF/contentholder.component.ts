@@ -54,8 +54,10 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   @Input() page = 0;
   @Input() filters: string[] = [];
   @Input() showLastTapped = false;
+  @Input() showCancelSelection = false;
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
+  @Output() selectionCanceled = new EventEmitter<void>();
   @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
   constructor(
     private sanitizer: DomSanitizer,
@@ -307,6 +309,7 @@ export interface IContentholderData {
   label: string;
   id: number;
   data: IToolElement;
+  border?: string;
 }
 
 export interface IContentholderAnnotation {

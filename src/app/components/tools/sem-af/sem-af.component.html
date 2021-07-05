@@ -1,17 +1,10 @@
 <app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-SEM-AF.TITLE'" (menuEvent)="onMenuSelect($event)">
 </app-tool-bar>
 
-<div style="font-size: large; text-align: center;" *ngIf="help_text !== null">
-    <span>{{help_text}}</span>
-</div>
 
-<app-contentholder-semaf class="content" [inData]="data" [links]="links" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
+<app-contentholder-semaf class="content" [inData]="data" [links]="links" [pageSize]="pageSize"
+    (selectionCanceled)="selectionCanceled()" (selectionChanged)="tokenSelect($event)"
     (selectionLinkChanged)="select_link($event)"
+    [showCancelSelection]="(selected_reference !==null) || (selected_reference_multi!==null) || (link_start_end!==null)"
     [filters]="activeFilters">
 </app-contentholder-semaf>
-
-<div class="footer" fxLayout="row" fxLayoutAlign="center center" *ngIf="mode === 0">
-    <button mat-stroked-button fxFlex="grow" style="margin: 1%;"
-        [style.background]="selectedAnnotation && selectedAnnotation.rgb || '#FFFFFF'"
-        >{{ selectedAnnotation ? selectedAnnotation.name : ('TOOL-QUICKANNO.NOSELECT' | translate) }}</button>
-</div>

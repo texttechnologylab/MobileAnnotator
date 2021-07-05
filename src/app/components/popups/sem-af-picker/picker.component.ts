@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PickerComponent as semafLinkPickerComponent } from 'src/app/components/popups/sem-af-link-picker/picker.component';
+import { PickerComponent as semafLinkPickerComponent, IPickerDataLink } from 'src/app/components/popups/sem-af-link-picker/picker.component';
 import {
   MatToolbarModule,
   MatButtonModule,
@@ -16,6 +16,7 @@ import {
 import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature, defaultLinkClasses } from '../../tools/sem-af/sem-af.utils';
 import { Link } from '../../content/contentholderSemAF/contentholder.component';
 import { IContentholderData } from '../../content/contentholder/contentholder.component';
+import { IToolElement } from 'src/app/services/interfaces';
 
 
 export enum return_type {
@@ -42,6 +43,9 @@ export function find_id(x: {}, id: number) {
     }
   }
 }
+
+
+
 
 @Component({
   selector: 'app-picker',
@@ -76,6 +80,10 @@ export class PickerComponent implements OnInit {
   };
   public index: number;
   public addr: number;
+  public after_closed: (result: {
+    [id: string]: any;
+    type: return_type;
+  }) => void;
 
   profileForm: FormGroup;
 
@@ -88,8 +96,26 @@ export class PickerComponent implements OnInit {
   ) { }
 
   /* Function to open the Link picker menu via button*/
-  openDialog(): void {
+  openDialog(link: Link): void {
+    const annon = this.data.annoData;
+    console.log("AnonData", annon)
+
+    let thisLink: IToolElement = annon[link.type][link.id]
+    console.log("thisLink", thisLink)
+
+
+
     let dialogRef = this.dialog.open(semafLinkPickerComponent, {
+      data: ({
+        features: thisLink.features,
+        entries: defaultLinkClasses,
+        annoData: this.data.annoData,
+        text: this.data.text,
+        id: link.id,
+        thisLink: link,
+        after_closed: this.after_closed,
+      } as any) as any
+
     });
 
   }
@@ -97,7 +123,8 @@ export class PickerComponent implements OnInit {
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
     const annotationList = [];
-    const { entries, highlights, last, features, annoData, text, links, id } = this.data;
+    const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
+    this.after_closed = after_closed;
     console.log("links.fi", links.filter((x) => { return x.from.id === id || x.to.id === id }))
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>();
@@ -140,7 +167,7 @@ export class PickerComponent implements OnInit {
       for (const [key, value] of Object.entries(featues)) {
         if (key in ["begin", "end"]) continue; // begin and end are not changeable by the user
 
-        if (!(Object.keys(features).includes(key))){
+        if (!(Object.keys(features).includes(key))) {
           features[key] = null
         }
 
@@ -165,8 +192,8 @@ export class PickerComponent implements OnInit {
               if (m) {
                 const { begin, end } = m["features"]
                 text_ = text.slice(begin, end);
-                color = defaultAnnotationClasses.find((x)=>x.type === m["_type"]).rgb
-                
+                color = defaultAnnotationClasses.find((x) => x.type === m["_type"]).rgb
+
               }
             }
           } catch (error) {
@@ -179,7 +206,7 @@ export class PickerComponent implements OnInit {
             type: FeatureType.Reference,
             key: key,
             display_name: value.display_name,
-            data: { feature_name: key, text: text_, text_org: text_, display_name: value.display_name,color: color } as Reference
+            data: { feature_name: key, text: text_, text_org: text_, display_name: value.display_name, color: color } as Reference
           })
 
         }
@@ -189,16 +216,16 @@ export class PickerComponent implements OnInit {
 
           if (text_value !== null && text_value !== undefined) {
             let values = text_value as number[];
-            let color  = null;
-            
+            let color = null;
+
             for (const valu of values) {
               try {
                 const m = find_id(annoData, valu);
                 if (m) {
                   const { begin, end } = m["features"]
                   const txt = text.slice(begin, end);
-                  color = defaultAnnotationClasses.find((x)=>x.type === m["_type"]).rgb
-                  text_.push({ text_org: txt, text: txt, id: valu,color: color });
+                  color = defaultAnnotationClasses.find((x) => x.type === m["_type"]).rgb
+                  text_.push({ text_org: txt, text: txt, id: valu, color: color });
                 }
 
               } catch (error) {
@@ -224,7 +251,7 @@ export class PickerComponent implements OnInit {
       this.features_dict = featues;
 
 
-      console.log("feature_visu",feature_visu)
+      console.log("feature_visu", feature_visu)
 
       this.profileForm = new FormGroup(forms);
 
@@ -303,16 +330,16 @@ export class PickerComponent implements OnInit {
     }
 
     for (const fe of this.feature_visu) {
-      if(fe.type === FeatureType.Reference) {
+      if (fe.type === FeatureType.Reference) {
         const refe = fe.data;
         if (refe.text != refe.text_org && refe.text === null && refe.feature_name !== ignore_select) {
           new_features[refe.feature_name] = null;
         }
       }
-      if(fe.type === FeatureType.ReferenceMulti){
-        const non_removed = (fe.data.values as SingleRef[]).filter((x)=>x.text !== null)
-        if(non_removed.length !== fe.data.length){
-          new_features[fe.key] = non_removed.map((x)=>x.id);
+      if (fe.type === FeatureType.ReferenceMulti) {
+        const non_removed = (fe.data.values as SingleRef[]).filter((x) => x.text !== null)
+        if (non_removed.length !== fe.data.length) {
+          new_features[fe.key] = non_removed.map((x) => x.id);
         }
       }
 
@@ -396,6 +423,10 @@ export interface IPickerData {
   text?: string;
   links?: Link[];
   id: number; // Id of the Selected Elem
+  after_closed: (result: {
+    [id: string]: any;
+    type: return_type;
+  }) => void
 }
 
 export interface IPickerEntryData {

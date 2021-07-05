@@ -71,6 +71,7 @@ export interface IPickerData {
   methapher: boolean;
   highlights?: Array<[string, boolean]>;
   last: IPickerEntryData[];
+  animal?: any;
 }
 
 export interface IPickerEntryData {

@@ -15,7 +15,7 @@ import {
 
 import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature, defaultLinkClasses } from '../../tools/sem-af/sem-af.utils';
 import { Link } from '../../content/contentholderSemAF/contentholder.component';
-import { IContentholderData } from '../../content/contentholder/contentholder.component';
+import { IContentholderData } from '../../content/contentholderSemAF/contentholder.component';
 
 
 export enum return_type {
@@ -31,6 +31,20 @@ export enum return_type {
 type SingleRef = { text_org: string, text: string, id: number };
 type Reference = { text: string, feature_name: string, text_org: string, display_name: string };
 type ReferenceMulti = { feature_name: string, display_name: string, values: SingleRef[] };
+
+export interface IPickerDataLink {
+  entries: IPickerEntryData[];
+  features?: any;
+  annoData?: any;
+  text?: string;
+  id: number; // Id of the Selected Elem
+  thisLink?: Link;
+  after_closed: (result: {
+    [id: string]: any;
+    type: return_type;
+  }) => void;
+}
+
 
 export function find_id(x: {}, id: number) {
   for (const [key, val] of Object.entries(x)) {
@@ -49,7 +63,7 @@ export function find_id(x: {}, id: number) {
  * Komponente für die Auswahl einer Kategorie des QuickAnnotators
  */
 export class PickerComponent implements OnInit {
-  
+
 
   public annotations: IPickerEntryData[] = [];
   public links: IAnnotationClass[] = [];
@@ -61,6 +75,11 @@ export class PickerComponent implements OnInit {
   public current_sel: string = null;
   public features;
   public links_containing_self: Link[];
+  public link: Link;
+  public after_closed: (result: {
+    [id: string]: any;
+    type: return_type;
+  }) => void;
 
   public ft = FeatureType;
 
@@ -81,37 +100,34 @@ export class PickerComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<PickerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IPickerData,
+    @Inject(MAT_DIALOG_DATA) public data: IPickerDataLink,
   ) { }
-  
+
 
 
 
   public ngOnInit(): void {
     this.links = defaultLinkClasses;
     const annotationList = [];
-    const { entries, highlights, last, features, annoData, text, links, id } = this.data;
-    console.log("links.fi",links.filter((x)=>{return x.from.id ===id || x.to.id === id}))
-    this.lastAnnotations = last;
+    const { entries, features, annoData, text, id, thisLink, after_closed } = this.data;
     this.highlightAnnotation = new Map<string, boolean>();
-    if(highlights != null){
-      this.highlightAnnotation.set(highlights,true)
-    }
+    this.link = thisLink
+    this.after_closed = after_closed;
+
 
     this.features = features;
-  
-    console.log("this.datathis.data",this.data)
 
-    this.current_sel = highlights;
 
-    this.links_containing_self = links.filter((x)=>{return x.from.id ===id || x.to.id === id});
+    console.log("this.datathis.data", this.data)
+
 
     console.log("1")
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
       //this.gather();
-      this.dialogRef.close({ type: return_type.change_attribute, data: this.gather() });
+      this.after_closed({ type: return_type.change_attribute, data: this.gather(), addr: this.link.id });
+      this.dialogRef.close()
     });
 
 
@@ -119,13 +135,13 @@ export class PickerComponent implements OnInit {
     console.log("1")
 
 
-    this.index = defaultAnnotationClasses.findIndex((x) => { return x.type == highlights })
+    this.index = defaultLinkClasses.findIndex((x) => { return x.type == thisLink.type })
     if (this.index != -1) {
 
-      const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
+      const annon = JSON.parse(JSON.stringify(defaultLinkClasses[this.index])) as IAnnotationClass
       const featues = annon.features
 
-      
+
 
 
 
@@ -133,7 +149,7 @@ export class PickerComponent implements OnInit {
       let reference: Reference[] = [];
       let referenceMulti: ReferenceMulti[] = [];
       for (const [key, value] of Object.entries(featues)) {
-        if(key in ["begin","end"]) continue; // begin and end are not changeable by the user
+        if (key in ["begin", "end"]) continue; // begin and end are not changeable by the user
 
         /**
          * Sometimes the an Attribute send by uima is not present but should be
@@ -228,7 +244,7 @@ export class PickerComponent implements OnInit {
 
       this.features_typed = Object.entries(featues);
       this.features_dict = featues;
-      
+
 
       const t = featues[0]
 
@@ -262,6 +278,10 @@ export class PickerComponent implements OnInit {
     console.log("1")
   }
 
+  public deleteThis(){
+    console.log("Todo: Delete this link")
+  }
+
   private gather(ignore_select: string = null) {
     if (this.index == -1) return {};
     var new_features = {}
@@ -287,9 +307,9 @@ export class PickerComponent implements OnInit {
   }
 
   public getBackground(entry: IContentholderData): string {
-    
-    const val = defaultAnnotationClasses.find((x)=>x.type == entry.data._type);
-    return (val===undefined)? "#fff": val.rgb;
+
+    const val = defaultAnnotationClasses.find((x) => x.type == entry.data._type);
+    return (val === undefined) ? "#fff" : val.rgb;
   }
 
   /**
@@ -297,25 +317,28 @@ export class PickerComponent implements OnInit {
    */
   public selected(entry: any): void {
     const e = entry as any;
-    
-    if(this.current_sel === e.type){
+
+    if (this.current_sel === e.type) {
       this.dialogRef.close({ type: return_type.remove_selected, entry: entry, features: this.features });
       return;
     }
-    
 
-    this.dialogRef.close({ type: return_type.selected, entry: entry, features: this.new_features });
+    console.log({ type: return_type.selected, entry: entry, features: this.new_features })
+
+
+    this.after_closed({ type: return_type.selected, entry: entry, features: this.new_features });
   }
 
   /**
    * Close the Dialog and make the user select start and end of the link
    */
-   public add_link(entry: IAnnotationClass): void {
+  public add_link(entry: IAnnotationClass): void {
     this.dialogRef.close({ type: return_type.add_link, entry: entry });
   }
 
   public selected_ref(feature_name: string): void {
     //console.log("xx1",{ type: return_type.change_attribute, data: this.gather() });
+    //this.after_closed()
     this.dialogRef.close({
       type: return_type.selected_ref,
       data: this.gather(feature_name),
