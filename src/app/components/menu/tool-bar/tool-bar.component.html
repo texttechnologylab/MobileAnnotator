@@ -1,14 +1,21 @@
+
 <mat-toolbar class="mat-elevation-z4 toolbar" color="accent" fxLayout="row" fxLayoutAlign="center center">
     <button mat-raised-button fxFlex="none" class="tools" color="primary" (click)="returnEvent()">
         <mat-icon>arrow_back_ios</mat-icon>
         <span>{{'MENU-TOOL-BAR.BACK' | translate}}</span>
     </button>
+
     <div fxFlex="grow" style="overflow-x: hidden; text-align: center;">
         <span>{{title | translate}}</span>
     </div>
+
+    <a mat-raised-button href="https://www.google.com/" color= "primary" target="_blank">Help</a>
+    
+
     <button mat-mini-fab fxFlex="none" color="primary" #mainTrigger="matMenuTrigger" [matMenuTriggerFor]="toolmenu">
         <mat-icon>build</mat-icon>
     </button>
+    
 
     <mat-menu #toolmenu="matMenu">
         <ng-container *ngFor="let entry of menu">

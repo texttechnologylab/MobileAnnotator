@@ -45,6 +45,8 @@ export class ToolBarComponent implements OnInit {
     this.menuEvent.next([returnEventId]);
   }
 
+ 
+
 }
 
 export interface IMenuAction {
