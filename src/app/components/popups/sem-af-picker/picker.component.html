@@ -125,13 +125,16 @@
                 (click)="onSelectLink(link.id, $event)" matBadgeSize="small">
 
 
-                <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
-                    [style.border]="link.from.border">
-                    {{link.from.label}} </div> ->
+                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
+                    >
+                    {{link.from.label}} </div>
+                    <div class="linkstyle">
+                        <mat-icon>arrow_right_alt</mat-icon>
+                    </div>
 
 
-                <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
-                    [style.border]="link.to.border">
+                <div class="entryDiv linkstyle"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
+                    >
                     {{link.to.label}} </div>
 
                 <button mat-raised-button (click)="openDialog(link)" [style.background]="'orange'">Change
