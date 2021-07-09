@@ -160,7 +160,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     if(data.is_multi === true){
       
       const el: HTMLDivElement = document.querySelector("#deleteMulti")
-      const en = document.querySelector(`#entity${data.id}`).getBoundingClientRect()
+      const en = document.querySelector(`#entity${data.id}`).getBoundingClientRect() as DOMRect
       
       const y = `${en.y+en.height+window.scrollY}px`
       const x = `${en.x+en.width/2+window.scrollX-el.getBoundingClientRect().width/2}px`
