@@ -1,44 +1,42 @@
-
-
-
-
 <div id="mainContent" class="content" style="overflow-y: visible  !important; position: relative; margin-bottom: 40px;">
     <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none;">
         <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="3" refY="4" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><polyline points="0,0 6,4, 0,8, 0,0"></polyline></marker>
+            <marker id="arrow" viewBox="0 0 10 10" refX="3" refY="4" markerWidth="4" markerHeight="4"
+                orient="auto-start-reverse">
+                <polyline points="0,0 6,4, 0,8, 0,0"></polyline>
+            </marker>
         </defs>
 
 
 
-        <path *ngFor="let link of link_visu; index as i" class="svg-arrow"
-            [attr.d]="link"></path>
+        <path *ngFor="let link of link_visu; index as i" class="svg-arrow" [attr.d]="link"></path>
 
 
-        
-  
-        <line  stroke="black" />
+
+
+        <line stroke="black" />
     </svg>
     <div class="contentholder" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')">
-        <div *ngFor="let entry of data; index as i" class="entryDiv"  [style.background]="getBackground(entry)"
-            [id]="'entity'+entry.id.toString()"
-            [style.border]="entry.border" [ngClass]="getClassesForEntry(entry)"
+        <div *ngFor="let entry of data; index as i" class="entryDiv" [style.background]="getBackground(entry)"
+            [id]="'entity'+entry.id.toString()" [style.border]="(entry.id === lastLong) ? 'solid 2px black' : ''"
+            [ngClass]="getClassesForEntry(entry)" (press)="addToMultitoken(entry, $event)"
             (click)="onSelect(entry, $event)">
             {{entry.label}} </div>
     </div>
     <div class="spacer" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')"> </div>
     <div id="links contentholder">
-        <div *ngFor="let link of []"  class="isolink entryDiv" [style.background]="'lightgreen'"
-            style="border: 4px solid lightgreen; display: flex; width: max-content" (click)="onSelectLink(link.id, $event)"
-            matBadgeSize="small" >
+        <div *ngFor="let link of []" class="isolink entryDiv" [style.background]="'lightgreen'"
+            style="border: 4px solid lightgreen; display: flex; width: max-content"
+            (click)="onSelectLink(link.id, $event)" matBadgeSize="small">
 
 
-            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
-                [ngClass]="getClassesForEntry(link.from)">
+            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
+                [style.border]="link.from.border" [ngClass]="getClassesForEntry(link.from)">
                 {{link.from.label}} </div> ->
 
 
-            <div class="entryDiv"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
-                [ngClass]="getClassesForEntry(link.to)">
+            <div class="entryDiv" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
+                [style.border]="link.to.border" [ngClass]="getClassesForEntry(link.to)">
                 {{link.to.label}} </div>
 
         </div>
@@ -63,7 +61,7 @@
         <mat-icon>chevron_right</mat-icon>
     </button>
     <span *ngIf="showCancelSelection">
-         <button (click)="selectionCanceled.emit()">Cancel Selection </button>
+        <button (click)="selectionCanceled.emit()">Cancel Selection </button>
     </span>
     <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('lst')">
         <mat-icon>skip_next</mat-icon>
@@ -75,4 +73,16 @@
         <button mat-menu-item *ngFor="let entry of contextMenuEntries" (click)="contextMenuEvent(entry)">{{entry |
             translate}}</button>
     </mat-menu>
+</div>
+
+<div id="deleteMulti" style="visibility: hidden">
+    Split up Multitoken? <br>
+    <button mat-raised-button  class="tools" color="primary" (click)="splitUpToken()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        <span>Split</span>
+    </button>
+    <button mat-raised-button class="tools" color="primary" (click)="1">
+        <mat-icon>arrow_back_ios</mat-icon>
+        <span>Cancel</span>
+    </button>
 </div>

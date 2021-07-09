@@ -87,3 +87,16 @@
     marker-end: url(#arrow);
     stroke-opacity: 0.6;
 }
+
+#deleteMulti{
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    visibility: hidden;
+    padding: 0.5em;
+    text-align: center;
+    background: #a5ab52;
+    border-radius: 11px;
+    font-size: 15px;
+
+}

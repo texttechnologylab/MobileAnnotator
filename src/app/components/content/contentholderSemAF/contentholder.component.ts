@@ -32,18 +32,21 @@ interface LinkPos{
 export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
 
   public data: IContentholderData[] = [];
+  public multiToken: IContentholderData[] = []
   public currentSelected: number = undefined;
   public lastTapped: number = undefined;
   public pageSizes = [50, 100, 150];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
   public link_visu: string[]=[];
+  public splitToken:IContentholderData;
 
   public linksPos: LinkPos[] =[];
 
   private filterSet: Set<string> = new Set();
 
   private longpress = false;
+  public lastLong: number = -1;
 
   @ViewChild('contextMenuContainer', { static: true }) private readonly contextMenuRef: ElementRef;
   @ViewChild(MatMenuTrigger, { static: true }) private readonly contextMenuTrigger: MatMenuTrigger;
@@ -57,6 +60,8 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   @Input() showCancelSelection = false;
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
+  @Output() createMultiToken = new EventEmitter<IContentholderData[]>();
+  @Output() deleteMultiToken = new EventEmitter<IContentholderData>();
   @Output() selectionCanceled = new EventEmitter<void>();
   @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
   constructor(
@@ -135,6 +140,51 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     console.log("document.getElementById('loginInput')",li)
   }
 
+  public splitUpToken(){
+    if(!this.splitToken) return;
+    this.deleteMultiToken.emit(this.splitToken)
+    this.splitToken = null;
+    const el: HTMLDivElement = document.querySelector("#deleteMulti")
+    el.style.visibility = "hidden";
+  }
+  
+  public addToMultitoken(data: IContentholderData,event: PointerEventInput & { timeStamp: number }){
+
+    event.preventDefault();
+    
+
+    this.preventDefault(event.srcEvent as MouseEvent);
+    this.longpress = true;
+    this.multiToken.push(data)
+
+    if(data.is_multi === true){
+      
+      const el: HTMLDivElement = document.querySelector("#deleteMulti")
+      const en = document.querySelector(`#entity${data.id}`).getBoundingClientRect()
+      
+      const y = `${en.y+en.height+window.scrollY}px`
+      const x = `${en.x+en.width/2+window.scrollX-el.getBoundingClientRect().width/2}px`
+      console.log(x,y)
+      this.splitToken = data;
+
+      console.log("Split Multitoken",en)
+      el.style.top = y;
+      el.style.left = x;
+      el.style.visibility = "visible";
+
+      return;
+    }
+    this.lastLong = data.id;
+
+    console.log("Long press",this.multiToken)
+    if(this.multiToken.length == 2){
+      this.createMultiToken.emit([...this.multiToken]);
+      this.multiToken = [];
+      this.lastLong = -1;
+      return;
+    }
+  }
+
   public ngAfterViewInit(){
 
 
@@ -144,7 +194,6 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
    * Händelt die Auswahl eines Tokens
    */
   public onSelect(entry: IContentholderData, event: MouseEvent) {
-    console.log("enty",JSON.stringify(entry,null,4))
     event.preventDefault();
     this.preventDefault(event);
 
@@ -154,6 +203,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       this.longpress = false;
       return;
     }
+
     if (this.currentSelected) {
       if (this.currentSelected === entry.id) {
         this.currentSelected = undefined;
@@ -310,6 +360,7 @@ export interface IContentholderData {
   id: number;
   data: IToolElement;
   border?: string;
+  is_multi?: boolean;
 }
 
 export interface IContentholderAnnotation {

@@ -16,6 +16,7 @@ import { IMenuListing, IMenuAction, returnEventId } from '../../menu/tool-bar/to
 
 import { return_type } from '../../popups/sem-af-picker/picker.component'
 import { MatSnackBar } from '@angular/material';
+import { start } from 'repl';
 
 @Component({
   selector: 'app-sem-af',
@@ -120,12 +121,24 @@ export class SemAF implements OnInit, OnDestroy {
   /**
    * Called when the user cancels the selection of a the Start/End of the Link or an Attribute
    */
-  public selectionCanceled(): void{
+  public selectionCanceled(): void {
     console.log("Canceled Selection")
-    this.selected_reference  =null;
-    this.selected_reference_multi  =null;
-    this.link_start_end  =null;
+    this.selected_reference = null;
+    this.selected_reference_multi = null;
+    this.link_start_end = null;
     this.activeFilters = []
+  }
+
+  public deleteToken(data: IContentholderData){
+    const queue: IQueueElement[] = [
+      {
+        cmd: 'remove',
+        data: {
+          bid: '_b0_',
+          addr: `${data.id}`,
+        }
+      }]
+      this.sendBatch(queue)
   }
 
   /**
@@ -202,9 +215,9 @@ export class SemAF implements OnInit, OnDestroy {
             }
           } else if (return_type.selected == result.type) {
             this.selectedAnnotation = result.entry;
-            new_features = result.features; 
+            new_features = result.features;
 
-            const queue = [this.removeallAnnotations(addr),this.createAnnotation(data)]
+            const queue = [this.removeallAnnotations(addr), this.createAnnotation(data)]
             this.sendBatch(queue)
           }
           else if (return_type.selected_after == result.type) {
@@ -257,12 +270,12 @@ export class SemAF implements OnInit, OnDestroy {
             const link = result.entry as IAnnotationClass;
             console.log("link:   a", link);
             this.link_start_end = [addr];
-            this.snackBar.open(`Select End for ${link.name}`,null,{ duration: 2000,})
+            this.snackBar.open(`Select End for ${link.name}`, null, { duration: 2000, })
             this.new_link = link;
           }
-          else if(return_type.remove_selected == result.type){ 
-            const {begin, end} = result.features
-            console.log("data{{{{",data)
+          else if (return_type.remove_selected == result.type) {
+            const { begin, end } = result.features
+            console.log("data{{{{", data)
             const queue: IQueueElement[] = [
               {
                 cmd: 'remove',
@@ -272,14 +285,25 @@ export class SemAF implements OnInit, OnDestroy {
                 }
               },
               {
-              cmd: 'create',
-              data: {
-                bid: '_b1_',
-                features: {begin: begin, end: end},
-                _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
-              }
-            }];
+                cmd: 'create',
+                data: {
+                  bid: '_b1_',
+                  features: { begin: begin, end: end },
+                  _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
+                }
+              }];
 
+            this.sendBatch(queue);
+          }
+          else if (return_type.remove_selected_link == result.type) {
+            const queue: IQueueElement[] = [
+              {
+                cmd: 'remove',
+                data: {
+                  bid: '_b0_',
+                  addr: `${addr}`,
+                }
+              },]
             this.sendBatch(queue);
           }
 
@@ -455,10 +479,10 @@ export class SemAF implements OnInit, OnDestroy {
 
     for (const item of annon_types) {
       for (const token_ of Object.values(this.tool.toolElements[item] || {})) {
-        if(Object.values(token_).length == 0) continue;
+        if (Object.values(token_).length == 0) continue;
         const token = token_ as IToolElement;
         const { begin, end } = token.features;
-        
+
         data.push({
           label: (begin !== end) ? text.slice(begin, end) : "∅",
           id: token._addr,
@@ -473,11 +497,24 @@ export class SemAF implements OnInit, OnDestroy {
 
 
 
+    const findDiffrent = data.find((y) => { })
+
+    const cd = data.filter((x) => {
+      const diff = data.findIndex((y) => {
+        return (x.data.features.begin >= y.data.features.begin)
+          && (x.data.features.end <= y.data.features.end) &&  x.id !== y.id
+      })
 
 
+      
+      if(diff == -1) return true
+      data[diff].is_multi = true;
+      return false
+    })
 
 
-    this.data = data.sort((a, b) => a.data.features.begin - b.data.features.begin);
+    
+    this.data = cd.sort((a, b) => a.data.features.begin - b.data.features.begin);
 
     const find_id = (id: number) => {
       if (id === null || id == undefined) return null;
@@ -528,6 +565,32 @@ export class SemAF implements OnInit, OnDestroy {
 
 
     }
+    this.links = this.links.filter((x)=>x !== null)
+    console.log("THIS.links",this.links)
+
+
+  }
+
+  public create_multitoken(data: IContentholderData[]){
+    console.log("create_multitoken",data)
+    let [start, end] = data;
+    if(start.data.features.begin > start.data.features.begin) start = end;
+
+    const featues = {
+      begin: start.data.features.begin,
+      end: end.data.features.end,
+    }
+
+
+    const queue: IQueueElement = {
+      cmd: 'create',
+      data: {
+        bid: '_b0_',
+        features: featues,
+        _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
+      }
+    };
+    this.sendBatch([queue]);
 
   }
 

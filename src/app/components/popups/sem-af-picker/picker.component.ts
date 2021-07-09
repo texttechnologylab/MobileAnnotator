@@ -26,7 +26,9 @@ export enum return_type {
   selected_ref,
   selected_ref_multi,
   add_link,
-  remove_selected
+  remove_selected,
+  remove_selected_link,
+  do_nothing
 }
 
 type SingleRef = { text_org: string, text: string, id: number, color?: string };
@@ -116,6 +118,12 @@ export class PickerComponent implements OnInit {
         after_closed: this.after_closed,
       } as any) as any
 
+    });
+
+    dialogRef.afterClosed().subscribe((x)=>{
+        if (x.type == return_type.remove_selected_link){
+          this.dialogRef.close({ type: return_type.do_nothing })
+        }
     });
 
   }

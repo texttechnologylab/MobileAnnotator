@@ -6,5 +6,7 @@
     (selectionCanceled)="selectionCanceled()" (selectionChanged)="tokenSelect($event)"
     (selectionLinkChanged)="select_link($event)"
     [showCancelSelection]="(selected_reference !==null) || (selected_reference_multi!==null) || (link_start_end!==null)"
+    (createMultiToken)="create_multitoken($event)"
+    (deleteMultiToken)="deleteToken($event)"
     [filters]="activeFilters">
 </app-contentholder-semaf>

@@ -18,15 +18,9 @@ import { Link } from '../../content/contentholderSemAF/contentholder.component';
 import { IContentholderData } from '../../content/contentholderSemAF/contentholder.component';
 
 
-export enum return_type {
-  change_attribute,
-  selected,
-  selected_after,
-  selected_ref,
-  selected_ref_multi,
-  add_link,
-  remove_selected
-}
+import {return_type} from '../sem-af-picker/picker.component'
+
+
 
 type SingleRef = { text_org: string, text: string, id: number };
 type Reference = { text: string, feature_name: string, text_org: string, display_name: string };
@@ -92,6 +86,7 @@ export class PickerComponent implements OnInit {
   };
   public index: number;
   public addr: number;
+  public id: number;
 
   profileForm: FormGroup;
 
@@ -113,6 +108,8 @@ export class PickerComponent implements OnInit {
     this.highlightAnnotation = new Map<string, boolean>();
     this.link = thisLink
     this.after_closed = after_closed;
+    this.id = id;
+    console.log("id",id)
 
 
     this.features = features;
@@ -280,6 +277,9 @@ export class PickerComponent implements OnInit {
 
   public deleteThis(){
     console.log("Todo: Delete this link")
+    console.log("addr",this.addr,this.id)
+    this.after_closed({ type: return_type.remove_selected_link, addr: this.id });
+    this.dialogRef.close({ type: return_type.remove_selected_link})
   }
 
   private gather(ignore_select: string = null) {
