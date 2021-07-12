@@ -1,3 +1,5 @@
+import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
+import { TitleCasePipe } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
@@ -28,6 +30,7 @@ export class ToolBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.title);
   }
 
   /**
@@ -45,7 +48,6 @@ export class ToolBarComponent implements OnInit {
     this.menuEvent.next([returnEventId]);
   }
 
- 
 
 }
 
