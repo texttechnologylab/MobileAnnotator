@@ -9,8 +9,11 @@
         <span>{{title | translate}}</span>
     </div>
 
-    <a mat-raised-button href="/assets/manual.pdf" color= "primary" target="_blank" fxLayout="row"
+    <a ng-attr-href="title === 'TOOL-SEM-AF.TITLE'" mat-raised-button href="/assets/manual.pdf" color= "primary" target="_blank" fxLayout="row"
     fxLayoutAlign="center center">Help</a>
+     
+    
+    
     
 
     <button mat-mini-fab fxFlex="none" color="primary" #mainTrigger="matMenuTrigger" [matMenuTriggerFor]="toolmenu">
