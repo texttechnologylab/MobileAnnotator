@@ -9,9 +9,11 @@
         <span>{{title | translate}}</span>
     </div>
 
-    <a ng-attr-href="title === 'TOOL-SEM-AF.TITLE'" mat-raised-button href="/assets/manual.pdf" color= "primary" target="_blank" fxLayout="row"
-    fxLayoutAlign="center center">Help</a>
-     
+    <ng-container *ngIf="title === 'TOOL-SEM-AF.TITLE'">
+
+    </ng-container>
+    
+    <button  mat-raised-button (click)="openmanual()" color= "primary" fxLayout="row" fxLayoutAlign="center center" >Help</button>
     
     
     

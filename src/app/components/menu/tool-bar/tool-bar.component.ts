@@ -41,6 +41,13 @@ export class ToolBarComponent implements OnInit {
     this.menuEvent.next(id);
   }
 
+  public openmanual(): void {
+    /* Edit if-conditions for the other pages if needed*/
+    if (this.title==="TOOL-SEM-AF.TITLE"){
+      window.open('/assets/manual.pdf','_blank');
+
+    }
+  }
   /**
    * Emitted das Event, dass der "Zurück" Button gewählt wurde
    */
