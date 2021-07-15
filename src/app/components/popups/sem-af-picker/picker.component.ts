@@ -71,6 +71,7 @@ export class PickerComponent implements OnInit {
   public current_sel: string = null;
   public features;
   public links_containing_self: Link[];
+  public shapenet_id: string = null;
 
   public ft = FeatureType;
 
@@ -347,6 +348,10 @@ public testshapenet(): void {
   private gather(ignore_select: string = null) {
     if (this.index == -1) return {};
     var new_features = {}
+
+    if(this.shapenet_id !== null){
+      new_features["object_id"] = this.shapenet_id
+    }
 
     console.log("controls", this.profileForm.controls)
     for (const [key, elem] of Object.entries(this.profileForm.controls)) {
