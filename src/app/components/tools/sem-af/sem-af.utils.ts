@@ -16,6 +16,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
+    has_shapenet: false,
     features: {
       "spatial_entitiy_type": {
         display_name: "Type(req)",
@@ -99,6 +100,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Place',
     name: 'Place',
     css_class: 'I-Place',
+    has_shapenet: false,
     features: {
       "dimensionality": {
         display_name: "Dimensionality",
@@ -367,6 +369,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
     name: 'Event-Path',
     css_class: 'I-eventpath',
+    has_shapenet: false,
     features: {
       "trigger": {
         display_name: "TRIGGER",
@@ -438,6 +441,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
     name: 'Path',
     css_class: 'I-Path',
+    has_shapenet: false,
     features: {
       'dimensionality': {
         display_name: 'Dimensionality',
@@ -553,6 +557,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
     name: 'Event',
     css_class: 'I-Event',
+    has_shapenet: false,
     features: {
       'mod': {/*a spatially relevant modifier*/
         display_name: 'mod',
@@ -588,6 +593,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Motion',
     name: 'Motion',
     css_class: 'I-Motion',
+    has_shapenet: false,
     features: {
       "motion_type": {
         display_name: "Montion type(req)",
@@ -717,6 +723,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
     css_class: 'I-Measure',
+    has_shapenet: false,
     features: {      
       "value": {
         display_name: 'Value(req)',
@@ -747,6 +754,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SRelation',
     name: 'sRelation',
     css_class: 'I-sRelation',
+    has_shapenet: false,
     features: {
       "comment": {
         display_name: 'Comment',
@@ -801,6 +809,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
     name: 'mRelation',
     css_class: 'I-mRelation',
+    has_shapenet: false,
     features: {
       "comment": {
         display_name: 'Comment',
@@ -825,6 +834,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.QsLink',
     name: 'QSLink',
     css_class: 'I-QsLink',
+    has_shapenet: false,
     features: {
       "trigger": {
         display_name: "Trigger",
@@ -923,6 +933,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',
     name: 'MLink',
     css_class: 'I-MLink',
+    has_shapenet: false,
     features: {
       'comment': {
         display_name: 'Comment',
@@ -999,6 +1010,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.MeasureLink',
     name: 'Measure Link',
     css_class: 'I-MeasureLink',
+    has_shapenet: false,
     features: {
       "trajector": {
         display_name: "Trajector",
@@ -1217,6 +1229,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.MoveLink',
     name: 'Move Link',
     css_class: 'I-MoveLink',
+    has_shapenet: false,
     features: {
       'comment': {
         display_name: 'Comment',
@@ -1329,6 +1342,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.OLink',
     name: 'OLink',
     css_class: 'I-OLink',
+    has_shapenet: false,
     features: {
       'comment': {
         display_name: 'Comment',
@@ -1758,6 +1772,7 @@ export interface IAnnotationClass {
   /** Can be any css color, i think */
   rgb: string;
   css_class: string;
+  has_shapenet: boolean
   /** Should only contain features which are editable by the user like a comment for example  */
   features: { [name: string]: Feature };
 }
