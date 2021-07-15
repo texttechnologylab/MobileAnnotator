@@ -16,7 +16,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialEntity',
     name: 'Spatial Entity',
     css_class: 'I-Spatial-Entity',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "spatial_entitiy_type": {
         display_name: "Type(req)",
@@ -100,7 +100,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Place',
     name: 'Place',
     css_class: 'I-Place',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "dimensionality": {
         display_name: "Dimensionality",
@@ -369,7 +369,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
     name: 'Event-Path',
     css_class: 'I-eventpath',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "trigger": {
         display_name: "TRIGGER",
@@ -441,7 +441,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Path',
     name: 'Path',
     css_class: 'I-Path',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       'dimensionality': {
         display_name: 'Dimensionality',
@@ -557,7 +557,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isobase.Event',
     name: 'Event',
     css_class: 'I-Event',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       'mod': {/*a spatially relevant modifier*/
         display_name: 'mod',
@@ -593,7 +593,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Motion',
     name: 'Motion',
     css_class: 'I-Motion',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "motion_type": {
         display_name: "Montion type(req)",
@@ -723,7 +723,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.Measure',
     name: 'Measure',
     css_class: 'I-Measure',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {      
       "value": {
         display_name: 'Value(req)',
@@ -754,7 +754,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.SRelation',
     name: 'sRelation',
     css_class: 'I-sRelation',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "comment": {
         display_name: 'Comment',
@@ -809,7 +809,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
     type: 'org.texttechnologylab.annotation.semaf.isospace.MRelation',
     name: 'mRelation',
     css_class: 'I-mRelation',
-    has_shapenet: false,
+    has_shapenet: true,
     features: {
       "comment": {
         display_name: 'Comment',
