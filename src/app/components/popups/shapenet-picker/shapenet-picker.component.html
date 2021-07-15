@@ -1,0 +1,25 @@
+<div>
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Search Term</mat-label>
+            <input matInput placeholder="Blue Cup" name="searchterm" [(ngModel)]="input"
+                (change)="change_input($event)"  width="100%">
+        </mat-form-field>
+
+
+
+
+    <!-- <code>{{searchJson}}</code> -->
+
+    <div>
+        <ng-container *ngFor="let res of searchResult.results">
+            <div style="display: flex;" class="searchResult">
+                <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+res.id+'&pic=1'" alt="..."
+                    loading="lazy" style="height: 8em;">
+                {{res.name}}
+            </div>
+        </ng-container>
+    </div>
+
+
+</div>

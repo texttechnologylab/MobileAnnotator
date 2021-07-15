@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PickerComponent as semafLinkPickerComponent, IPickerDataLink } from 'src/app/components/popups/sem-af-link-picker/picker.component';
+import { PickerComponent as semafLinkPickerComponent } from 'src/app/components/popups/sem-af-link-picker/picker.component';
 import {
   MatToolbarModule,
   MatButtonModule,
@@ -17,6 +17,7 @@ import { defaultAnnotationClasses, IAnnotationClass, FeatureType, Feature, defau
 import { Link } from '../../content/contentholderSemAF/contentholder.component';
 import { IContentholderData } from '../../content/contentholder/contentholder.component';
 import { IToolElement } from 'src/app/services/interfaces';
+import { ShapenetPickerComponent } from '../shapenet-picker/shapenet-picker.component';
 
 
 export enum return_type {
@@ -127,6 +128,25 @@ export class PickerComponent implements OnInit {
     });
 
   }
+
+public testshapenet(): void {
+
+
+  let dialogRef = this.dialog.open(ShapenetPickerComponent, {
+    data: "Blue Cup",
+    height: '100%',
+    width: '500px',
+    maxWidth: '100vw'
+
+  });
+
+  // dialogRef.afterClosed().subscribe((x)=>{
+  //     if (x.type == return_type.remove_selected_link){
+  //       this.dialogRef.close({ type: return_type.do_nothing })
+  //     }
+  // });
+
+}
 
   public ngOnInit(): void {
     this.links = defaultLinkClasses;

@@ -39,6 +39,8 @@ import { PickerComponent as semafLinkPickerComponent } from './components/popups
 
 
 import { SemAF } from './components/tools/sem-af/sem-af.component';
+import { ShapenetPickerComponent } from './components/popups/shapenet-picker/shapenet-picker.component';
+import {ScrollingModule} from '@angular/cdk/scrolling'
 
 
 @NgModule({
@@ -62,7 +64,8 @@ import { SemAF } from './components/tools/sem-af/sem-af.component';
     CommentsComponent,
     KnowledgePickerComponent,
     ToolBarComponent,
-    SemAF
+    SemAF,
+    ShapenetPickerComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,6 +79,7 @@ import { SemAF } from './components/tools/sem-af/sem-af.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    ScrollingModule,
   ],
   providers: [
     CookieService, {
