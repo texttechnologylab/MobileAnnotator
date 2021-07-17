@@ -109,16 +109,16 @@ export class PickerComponent implements OnInit {
     this.link = thisLink
     this.after_closed = after_closed;
     this.id = id;
-    console.log("id",id)
+    /*console.log("id",id)*/
 
 
     this.features = features;
 
 
-    console.log("this.datathis.data", this.data)
+    /*console.log("this.datathis.data", this.data)*/
 
 
-    console.log("1")
+    /*console.log("1")*/
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
@@ -129,7 +129,7 @@ export class PickerComponent implements OnInit {
 
 
     var forms = {}
-    console.log("1")
+    /*console.log("1")*/
 
 
     this.index = defaultLinkClasses.findIndex((x) => { return x.type == thisLink.type })
@@ -142,7 +142,7 @@ export class PickerComponent implements OnInit {
 
 
 
-      console.log("featues", featues, features)
+      /*console.log("featues", featues, features)*/
       let reference: Reference[] = [];
       let referenceMulti: ReferenceMulti[] = [];
       for (const [key, value] of Object.entries(featues)) {
@@ -156,7 +156,7 @@ export class PickerComponent implements OnInit {
 
           if (featues[key].type == FeatureType.Text) {
             forms[key] = new FormControl(value.value)
-            console.log("forms0: ", key, value.value, features)
+            /*console.log("forms0: ", key, value.value, features)*/
             this.text_inputs.push({
               key: key,
               value: `${value.value}`,
@@ -178,11 +178,11 @@ export class PickerComponent implements OnInit {
             org_string: `${text_value}`,
           })
           forms[key] = new FormControl(text_value)
-          console.log("forms1: ", key, text_value)
+          /*console.log("forms1: ", key, text_value)*/
         }
         else if (featues[key].type == FeatureType.Select) {
           forms[key] = new FormControl(text_value !== "" ? text_value : null)
-          console.log("forms2: ", key, text_value, typeof (text_value))
+          /*console.log("forms2: ", key, text_value, typeof (text_value))*/
         }
         else if (featues[key].type == FeatureType.Reference) {
           let text_ = null;
@@ -202,7 +202,7 @@ export class PickerComponent implements OnInit {
           }
 
           reference.push({ feature_name: key, text: text_, text_org: text_, display_name: value.display_name })
-          console.log("forms3: ", key, text_value, typeof (text_value), text_)
+          /*console.log("forms3: ", key, text_value, typeof (text_value), text_)*/
         }
         else if (featues[key].type == FeatureType.ReferenceMulti) {
           let text_: SingleRef[] = [];
@@ -231,11 +231,11 @@ export class PickerComponent implements OnInit {
 
 
           referenceMulti.push({ feature_name: key, display_name: value.display_name, values: text_ })
-          console.log("forms4: ", key, text_, text_value)
+          //console.log("forms4: ", key, text_, text_value)
         }
       }
-      console.log("reference", reference)
-      console.log("referenceMulti", referenceMulti)
+      //console.log("reference", reference)
+      //console.log("referenceMulti", referenceMulti)
       this.reference = reference;
       this.referenceMulti = referenceMulti;
 
@@ -247,37 +247,37 @@ export class PickerComponent implements OnInit {
 
 
 
-      console.log("annon", JSON.stringify(this.text_inputs, null, 4));
+      //console.log("annon", JSON.stringify(this.text_inputs, null, 4));
 
 
 
 
 
       this.profileForm = new FormGroup(forms);
-      console.log(this.profileForm)
+      //console.log(this.profileForm)
 
 
       this.features_json = JSON.stringify(features, null, 4);
-      console.log(this.features_json)
+      //console.log(this.features_json)
 
       this.new_features = features;
     }
     else {
       this.profileForm = new FormGroup({})
     }
-    console.log("1")
+    //console.log("1")
 
 
     for (const entry of entries) {
       annotationList.push(entry);
     }
     this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
-    console.log("1")
+    //console.log("1")
   }
 
   public deleteThis(){
-    console.log("Todo: Delete this link")
-    console.log("addr",this.addr,this.id)
+    //console.log("Todo: Delete this link")
+    //console.log("addr",this.addr,this.id)
     this.after_closed({ type: return_type.remove_selected_link, addr: this.id });
     this.dialogRef.close({ type: return_type.remove_selected_link})
   }
@@ -286,7 +286,7 @@ export class PickerComponent implements OnInit {
     if (this.index == -1) return {};
     var new_features = {}
 
-    console.log("controls", this.profileForm.controls)
+    //console.log("controls", this.profileForm.controls)
     for (const [key, elem] of Object.entries(this.profileForm.controls)) {
       const val = this.profileForm.get(key).value;
 
@@ -301,9 +301,9 @@ export class PickerComponent implements OnInit {
       }
     }
 
-    console.log("Gather", JSON.stringify(new_features, null, 4))
+    //console.log("Gather", JSON.stringify(new_features, null, 4))
     return new_features;
-    console.log("Gather", JSON.stringify(new_features, null, 4))
+    //console.log("Gather", JSON.stringify(new_features, null, 4))
   }
 
   public getBackground(entry: IContentholderData): string {
@@ -323,7 +323,7 @@ export class PickerComponent implements OnInit {
       return;
     }
 
-    console.log({ type: return_type.selected, entry: entry, features: this.new_features })
+    //console.log({ type: return_type.selected, entry: entry, features: this.new_features })
 
 
     this.after_closed({ type: return_type.selected, entry: entry, features: this.new_features });

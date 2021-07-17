@@ -82,7 +82,7 @@ export class SemAF implements OnInit, OnDestroy {
       }
     };
     this.route.queryParams.subscribe(paramObserver);
-    console.log({ 1: this.documentService.currentCAS.text })
+    //console.log({ 1: this.documentService.currentCAS.text })
 
     // Auf Änderungen des Dokuments reagieren
     const changeObserver: PartialObserver<void> = {
@@ -106,7 +106,7 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
   public select_link(id: number) {
-    console.log(`Link Selected: ${id}`)
+    //console.log(`Link Selected: ${id}`)
 
 
   }
@@ -122,7 +122,7 @@ export class SemAF implements OnInit, OnDestroy {
    * Called when the user cancels the selection of a the Start/End of the Link or an Attribute
    */
   public selectionCanceled(): void {
-    console.log("Canceled Selection")
+    //console.log("Canceled Selection")
     this.selected_reference = null;
     this.selected_reference_multi = null;
     this.link_start_end = null;
@@ -154,7 +154,7 @@ export class SemAF implements OnInit, OnDestroy {
       const feature = {};
       feature[st] = data.id
       this.activeFilters = [];
-      console.log("feature: ", feature, data)
+      //console.log("feature: ", feature, data)
 
 
       this.update_feature(Number.parseInt(this.selected_reference.addr), feature);
@@ -169,7 +169,7 @@ export class SemAF implements OnInit, OnDestroy {
       this.selected_reference_multi.current_ids.push(data.id)
       feature[st] = this.selected_reference_multi.current_ids;
       this.activeFilters = [];
-      console.log("feature: ", feature, data)
+      //console.log("feature: ", feature, data)
 
 
       this.update_feature(Number.parseInt(this.selected_reference_multi.addr), feature);
@@ -179,14 +179,14 @@ export class SemAF implements OnInit, OnDestroy {
 
     if (this.link_start_end !== null) {
 
-      console.log("HIIIII")
+      //console.log("HIIIII")
       const id = data.id;
       if (id === undefined) return;
 
       this.link_start_end.push(id)
       this.help_text = `Select End for ${this.new_link.name}`;
       if (this.link_start_end.length == 2) {
-        console.log("start_end:", JSON.stringify(this.link_start_end, null, 4))
+        //console.log("start_end:", JSON.stringify(this.link_start_end, null, 4))
         const [a, b] = this.link_start_end
         this.createLink(this.new_link.type, a, b)
 
@@ -200,10 +200,10 @@ export class SemAF implements OnInit, OnDestroy {
     {
 
       // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
-      console.log("data.data.features", data.data.features)
+      //console.log("data.data.features", data.data.features)
 
       const after_closed = (result: { type: return_type, [id: string]: any }) => {
-        console.log("CLOSED!")
+        //console.log("CLOSED!")
         var new_features;
         const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : data.id;
 
@@ -229,7 +229,7 @@ export class SemAF implements OnInit, OnDestroy {
 
 
 
-            console.log("data:  ", JSON.stringify(data, null, 4));
+            //console.log("data:  ", JSON.stringify(data, null, 4));
             const features = {};
 
             const queue: IQueueElement = {
@@ -240,11 +240,11 @@ export class SemAF implements OnInit, OnDestroy {
                 _type: this.selectedAnnotation.type,
               }
             };
-            console.log("queue11:  ", JSON.stringify(queue, null, 4));
+            //console.log("queue11:  ", JSON.stringify(queue, null, 4));
             this.sendBatch([queue]);
           }
           else if (return_type.selected_ref == result.type) {
-            console.log("resxx", result)
+            //console.log("resxx", result)
             this.selected_reference = { feature_name: result.feature_name, addr: addr }
             if (result.allowed_type !== null) {
               this.activeFilters = result.allowed_type;
@@ -255,7 +255,7 @@ export class SemAF implements OnInit, OnDestroy {
             }
           }
           else if (return_type.selected_ref_multi == result.type) {
-            console.log("resxx", result)
+            //console.log("resxx", result)
             this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
             if (result.allowed_type !== null) {
               this.activeFilters = result.allowed_type;
@@ -268,14 +268,14 @@ export class SemAF implements OnInit, OnDestroy {
 
           else if (return_type.add_link == result.type) {
             const link = result.entry as IAnnotationClass;
-            console.log("link:   a", link);
+            //console.log("link:   a", link);
             this.link_start_end = [addr];
             this.snackBar.open(`Select End for ${link.name}`, null, { duration: 2000, })
             this.new_link = link;
           }
           else if (return_type.remove_selected == result.type) {
             const { begin, end } = result.features
-            console.log("data{{{{", data)
+            //console.log("data{{{{", data)
             const queue: IQueueElement[] = [
               {
                 cmd: 'remove',
@@ -354,7 +354,7 @@ export class SemAF implements OnInit, OnDestroy {
     filter.afterClosed().subscribe((result) => {
       if (result) {
         this.activeFilters = Array.from(result);
-        console.log(this.activeFilters)
+        //console.log(this.activeFilters)
       }
     });
   }
@@ -552,7 +552,7 @@ export class SemAF implements OnInit, OnDestroy {
           glabel.id = ground._addr;
           glabel.label = this.documentService.currentCAS.text.slice(ground.features.begin, ground.features.end)
           glabel.data = ground;
-          console.log("ground", ground)
+          //console.log("ground", ground)
         }
         return {
           id: link._addr,
@@ -566,13 +566,13 @@ export class SemAF implements OnInit, OnDestroy {
 
     }
     this.links = this.links.filter((x)=>x !== null)
-    console.log("THIS.links",this.links)
+    //console.log("THIS.links",this.links)
 
 
   }
 
   public create_multitoken(data: IContentholderData[]){
-    console.log("create_multitoken",data)
+    //console.log("create_multitoken",data)
     let [start, end] = data;
     if(start.data.features.begin > start.data.features.begin) start = end;
 
@@ -645,7 +645,7 @@ export class SemAF implements OnInit, OnDestroy {
         _type: type,
       }
     };
-    console.log("queuex:  ", JSON.stringify(queue, null, 4));
+    //console.log("queuex:  ", JSON.stringify(queue, null, 4));
     this.sendBatch([queue]);
   }
 

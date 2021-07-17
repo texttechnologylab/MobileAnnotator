@@ -30,7 +30,7 @@ export class ToolBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.title);
+    /*console.log(this.title);*/ 
   }
 
   /**

@@ -17,6 +17,7 @@ export class ShapenetPickerComponent implements OnInit {
   public searchJson: string;
   public input: string;
   public cur: number = 0;
+  public selected: number =0;
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<string>,
@@ -26,7 +27,7 @@ export class ShapenetPickerComponent implements OnInit {
     this.input = this.data;
     this.search.pipe(distinctUntilChanged((a, b) => a === b)).subscribe({
       next: async (v) => {
-        console.log(`observerA: ${v}`)
+        //console.log(`observerA: ${v}`)
         const copy = this.cur + 1;
         this.cur += 1;
 
@@ -37,7 +38,7 @@ export class ShapenetPickerComponent implements OnInit {
 
           // We use force-cache to not put undue stress on the fragile servers :)
           const result: ShapeNetSearchResult = await (await fetch('http://shapenet.texttechnologylab.org/search?search=' + encodeURIComponent(v), { cache: "force-cache" })).json()
-
+          //console.log("Result: ", result);
           if (this.cur > copy) return // ensure that the newest result is used
           this.searchResult = result
 
@@ -59,6 +60,12 @@ export class ShapenetPickerComponent implements OnInit {
   public change_input(a: any) {
     //console.log("change_input",a,this.input)
     this.search.next(this.input)
+  }
+
+  public set_shapenet(id:string) {
+    
+    console.log("shapenet test", id);
+    
   }
 
 }

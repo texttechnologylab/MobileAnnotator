@@ -184,11 +184,11 @@ export class KnowledgeBaseComponent implements OnInit, OnDestroy {
     // Bestimmte den Textabschnitt, der als Multitoken zusammengefasst werden soll
     const begin = Math.min(+from.features.begin, +from.features.begin);
     const end = Math.min(+to.features.end, +to.features.end);
-    console.log('coords', begin, end);
+    //console.log('coords', begin, end);
 
     const possibles = Object.values(this.tool.toolElements[ttEntityType]).map((entry) => getTypedAnnotation<TextTechnologyEntity>(entry));
     const children: TextTechnologyEntity[] = [];
-    console.log('possibles', possibles);
+    //console.log('possibles', possibles);
 
     for (const entry of possibles) {
       if (!entry) {
@@ -198,7 +198,7 @@ export class KnowledgeBaseComponent implements OnInit, OnDestroy {
         children.push(entry);
       }
     }
-    console.log('children', children);
+    //console.log('children', children);
 
     const queue: IQueueElement[] = [];
     // Entferne alle Annotationen der bisherigen Tokens
