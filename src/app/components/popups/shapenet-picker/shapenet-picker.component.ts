@@ -64,7 +64,7 @@ export class ShapenetPickerComponent implements OnInit {
 
   public set_shapenet(id:string) {
     
-    //console.log("shapenet test");
+    console.log("shapenet test", id);
     
   }
 
