@@ -2,7 +2,7 @@
 
         <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Search Term</mat-label>
-            <input matInput placeholder="Blue Cup" name="searchterm" [(ngModel)]="input"
+            <input matInput placeholder="" name="searchterm" [(ngModel)]="input"
                 (change)="change_input($event)"  width="100%">
         </mat-form-field>
 
@@ -13,8 +13,8 @@
 
     <div *ngIf="searchResult !== undefined && searchResult !== null">
         <ng-container *ngIf="searchResult.success">
-            <ng-container *ngFor="let res of searchResult.results">
-                <div style="display: flex;" class="searchResult">
+            <ng-container *ngFor="let res of searchResult.results; let i = index">
+                <div style="display: flex;" class="searchResult" (click)="set_shapenet(res.id)" [style.background]="selected==i?'lightgreen' : 'white'" (click)="selected=i">
                     <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+res.id+'&pic=1'" alt="..."
                         loading="lazy" style="height: 8em;">
                     {{res.name}}

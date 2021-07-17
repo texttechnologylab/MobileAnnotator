@@ -151,7 +151,7 @@ export class DocumentService {
    * Öffnet das Dokument mit der übergebenen ID
    */
   public openCAS(id: string | number): void {
-    console.log('start openCAS');
+    //console.log('start openCAS');
     const casId = `${id}`;
     if (this.loadedCAS != null && this.loadedCAS.casId === casId) {
       this.casOpened.next(this.loadedCAS);
@@ -159,7 +159,7 @@ export class DocumentService {
     }
     this.expectedCAS = casId;
     this.websocketService.send({ cmd: 'open_cas', data: { casId } });
-    console.log('end openCAS');
+    //console.log('end openCAS');
   }
 
   /**

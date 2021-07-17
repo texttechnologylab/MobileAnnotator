@@ -69,7 +69,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log("ngOnChanges", changes)
+    /*console.log("ngOnChanges", changes)*/
     if (changes) {
       if (changes.pageSize != null || changes.page != null || changes.inData != null) {
         if (changes.inData != null || changes.pageSize != null) {
@@ -120,7 +120,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
 
       const a = getLinkPointsString(from_,to_,false,1,null);
       this.link_visu.push(a.pathStr);
-      console.log("svg Link a",a)
+      /*console.log("svg Link a",a)*/
 
       li.push({
         start:{
@@ -133,11 +133,11 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
         }
       })
 
-      console.log("link",from,to,link)
+      /*console.log("link",from,to,link)*/
     }
 
     this.linksPos = li;
-    console.log("document.getElementById('loginInput')",li)
+    /*console.log("document.getElementById('loginInput')",li)*/
   }
 
   public splitUpToken(){
@@ -164,10 +164,10 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       
       const y = `${en.y+en.height+window.scrollY}px`
       const x = `${en.x+en.width/2+window.scrollX-el.getBoundingClientRect().width/2}px`
-      console.log(x,y)
+      /*console.log(x,y)*/
       this.splitToken = data;
 
-      console.log("Split Multitoken",en)
+      /*console.log("Split Multitoken",en)*/
       el.style.top = y;
       el.style.left = x;
       el.style.visibility = "visible";
@@ -176,7 +176,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     }
     this.lastLong = data.id;
 
-    console.log("Long press",this.multiToken)
+    /*console.log("Long press",this.multiToken)*/
     if(this.multiToken.length == 2){
       this.createMultiToken.emit([...this.multiToken]);
       this.multiToken = [];

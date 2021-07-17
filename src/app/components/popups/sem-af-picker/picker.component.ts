@@ -104,10 +104,10 @@ export class PickerComponent implements OnInit {
   /* Function to open the Link picker menu via button*/
   openDialog(link: Link): void {
     const annon = this.data.annoData;
-    console.log("AnonData", annon)
+    //console.log("AnonData", annon)
 
     let thisLink: IToolElement = annon[link.type][link.id]
-    console.log("thisLink", thisLink)
+    //console.log("thisLink", thisLink)
 
 
 
@@ -143,7 +143,7 @@ export class PickerComponent implements OnInit {
       const result: Shapenet_Req = await (await fetch(url + id, { cache: "force-cache" })).json()
       this.shapenet_features = result;
 
-      console.log("shapenet_features",this.shapenet_features)
+      //console.log("shapenet_features",this.shapenet_features)
 
 
     } catch (error) {
@@ -175,7 +175,7 @@ public testshapenet(): void {
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
     this.after_closed = after_closed;
-    console.log("links.fi", links.filter((x) => { return x.from.id === id || x.to.id === id }))
+    //console.log("links.fi", links.filter((x) => { return x.from.id === id || x.to.id === id }))
     this.lastAnnotations = last;
     this.highlightAnnotation = new Map<string, boolean>();
     if (highlights != null) {
@@ -186,13 +186,13 @@ public testshapenet(): void {
 
     
 
-    console.log("this.datathis.data", this.data)
+    //console.log("this.datathis.data", this.data)
 
     this.current_sel = highlights;
 
     this.links_containing_self = links.filter((x) => { return x.from.id === id || x.to.id === id });
 
-    console.log("1")
+    //console.log("1")
 
     this.dialogRef.disableClose = true;//disable default close operation
     this.dialogRef.backdropClick().subscribe(result => {
@@ -202,7 +202,7 @@ public testshapenet(): void {
 
 
     var forms = {}
-    console.log("1")
+    //console.log("1")
 
     const feature_visu: FeatureVisu[] = []
 
@@ -311,7 +311,7 @@ public testshapenet(): void {
       this.features_dict = featues;
 
 
-      console.log("feature_visu", feature_visu)
+      //console.log("feature_visu", feature_visu)
 
       this.profileForm = new FormGroup(forms);
 
@@ -384,7 +384,7 @@ public testshapenet(): void {
       new_features["object_id"] = this.shapenet_id
     }
 
-    console.log("controls", this.profileForm.controls)
+    //console.log("controls", this.profileForm.controls)
     for (const [key, elem] of Object.entries(this.profileForm.controls)) {
       const val = this.profileForm.get(key).value;
 
