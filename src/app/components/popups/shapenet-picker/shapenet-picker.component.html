@@ -11,14 +11,18 @@
 
     <!-- <code>{{searchJson}}</code> -->
 
-    <div>
-        <ng-container *ngFor="let res of searchResult.results">
-            <div style="display: flex;" class="searchResult">
-                <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+res.id+'&pic=1'" alt="..."
-                    loading="lazy" style="height: 8em;">
-                {{res.name}}
-            </div>
+    <div *ngIf="searchResult !== undefined && searchResult !== null">
+        <ng-container *ngIf="searchResult.success">
+            <ng-container *ngFor="let res of searchResult.results">
+                <div style="display: flex;" class="searchResult">
+                    <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+res.id+'&pic=1'" alt="..."
+                        loading="lazy" style="height: 8em;">
+                    {{res.name}}
+                </div>
+            </ng-container>
         </ng-container>
+        
+
     </div>
 
 
