@@ -133,14 +133,14 @@ export class PickerComponent implements OnInit {
   }
 
 
-  public async get_shapenet_data(id: string){
+  public async get_shapenet_data(){
     try {
       const url = 'http://shapenet.texttechnologylab.org/getFeature?id='
 
 
 
       // We use force-cache to not put undue stress on the fragile servers :)
-      const result: Shapenet_Req = await (await fetch(url + id, { cache: "force-cache" })).json()
+      const result: Shapenet_Req = await (await fetch(url + this.shapenet_id, { cache: "force-cache" })).json()
       this.shapenet_features = result;
 
       console.log("shapenet_features",this.shapenet_features)
@@ -216,7 +216,7 @@ public testshapenet(): void {
       if(annon.has_shapenet){
         if(features['object_id']){
           this.shapenet_id =  features['object_id']
-          this.get_shapenet_data(this.shapenet_id)
+          this.get_shapenet_data()
           //console.log('object_id',features['object_id'])
         }
       }
