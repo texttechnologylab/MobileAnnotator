@@ -72,6 +72,7 @@ export class PickerComponent implements OnInit {
   public features;
   public links_containing_self: Link[];
   public shapenet_id: string = null;
+  public text: string;
 
   public shapenet_features?: Shapenet_Req = null;
 
@@ -155,22 +156,25 @@ public testshapenet(): void {
 
 
   let dialogRef = this.dialog.open(ShapenetPickerComponent, {
-    data: "Blue Cup",
+    data: {term : this.text,id: this.shapenet_id},
     height: '100%',
     width: '500px',
     maxWidth: '100vw'
 
   });
 
-  // dialogRef.afterClosed().subscribe((x)=>{
-  //     if (x.type == return_type.remove_selected_link){
-  //       this.dialogRef.close({ type: return_type.do_nothing })
-  //     }
-  // });
+   dialogRef.afterClosed().subscribe((x)=>{
+    //this.shapenet_id =  features['object_id']
+    if(!x) return;
+    const {id} = x;
+    this.shapenet_id = id;
+    this.get_shapenet_data()
+   });
 
 }
 
   public ngOnInit(): void {
+    
     this.links = defaultLinkClasses;
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
@@ -184,6 +188,7 @@ public testshapenet(): void {
 
     this.features = features;
 
+    this.text = text.slice(features["begin"],features["end"])
     
 
     //console.log("this.datathis.data", this.data)

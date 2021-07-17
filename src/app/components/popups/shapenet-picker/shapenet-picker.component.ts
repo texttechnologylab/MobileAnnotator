@@ -17,23 +17,25 @@ export class ShapenetPickerComponent implements OnInit {
   public searchJson: string;
   public input: string;
   public cur: number = 0;
-  public selected: number =0;
+  public selected: string =null;
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<string>,
-    @Inject(MAT_DIALOG_DATA) public data: string,) { }
+    @Inject(MAT_DIALOG_DATA) public data: {term: string, id: string},) { }
 
   ngOnInit() {
-    this.input = this.data;
+    const {term, id} = this.data
+    this.input = term;
+    this.selected = id;
     this.search.pipe(distinctUntilChanged((a, b) => a === b)).subscribe({
       next: async (v) => {
         //console.log(`observerA: ${v}`)
         const copy = this.cur + 1;
         this.cur += 1;
+        this.searchResult = null
 
         try {
           const url = 'http://shapenet.texttechnologylab.org/search?search='
-
 
 
           // We use force-cache to not put undue stress on the fragile servers :)
@@ -43,6 +45,7 @@ export class ShapenetPickerComponent implements OnInit {
           this.searchResult = result
 
           this.searchJson = JSON.stringify(result, null, 4)
+          
 
         } catch (error) {
           if (this.cur > copy) return
@@ -54,7 +57,7 @@ export class ShapenetPickerComponent implements OnInit {
 
       }
     });
-    this.search.next(this.data)
+    this.search.next(term)
   }
 
   public change_input(a: any) {
@@ -65,6 +68,8 @@ export class ShapenetPickerComponent implements OnInit {
   public set_shapenet(id:string) {
     
     console.log("shapenet test", id);
+    this.selected = id;
+    this.dialogRef.close({id: id})
     
   }
 
