@@ -94,6 +94,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling'
     PickerComponent,
     semafPickerComponent,
     semafLinkPickerComponent,
+    ShapenetPickerComponent,
     FilterComponent,
     CommentsComponent,
     KnowledgePickerComponent,
