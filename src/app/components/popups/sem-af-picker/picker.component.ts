@@ -73,6 +73,8 @@ export class PickerComponent implements OnInit {
   public links_containing_self: Link[];
   public shapenet_id: string = null;
 
+  public shapenet_features?: Shapenet_Req = null;
+
   public ft = FeatureType;
 
 
@@ -130,6 +132,25 @@ export class PickerComponent implements OnInit {
 
   }
 
+
+  public async get_shapenet_data(id: string){
+    try {
+      const url = 'http://shapenet.texttechnologylab.org/getFeature?id='
+
+
+
+      // We use force-cache to not put undue stress on the fragile servers :)
+      const result: Shapenet_Req = await (await fetch(url + id, { cache: "force-cache" })).json()
+      this.shapenet_features = result;
+
+      console.log("shapenet_features",this.shapenet_features)
+
+
+    } catch (error) {
+      this.shapenet_features = null
+    }
+  }
+
 public testshapenet(): void {
 
 
@@ -163,6 +184,8 @@ public testshapenet(): void {
 
     this.features = features;
 
+    
+
     console.log("this.datathis.data", this.data)
 
     this.current_sel = highlights;
@@ -189,6 +212,14 @@ public testshapenet(): void {
       const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
       const featues = annon.features
 
+
+      if(annon.has_shapenet){
+        if(features['object_id']){
+          this.shapenet_id =  features['object_id']
+          this.get_shapenet_data(this.shapenet_id)
+          //console.log('object_id',features['object_id'])
+        }
+      }
 
 
 
@@ -466,4 +497,31 @@ export interface IPickerEntryData {
   name: string;
   rgb?: string;
   concept: boolean;
+}
+
+
+// Generated using quicktype
+interface Shapenet_Req {
+  feature: Shapenet_Feature;
+  success: boolean;
+}
+
+interface Shapenet_Feature {
+  wnsynset:            string;
+  wnlemmas:            string[];
+  solidVolume:         string;
+  isContainer:         boolean;
+  surfaceVolume:       string;
+  weight:              string;
+  tags:                string[];
+  unit:                string;
+  supportSurfaceArea:  string;
+  staticFrictionForce: string;
+  name:                string;
+  alignedDims:         string;
+  id:                  string;
+  categories:          string[];
+  up:                  string;
+  front:               string;
+  has_parts:           boolean;
 }
