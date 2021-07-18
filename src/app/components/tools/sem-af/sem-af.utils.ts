@@ -927,7 +927,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     }
   }
   },
-  /*meta link-mlink complete*/
+  /*mlink complete*/
   {     
     rgb: 'rgb(204,204,204)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',
@@ -944,31 +944,31 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         display_name: "Trigger",
         /*refer to spatial signal*/
         type: FeatureType.Reference,      
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SRelation"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       },      
       "figure": {
         display_name: "Figure(req)",
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       },      
       "ground": {
         display_name: "Ground(req)",              
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       },
       "end_point1": {
         display_name: "end_point1",      
          type: FeatureType.Reference,      
-         reference_option: [],
+         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
          value: "null",
       },
       "end_point2": {
         display_name: "end_point2",      
          type: FeatureType.Reference,      
-         reference_option: [],
+         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
          value: "null",
       },
       "val": {
@@ -980,8 +980,116 @@ export const defaultLinkClasses: IAnnotationClass[] = [
       "bounds": {
         display_name: "Bounds",
          type: FeatureType.Reference,      
-         reference_option: [],
+         reference_option: ["uima.cas.FSList"],
          value: "null",
+      },
+      "rel_type": {
+        display_name: "relation type",
+        type: FeatureType.Select,
+        value: "",
+        select_option: [{
+          display_name: "Coreference",
+          value: "COREFERENCE",
+          value_name: "COREFERENCE"
+        },
+        {
+          display_name: "Subcoreference",
+          value: "SUBCOREFFERENCE",
+          value_name: "SUBCOREFFERENCE"
+        },
+        {
+          display_name: " In Front Of",
+          value: "IN FRONT OF",
+          value_name: "IN FRONT OF"
+        },]}
+    }
+  },
+  /*metalink complete*/
+  {     
+    rgb: 'rgb(204,204,204)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.MetaLink',
+    name: 'MetaLink',
+    css_class: 'I-MetaLink',
+    has_shapenet: false,
+    features: {
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },  
+      "trigger": {
+        display_name: "Trigger",
+        /*refer to spatial signal*/
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
+      },      
+      "figure": {
+        display_name: "Figure(req)",
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
+      },      
+      "ground": {
+        display_name: "Ground(req)",              
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
+      },
+      
+  
+      "rel_type": {
+        display_name: "relation type",
+        type: FeatureType.Select,
+        value: "",
+        select_option: [{
+          display_name: "Coreference",
+          value: "COREFERENCE",
+          value_name: "COREFERENCE"
+        },
+        {
+          display_name: "Subcoreference",
+          value: "SUBCOREFFERENCE",
+          value_name: "SUBCOREFFERENCE"
+        },
+        {
+          display_name: " In Front Of",
+          value: "IN FRONT OF",
+          value_name: "IN FRONT OF"
+        },]}
+    }
+  },
+  /*srlink complete but what to annotate?*/
+  {     
+    rgb: 'rgb(204,204,204)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.SrLink',
+    name: 'SrLink',
+    css_class: 'I-SrLink',
+    has_shapenet: false,
+    features: {
+      'comment': {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },  
+      "trigger": {
+        display_name: "Trigger",
+        /*refer to spatial signal*/
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
+      },      
+      "figure": {
+        display_name: "Figure(req)",
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
+      },      
+      "ground": {
+        display_name: "Ground(req)",              
+        type: FeatureType.Reference,      
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+        value: "null",
       },
       "rel_type": {
         display_name: "relation type",
