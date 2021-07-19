@@ -31,23 +31,27 @@
             <ng-container *ngIf="index != -1">
                 <h2>Attributes</h2>
 
-                <button mat-raised-button (click)="testshapenet()" [style.background]="'orange'">
-                    testshapenet</button>
+                <button mat-raised-button (click)="open_shapenet()" [style.background]="'lightgreen'">
+                    Change ShapeNet Object</button>
 
-                
-                    <ng-container *ngIf="shapenet_id!==null">
-                    <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'" alt="..."
-                    loading="lazy" style="height: 8em;">
-                    <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
-                        <ng-container *ngIf="shapenet_features.success" >
-                            {{shapenet_features.feature.name}}
+                <ng-container *ngIf="shapenet_id!==null && shapenet_id !== ''">
+                    <mat-card>
+                        <img mat-card-image
+                            [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'"
+                            alt="..." loading="lazy" style="height: 8em;">
+                        <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
+                            <ng-container *ngIf="shapenet_features.success">
+                                <mat-card-subtitle>{{shapenet_features.feature.name}}</mat-card-subtitle>
+                            </ng-container>
+
                         </ng-container>
-
-                    </ng-container>
+                    </mat-card>
+                    <button mat-raised-button (click)="delete_shapenet()" [style.background]="'lightcoral'">
+                        Delete ShapeNet Object</button>
                 </ng-container>
-            
 
-                
+
+
                 <form [formGroup]="profileForm">
 
                     <ng-container *ngFor="let feature of feature_visu; index as i">
@@ -78,10 +82,10 @@
                             <ng-container>
                                 <div style="width:100%; display: flex">
                                     <div class="item-ref">
-                                        <button (tap)="feature.data.text=null" [style.background]="feature.data.color" 
-                                        class="item-ref-button" *ngIf="feature.data.text!=null">
-                                            <span>{{feature.data.text}} <mat-icon class="backspace-icon" aria-hidden="false"
-                                                    aria-label="Delete">backspace</mat-icon></span>
+                                        <button (tap)="feature.data.text=null" [style.background]="feature.data.color"
+                                            class="item-ref-button" *ngIf="feature.data.text!=null">
+                                            <span>{{feature.data.text}} <mat-icon class="backspace-icon"
+                                                    aria-hidden="false" aria-label="Delete">backspace</mat-icon></span>
                                         </button>
                                     </div>
                                     <button style="margin-left:5px" class="item-ref-button"
@@ -89,10 +93,10 @@
                                         Select
                                     </button>
                                 </div>
-    
+
                             </ng-container>
                             <br>
-                            
+
                         </div>
 
                         <div *ngIf="feature.type == ft.ReferenceMulti">
@@ -102,9 +106,10 @@
                                     <div class="item-ref">
                                         <ng-container *ngFor="let value of feature.data.values; index as i">
                                             <button (tap)="value.text=null" class="item-ref-button"
-                                                *ngIf="value.text!=null" [style.background]="value.color" >
-                                                <span>{{value.text}} <mat-icon class="backspace-icon" aria-hidden="false"
-                                                        aria-label="Delete">backspace</mat-icon></span>
+                                                *ngIf="value.text!=null" [style.background]="value.color">
+                                                <span>{{value.text}} <mat-icon class="backspace-icon"
+                                                        aria-hidden="false" aria-label="Delete">backspace</mat-icon>
+                                                    </span>
                                             </button>
                                         </ng-container>
                                     </div>
@@ -113,7 +118,7 @@
                                         Select
                                     </button>
                                 </div>
-    
+
                             </ng-container>
                             <br>
                         </div>
@@ -146,16 +151,16 @@
                 (click)="onSelectLink(link.id, $event)" matBadgeSize="small">
 
 
-                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.from)" [style.border]="link.from.border"
-                    >
+                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
+                    [style.border]="link.from.border">
                     {{link.from.label}} </div>
-                    <div class="linkstyle">
-                        <mat-icon>arrow_right_alt</mat-icon>
-                    </div>
+                <div class="linkstyle">
+                    <mat-icon>arrow_right_alt</mat-icon>
+                </div>
 
 
-                <div class="entryDiv linkstyle"  [style.margin-top]="'0'" [style.background]="getBackground(link.to)" [style.border]="link.to.border"
-                    >
+                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
+                    [style.border]="link.to.border">
                     {{link.to.label}} </div>
 
                 <button mat-raised-button (click)="openDialog(link)" [style.background]="'orange'">Change
