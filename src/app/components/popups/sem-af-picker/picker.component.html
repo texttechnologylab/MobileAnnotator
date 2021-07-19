@@ -32,18 +32,20 @@
                 <h2>Attributes</h2>
 
                 <button mat-raised-button (click)="testshapenet()" [style.background]="'orange'">
-                    testshapenet</button>
+                    Change ShapeNet Object</button>
 
                 
                     <ng-container *ngIf="shapenet_id!==null">
-                    <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'" alt="..."
-                    loading="lazy" style="height: 8em;">
-                    <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
+                        <mat-card>
+                        <img mat-card-image [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'" alt="..."
+                        loading="lazy" style="height: 8em;">
+                        <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
                         <ng-container *ngIf="shapenet_features.success" >
-                            {{shapenet_features.feature.name}}
+                            <mat-card-subtitle>{{shapenet_features.feature.name}}</mat-card-subtitle>
                         </ng-container>
 
                     </ng-container>
+                </mat-card>
                 </ng-container>
             
 
