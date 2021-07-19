@@ -18,7 +18,7 @@ export class ShapenetPickerComponent implements OnInit {
   public input: string;
   public cur: number = 0;
   public selected: string =null;
-  public shapenet_url = 'http://shapenet.texttechnologylab.org'
+  public shapenet_url = location.protocol === "https:" ? 'https://m6ytspuafdw.hopto.org/shapenet' : 'http://shapenet.texttechnologylab.org';
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<string>,
