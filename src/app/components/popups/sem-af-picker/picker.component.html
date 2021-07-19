@@ -31,10 +31,9 @@
             <ng-container *ngIf="index != -1">
                 <h2>Attributes</h2>
 
-                <button mat-raised-button (click)="testshapenet()" [style.background]="'orange'">
+                <button mat-raised-button (click)="open_shapenet()" [style.background]="'lightgreen'">
                     Change ShapeNet Object</button>
-
-                
+                                
                     <ng-container *ngIf="shapenet_id!==null">
                         <mat-card>
                         <img mat-card-image [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'" alt="..."
@@ -46,6 +45,8 @@
 
                     </ng-container>
                 </mat-card>
+                <button mat-raised-button (click)="delete_shapenet()" [style.background]="'lightcoral'">
+                    Delete ShapeNet Object</button>
                 </ng-container>
             
 
