@@ -87,6 +87,7 @@ export class PickerComponent implements OnInit {
   };
   public index: number;
   public addr: number;
+  public originalComment = null;
   public after_closed: (result: {
     [id: string]: any;
     type: return_type;
@@ -125,16 +126,16 @@ export class PickerComponent implements OnInit {
 
     });
 
-    dialogRef.afterClosed().subscribe((x)=>{
-        if (x.type == return_type.remove_selected_link){
-          this.dialogRef.close({ type: return_type.do_nothing })
-        }
+    dialogRef.afterClosed().subscribe((x) => {
+      if (x.type == return_type.remove_selected_link) {
+        this.dialogRef.close({ type: return_type.do_nothing })
+      }
     });
 
   }
 
 
-  public async get_shapenet_data(){
+  public async get_shapenet_data() {
     try {
       const url = 'http://shapenet.texttechnologylab.org/getFeature?id='
 
@@ -152,29 +153,29 @@ export class PickerComponent implements OnInit {
     }
   }
 
-public open_shapenet(): void {
+  public open_shapenet(): void {
 
 
-  let dialogRef = this.dialog.open(ShapenetPickerComponent, {
-    data: {term : this.text,id: this.shapenet_id},
-    height: '100%',
-    width: '500px',
-    maxWidth: '100vw'
+    let dialogRef = this.dialog.open(ShapenetPickerComponent, {
+      data: { term: this.text, id: this.shapenet_id },
+      height: '100%',
+      width: '500px',
+      maxWidth: '100vw'
 
-  });
+    });
 
-   dialogRef.afterClosed().subscribe((x)=>{
-    //this.shapenet_id =  features['object_id']
-    if(!x) return;
-    const {id} = x;
-    this.shapenet_id = id;
-    this.get_shapenet_data()
-   });
+    dialogRef.afterClosed().subscribe((x) => {
+      //this.shapenet_id =  features['object_id']
+      if (!x) return;
+      const { id } = x;
+      this.shapenet_id = id;
+      this.get_shapenet_data()
+    });
 
-}
+  }
 
   public ngOnInit(): void {
-    
+
     this.links = defaultLinkClasses;
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
@@ -188,8 +189,8 @@ public open_shapenet(): void {
 
     this.features = features;
 
-    this.text = text.slice(features["begin"],features["end"])
-    
+    this.text = text.slice(features["begin"], features["end"])
+
 
     //console.log("this.datathis.data", this.data)
 
@@ -218,9 +219,9 @@ public open_shapenet(): void {
       const featues = annon.features
 
 
-      if(annon.has_shapenet){
-        if(features['object_id']){
-          this.shapenet_id =  features['object_id']
+      if (annon.has_shapenet) {
+        if (features['object_id']) {
+          this.shapenet_id = features['object_id']
           this.get_shapenet_data()
           //console.log('object_id',features['object_id'])
         }
@@ -239,7 +240,23 @@ public open_shapenet(): void {
 
         const text_value: string | number | boolean | number[] = features[key];
         if (featues[key].type == FeatureType.Text) {
-          feature_visu.push(this.createTextInput(key, text_value as string, featues[key].display_name, forms))
+          let val = text_value;
+          if (key == "comment") {
+            
+            try {
+              const v = JSON.parse(val as string);
+              if(v !== null) {
+                if("actualComment" in v) {
+                  this.originalComment = v;
+                  val = v.actualComment
+                }
+              }
+            } catch (error) {
+              //console.log(error)
+            }
+            //console.log(val)
+          }
+          feature_visu.push(this.createTextInput(key, val as string, featues[key].display_name, forms))
 
         }
         else if (featues[key].type == FeatureType.Select) {
@@ -385,13 +402,17 @@ public open_shapenet(): void {
     if (this.index == -1) return {};
     var new_features = {}
 
-    if(this.shapenet_id !== null){
+    if (this.shapenet_id !== null) {
       new_features["object_id"] = this.shapenet_id
     }
 
     //console.log("controls", this.profileForm.controls)
     for (const [key, elem] of Object.entries(this.profileForm.controls)) {
-      const val = this.profileForm.get(key).value;
+      let val = this.profileForm.get(key).value;
+      if(key == "comment" && this.originalComment !== null){
+        this.originalComment.actualComment = val
+        val = this.originalComment;
+      }
 
       if (this.profileForm.get(key).dirty) {
         new_features[key] = val;
@@ -477,7 +498,7 @@ public open_shapenet(): void {
     this.dialogRef.close({ type: return_type.selected_after, entry: entry, features: this.new_features });
   }
 
-  public delete_shapenet (){
+  public delete_shapenet() {
     this.shapenet_id = "";
   }
 
@@ -514,21 +535,21 @@ interface Shapenet_Req {
 }
 
 interface Shapenet_Feature {
-  wnsynset:            string;
-  wnlemmas:            string[];
-  solidVolume:         string;
-  isContainer:         boolean;
-  surfaceVolume:       string;
-  weight:              string;
-  tags:                string[];
-  unit:                string;
-  supportSurfaceArea:  string;
+  wnsynset: string;
+  wnlemmas: string[];
+  solidVolume: string;
+  isContainer: boolean;
+  surfaceVolume: string;
+  weight: string;
+  tags: string[];
+  unit: string;
+  supportSurfaceArea: string;
   staticFrictionForce: string;
-  name:                string;
-  alignedDims:         string;
-  id:                  string;
-  categories:          string[];
-  up:                  string;
-  front:               string;
-  has_parts:           boolean;
+  name: string;
+  alignedDims: string;
+  id: string;
+  categories: string[];
+  up: string;
+  front: string;
+  has_parts: boolean;
 }
