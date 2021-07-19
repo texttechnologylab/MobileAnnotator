@@ -1007,7 +1007,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   /*metalink complete*/
   {     
     rgb: 'rgb(204,204,204)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.MetaLink',
+    type: 'org.texttechnologylab.annotation.semaf.meta.MetaLink',
     name: 'MetaLink',
     css_class: 'I-MetaLink',
     has_shapenet: false,
@@ -1062,7 +1062,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   /*srlink complete but what to annotate?*/
   {     
     rgb: 'rgb(204,204,204)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.SrLink',
+    type: 'org.texttechnologylab.annotation.semaf.semafsr.SrLink',
     name: 'SrLink',
     css_class: 'I-SrLink',
     has_shapenet: false,
