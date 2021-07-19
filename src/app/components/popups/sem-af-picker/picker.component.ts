@@ -477,7 +477,7 @@ public open_shapenet(): void {
     this.dialogRef.close({ type: return_type.selected_after, entry: entry, features: this.new_features });
   }
 
-  public delete_shapenet (id:string){
+  public delete_shapenet (){
     this.shapenet_id = "";
   }
 
