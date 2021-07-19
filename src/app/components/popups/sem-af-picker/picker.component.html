@@ -37,7 +37,7 @@
                 <ng-container *ngIf="shapenet_id!==null && shapenet_id !== ''">
                     <mat-card>
                         <img mat-card-image
-                            [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+shapenet_id+'&pic=1'"
+                            [src]="shapenet_url+'/getThumbnail?id='+shapenet_id+'&pic=1'"
                             alt="..." loading="lazy" style="height: 8em;">
                         <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
                             <ng-container *ngIf="shapenet_features.success">

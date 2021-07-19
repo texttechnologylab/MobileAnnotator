@@ -18,6 +18,7 @@ export class ShapenetPickerComponent implements OnInit {
   public input: string;
   public cur: number = 0;
   public selected: string =null;
+  public shapenet_url = 'http://shapenet.texttechnologylab.org'
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<string>,
@@ -35,11 +36,11 @@ export class ShapenetPickerComponent implements OnInit {
         this.searchResult = null
 
         try {
-          const url = 'http://shapenet.texttechnologylab.org/search?search='
+          const url = `${this.shapenet_url}/search?search=`
 
 
           // We use force-cache to not put undue stress on the fragile servers :)
-          const result: ShapeNetSearchResult = await (await fetch('http://shapenet.texttechnologylab.org/search?search=' + encodeURIComponent(v), { cache: "force-cache" })).json()
+          const result: ShapeNetSearchResult = await (await fetch(url + encodeURIComponent(v), { cache: "force-cache" })).json()
           //console.log("Result: ", result);
           if (this.cur > copy) return // ensure that the newest result is used
           this.searchResult = result

@@ -16,7 +16,7 @@
             <ng-container *ngFor="let res of searchResult.results; let i = index">
                 <div style="display: flex;" class="searchResult" (click)="set_shapenet(res.id)"
                     [style.background]="selected===res.id?'lightgreen' : 'white'">
-                    <img [src]="'http://shapenet.texttechnologylab.org/getThumbnail?id='+res.id+'&pic=1'" alt="..."
+                    <img [src]="shapenet_url+'/getThumbnail?id='+res.id+'&pic=1'" alt="..."
                         loading="lazy" style="height: 8em;">
                     {{res.name}}
                 </div>

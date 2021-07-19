@@ -73,6 +73,7 @@ export class PickerComponent implements OnInit {
   public links_containing_self: Link[];
   public shapenet_id: string = null;
   public text: string;
+  public shapenet_url = location.protocol === "https:" ? 'https://m6ytspuafdw.hopto.org/shapenet' :  'http://shapenet.texttechnologylab.org'
 
   public shapenet_features?: Shapenet_Req = null;
 
@@ -137,7 +138,7 @@ export class PickerComponent implements OnInit {
 
   public async get_shapenet_data() {
     try {
-      const url = 'http://shapenet.texttechnologylab.org/getFeature?id='
+      const url = `${this.shapenet_url}/getFeature?id=`
 
 
 
