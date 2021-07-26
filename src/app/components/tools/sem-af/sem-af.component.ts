@@ -545,12 +545,12 @@ export class SemAF implements OnInit, OnDestroy {
         const flabel: IContentholderData = { id: null, label: null, data: null }
         const glabel: IContentholderData = { id: null, label: null, data: null }
 
-        if (figure !== null) {
+        if (figure !== null && figure !== undefined) {
           flabel.id = figure._addr;
           flabel.label = this.documentService.currentCAS.text.slice(figure.features.begin, figure.features.end)
           flabel.data = figure;
         }
-        if (ground !== null) {
+        if (ground !== null && figure !== undefined) {
           glabel.id = ground._addr;
           glabel.label = this.documentService.currentCAS.text.slice(ground.features.begin, ground.features.end)
           glabel.data = ground;
