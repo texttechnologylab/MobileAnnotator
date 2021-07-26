@@ -504,6 +504,8 @@ export class SemAF implements OnInit, OnDestroy {
         return (x.data.features.begin >= y.data.features.begin)
           && (x.data.features.end <= y.data.features.end) &&  x.id !== y.id
       })
+      if(x.data.features.begin == x.data.features.end) return true // a empty token (length of text==0) would otherwise never be shown
+    
 
 
       
