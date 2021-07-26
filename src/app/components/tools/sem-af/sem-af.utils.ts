@@ -930,7 +930,8 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   /*mlink complete*/
   {     
     rgb: 'rgb(204,204,204)',
-    type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',
+    type: 'org.texttechnologylab.annotation.semaf.isotimeml.MLink',
+    /*type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',*/
     name: 'MLink',
     css_class: 'I-MLink',
     has_shapenet: false,
@@ -1107,7 +1108,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         },]}
     }
   },
-  /* measure link not exist*/
+  /* measure link not exist
   {
     rgb: 'rgb(204,204,204)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MeasureLink',
@@ -1117,19 +1118,19 @@ export const defaultLinkClasses: IAnnotationClass[] = [
     features: {
       "trajector": {
         display_name: "Trajector",
-        /*refer to location/(spatial)entity/event tag*/
+    
         type: FeatureType.Reference,      
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
         value: "null",
       },
       "landmark": {
         display_name: "Landmark",
-        /*refer to location/(spatial)entity/event tag*/
+       
         type: FeatureType.Reference,      
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
         value: "null",
       },
-      /*relation type*/
+      
       "relType": {
         display_name: "relation type",
         type: FeatureType.Select,
@@ -1272,7 +1273,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
           value_name: "IN"
         }       
         ]},
-        /*val describes the actual measurement*/
+     
         "val": {
           display_name: "Val",
           type: FeatureType.Select,
@@ -1305,27 +1306,27 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         ]},
         "Val_refer_to_Text": {
           display_name: "Val refer to Text",
-          /*refer to a measure tag*/
+        
           type: FeatureType.Reference,      
           reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
           value: "null",
         },
         "endPoint1": {
           display_name: "endPoint1",
-          /*refer to location/(spatial)entity/event tag*/
+      
           type: FeatureType.Reference,      
           reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
           value: "null",
         },
         "endPoint2": {
           display_name: "endPoint2",
-          /*refer to location/(spatial)entity/event tag*/
+         
           type: FeatureType.Reference,      
           reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Location","org.texttechnologylab.annotation.semaf.isospace.SpatialEntity","org.texttechnologylab.annotation.semaf.isobase.Event"],
           value: "null",
         },
     }
-  },
+  },*/
    /* move link complete */
   {
     rgb: 'rgb(204,204,204)',
@@ -1370,14 +1371,14 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         "source": {
           display_name: "Source",
           type: FeatureType.Reference,      
-          reference_option: [],
+          reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
           /*no restrict to select */
           value: "null",
         }, 
         "goal": {
           display_name: "Goal",
           type: FeatureType.Reference,      
-          reference_option: [],
+          reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
           /*no restrict to select */
           value: "null",
         }, 
