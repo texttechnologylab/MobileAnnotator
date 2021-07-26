@@ -343,7 +343,8 @@ export class PickerComponent implements OnInit {
       type: return_type.selected_ref,
       data: this.gather(feature_name),
       feature_name: feature_name,
-      allowed_type: this.features_dict[feature_name].reference_option
+      allowed_type: this.features_dict[feature_name].reference_option,
+      addr: this.link.id
     });
     //console.log("xx1",feature_name);
   }
@@ -360,7 +361,8 @@ export class PickerComponent implements OnInit {
       data: this.gather(feature_name),
       feature_name: feature_name,
       current_ids: current_id,
-      allowed_type: this.features_dict[feature_name].reference_option
+      allowed_type: this.features_dict[feature_name].reference_option,
+      addr: this.link.id
     });
     //console.log("xx1",feature_name);
   }
