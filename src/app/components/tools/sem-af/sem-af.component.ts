@@ -529,6 +529,7 @@ export class SemAF implements OnInit, OnDestroy {
      * so they extract all links and save them in this.links
      */
     const link_types = [...defaultLinkClasses];
+    console.log(this.tool.toolElements)
     this.links = []
     for (const { type, rgb } of link_types) {
       // Not all Files need to have all types of links
@@ -549,6 +550,9 @@ export class SemAF implements OnInit, OnDestroy {
           flabel.id = figure._addr;
           flabel.label = this.documentService.currentCAS.text.slice(figure.features.begin, figure.features.end)
           flabel.data = figure;
+        }
+        else {
+          console.log("test123",figure,link,flabel,glabel)
         }
         if (ground !== null && figure !== undefined) {
           glabel.id = ground._addr;
