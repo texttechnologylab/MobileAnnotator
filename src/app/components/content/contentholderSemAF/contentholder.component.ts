@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges,AfterViewInit , SimpleChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges,AfterViewInit , SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -47,6 +47,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
 
   private longpress = false;
   public lastLong: number = -1;
+  private link_render_date: Date = null;
 
   @ViewChild('contextMenuContainer', { static: true }) private readonly contextMenuRef: ElementRef;
   @ViewChild(MatMenuTrigger, { static: true }) private readonly contextMenuTrigger: MatMenuTrigger;
@@ -81,12 +82,24 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
         this.filterSet = make_filter(this.filters);
       }
       if(changes.links){
-        setTimeout(()=>{this.test(this.links)}, 100); // Ensure entities are rendered
+        const d = new Date();
+        this.link_render_date = d;
+        setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
       }
     }
   }
 
-  public test(links: Link[]){
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const d = new Date();
+    this.link_render_date = d;
+    setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
+  }
+  
+
+  public render_links(links: Link[], date: Date){
+    if(date < this.link_render_date) return; // only render once
+    console.log("render_links")
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
     if(this.links === undefined) return;
