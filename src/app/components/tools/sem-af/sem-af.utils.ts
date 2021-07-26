@@ -71,7 +71,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: [],
         /*only number allowed*/
       },
-      "Countable": {
+      "countable": {
         display_name: "countable",
         type: FeatureType.Select,
         value: 'countable',
