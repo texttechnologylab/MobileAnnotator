@@ -341,7 +341,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       'elevation': {
         display_name: 'Elevation',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
         value: "null",
       },
       "dcl": {/*Document Creation Location, default value：false*/
@@ -959,18 +959,13 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       },
-      "end_point1": {
-        display_name: "end_point1",      
+      "endpoints": {
+        display_name: "endpoints",      
          type: FeatureType.Reference,      
-         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
+         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Endpoint"],
          value: "null",
       },
-      "end_point2": {
-        display_name: "end_point2",      
-         type: FeatureType.Reference,      
-         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
-         value: "null",
-      },
+
       "val": {
         display_name: "Val",      
          type: FeatureType.Reference,      
@@ -1347,19 +1342,19 @@ export const defaultLinkClasses: IAnnotationClass[] = [
       "figure": {
         display_name: "Figure(req)",
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       }, 
       "ground": {
         display_name: "Ground(req)",              
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       }, 
       "trigger": {
         display_name: "Trigger",
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         /*no restrict to select */
         value: "null",
       },      
@@ -1460,20 +1455,20 @@ export const defaultLinkClasses: IAnnotationClass[] = [
       "figure": {
         display_name: "Figure(req)",
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       }, 
       "ground": {
         display_name: "Ground(req)",              
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       }, 
       "trigger": {
         display_name: "Trigger",
         /*refer to spatial signal*/
         type: FeatureType.Reference,      
-        reference_option: [],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Entity"],
         value: "null",
       },
       /*relation type*/
