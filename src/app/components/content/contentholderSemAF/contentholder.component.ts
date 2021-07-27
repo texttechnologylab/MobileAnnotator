@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges,AfterViewInit , SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
@@ -11,12 +11,12 @@ enum eContextMenu {
   DeleteMulti = 'CONTENT-CONTENTHOLDER.DELETE-MULTI'
 }
 
-interface Pos{
+interface Pos {
   x: number,
   y: number
 }
 
-interface LinkPos{
+interface LinkPos {
   start: Pos,
   end: Pos
 }
@@ -29,7 +29,7 @@ interface LinkPos{
 /**
  * Komponente für die tokenweise Darstellung der Texte
  */
-export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
+export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
   public data: IContentholderData[] = [];
   public multiToken: IContentholderData[] = []
@@ -38,10 +38,10 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   public pageSizes = [50, 100, 150];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
-  public link_visu: string[]=[];
-  public splitToken:IContentholderData;
+  public link_visu: string[] = [];
+  public splitToken: IContentholderData;
 
-  public linksPos: LinkPos[] =[];
+  public linksPos: LinkPos[] = [];
 
   private filterSet: Set<string> = new Set();
 
@@ -81,11 +81,11 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       if (changes.filters) {
         this.filterSet = make_filter(this.filters);
       }
-      if(changes.links){
+      if (changes.links) {
         const d = new Date();
-        console.log(JSON.stringify(this.links,null,4))
+        console.log(JSON.stringify(this.links, null, 4))
         this.link_render_date = d;
-        setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
+        setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
       }
     }
   }
@@ -94,103 +94,111 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   onResize(event) {
     const d = new Date();
     this.link_render_date = d;
-    setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
+    setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
   }
-  
 
-  public render_links(links: Link[], date: Date){
+
+  public render_links(links: Link[], date: Date) {
     //if(date < this.link_render_date) return; // only render once
-    
+
     console.log("render_links", this.links, this.links.length)
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
-    if(this.links === undefined) {
+    if (this.links === undefined) {
       console.log("this.links is undefined")
-      return;}
+      return;
+    }
     this.link_visu = [];
     const links_ = [...this.links];
     console.log(links_)
     for (const link of links_) {
-      console.log(link)
-      const from_ = document.querySelector(`#entity${link.from.id}`)
-      const to_   = document.querySelector(`#entity${link.to.id}`)
-      console.log("from_,to_",link,from_,to_)
-      if(!from_ || !to_) return; // maybe something else here
+      try {
 
-      const from = from_.getBoundingClientRect() as DOMRect;
-      const to = to_.getBoundingClientRect() as DOMRect;
 
-      // https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
-      // At about line 1239
+        console.log(link)
+        const from_ = document.querySelector(`#entity${link.from.id}`)
+        const to_ = document.querySelector(`#entity${link.to.id}`)
+        console.log("from_,to_", link, from_, to_)
+        if (!from_ || !to_) return; // maybe something else here
 
-      const pos: LinkPos = {
-        start:{
-          x: from.x +  from.width/2 + window.scrollX, 
-          y: from.y -base.y  + window.scrollY
-        },
-        end:{
-          x: to.x +  to.width/2 + window.scrollX,
-          y: to.y - base.y + window.scrollY
+        const from = from_.getBoundingClientRect() as DOMRect;
+        const to = to_.getBoundingClientRect() as DOMRect;
+
+        // https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
+        // At about line 1239
+
+        const pos: LinkPos = {
+          start: {
+            x: from.x + from.width / 2 + window.scrollX,
+            y: from.y - base.y + window.scrollY
+          },
+          end: {
+            x: to.x + to.width / 2 + window.scrollX,
+            y: to.y - base.y + window.scrollY
+          }
+        };
+
+        if (pos.start.y == pos.end.y) { // Both Nodes are on the same line
+
         }
-      };
-
-      if(pos.start.y == pos.end.y) { // Both Nodes are on the same line
-
-      } 
 
 
-      const a = getLinkPointsString(from_,to_,false,1,null);
-      this.link_visu.push(a.pathStr);
-      /*console.log("svg Link a",a)*/
+        const a = getLinkPointsString(from_, to_, false, 1, null);
+        this.link_visu.push(a.pathStr);
+        /*console.log("svg Link a",a)*/
 
-      li.push({
-        start:{
-          x: from.x +  from.width/2 + window.scrollX, 
-          y: from.y -base.y  + window.scrollY
-        },
-        end:{
-          x: to.x +  to.width/2 + window.scrollX,
-          y: to.y - base.y + window.scrollY
-        }
-      })
+        li.push({
+          start: {
+            x: from.x + from.width / 2 + window.scrollX,
+            y: from.y - base.y + window.scrollY
+          },
+          end: {
+            x: to.x + to.width / 2 + window.scrollX,
+            y: to.y - base.y + window.scrollY
+          }
+        })
 
-      /*console.log("link",from,to,link)*/
+        /*console.log("link",from,to,link)*/
+      } catch (error) {
+        console.log(error,"Testz")
+      }
     }
 
     this.linksPos = li;
+
     /*console.log("document.getElementById('loginInput')",li)*/
   }
 
-  public splitUpToken(){
-    if(!this.splitToken) return;
+  public splitUpToken() {
+    if (!this.splitToken) return;
     this.deleteMultiToken.emit(this.splitToken)
     this.splitToken = null;
     const el: HTMLDivElement = document.querySelector("#deleteMulti")
     el.style.visibility = "hidden";
   }
 
-  public cancelSplit(){
+  public cancelSplit() {
     this.splitToken = null;
     const el: HTMLDivElement = document.querySelector("#deleteMulti")
     el.style.visibility = "hidden";
   }
-  
-  public addToMultitoken(data: IContentholderData,event: PointerEventInput & { timeStamp: number }){
+
+  public addToMultitoken(data: IContentholderData, event: PointerEventInput & { timeStamp: number }) {
 
     event.preventDefault();
-    
+
 
     this.preventDefault(event.srcEvent as MouseEvent);
     this.longpress = true;
     this.multiToken.push(data)
 
-    if(data.is_multi === true){
-      
+    if (data.is_multi === true) {
+
       const el: HTMLDivElement = document.querySelector("#deleteMulti")
       const en = document.querySelector(`#entity${data.id}`).getBoundingClientRect() as DOMRect
-      
-      const y = `${en.y+en.height+window.scrollY}px`
-      const x = `${en.x+en.width/2+window.scrollX-el.getBoundingClientRect().width/2}px`
+
+      const y = `${en.y + en.height + window.scrollY}px`
+      const x = `${en.x + en.width / 2 + window.scrollX - el.getBoundingClientRect().width / 2}px`
       /*console.log(x,y)*/
       this.splitToken = data;
 
@@ -204,7 +212,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     this.lastLong = data.id;
 
     /*console.log("Long press",this.multiToken)*/
-    if(this.multiToken.length == 2){
+    if (this.multiToken.length == 2) {
       this.createMultiToken.emit([...this.multiToken]);
       this.multiToken = [];
       this.lastLong = -1;
@@ -212,7 +220,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     }
   }
 
-  public ngAfterViewInit(){
+  public ngAfterViewInit() {
 
 
   }
@@ -224,7 +232,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     event.preventDefault();
     this.preventDefault(event);
 
-    if(!this.filterSet.has(entry.data._type) && this.filterSet.size) return;
+    if (!this.filterSet.has(entry.data._type) && this.filterSet.size) return;
 
     if (this.longpress) {
       this.longpress = false;
@@ -244,7 +252,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     }
   }
 
-  public onSelectLink(id:number, event: MouseEvent){
+  public onSelectLink(id: number, event: MouseEvent) {
     event.preventDefault();
     this.preventDefault(event);
     this.selectionLinkChanged.emit(id)
@@ -333,9 +341,9 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
    * Gibt einen Farbwert oder Style für den Background zurück
    */
   public getBackground(entry: IContentholderData): string | SafeStyle {
-    
-    const val = defaultAnnotationClasses.find((x)=>x.type == entry.data._type);
-    return (val===undefined)? "#fff": val.rgb;
+
+    const val = defaultAnnotationClasses.find((x) => x.type == entry.data._type);
+    return (val === undefined) ? "#fff" : val.rgb;
   }
 
   /**
@@ -346,8 +354,8 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     return true // Delete this later not nessacary anymore
   }
 
-  public links_to_string(){
-   return JSON.stringify(this.links,null,4);
+  public links_to_string() {
+    return JSON.stringify(this.links, null, 4);
   }
 
   /**
@@ -370,7 +378,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   }
 }
 
-export interface LabelAndId{
+export interface LabelAndId {
   id: number;
   label: string;
 }
