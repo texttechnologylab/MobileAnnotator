@@ -315,6 +315,7 @@ export class SemAF implements OnInit, OnDestroy {
 
         }
       }
+      console.log (318,this.links)
       const picker = this.dialog.open(PickerComponent, {
         data: {
           features: data.data.features,
@@ -572,6 +573,7 @@ export class SemAF implements OnInit, OnDestroy {
 
     }
     this.links = this.links.filter((x)=>x !== null)
+    console.log (576,this.links)
     //console.log("THIS.links",this.links)
 
 

@@ -83,6 +83,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       }
       if(changes.links){
         const d = new Date();
+        console.log(JSON.stringify(this.links,null,4))
         this.link_render_date = d;
         setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
       }
@@ -98,7 +99,8 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   
 
   public render_links(links: Link[], date: Date){
-    if(date < this.link_render_date) return; // only render once
+    //if(date < this.link_render_date) return; // only render once
+    
     console.log("render_links")
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
