@@ -83,7 +83,6 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       }
       if (changes.links) {
         const d = new Date();
-        console.log(JSON.stringify(this.links, null, 4))
         this.link_render_date = d;
         setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
       }
@@ -101,11 +100,9 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public render_links(links: Link[], date: Date) {
     //if(date < this.link_render_date) return; // only render once
 
-    console.log("render_links", this.links, this.links.length)
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
     if (this.links === undefined) {
-      console.log("this.links is undefined")
       return;
     }
     this.link_visu = [];
@@ -116,10 +113,9 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       try {
 
 
-        console.log(link)
+
         const from_ = document.querySelector(`#entity${link.from.id}`)
         const to_ = document.querySelector(`#entity${link.to.id}`)
-        console.log("from_,to_", link, from_, to_)
         if (!from_ || !to_) continue; // maybe something else here
 
         const from = from_.getBoundingClientRect() as DOMRect;
@@ -193,6 +189,14 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
     this.preventDefault(event.srcEvent as MouseEvent);
     this.longpress = true;
+    if(this.multiToken.length>0){
+      if(this.multiToken[0] == data){
+        this.multiToken = [];
+        this.lastLong = -1;
+        console.log("Cancel create multitoken")
+        return
+      }
+    }
     this.multiToken.push(data)
 
     if (data.is_multi === true) {
