@@ -101,17 +101,20 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   public render_links(links: Link[], date: Date){
     //if(date < this.link_render_date) return; // only render once
     
-    console.log("render_links")
+    console.log("render_links", this.links, this.links.length)
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
     if(this.links === undefined) {
       console.log("this.links is undefined")
       return;}
     this.link_visu = [];
-    for (const link of links) {
+    const links_ = [...this.links];
+    console.log(links_)
+    for (const link of links_) {
+      console.log(link)
       const from_ = document.querySelector(`#entity${link.from.id}`)
       const to_   = document.querySelector(`#entity${link.to.id}`)
-      console.log("from_,to_",from_,to_)
+      console.log("from_,to_",link,from_,to_)
       if(!from_ || !to_) return; // maybe something else here
 
       const from = from_.getBoundingClientRect() as DOMRect;
