@@ -99,7 +99,8 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
   
 
   public render_links(links: Link[], date: Date){
-    if(date < this.link_render_date) return; // only render once
+    //if(date < this.link_render_date) return; // only render once
+    
     console.log("render_links")
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
