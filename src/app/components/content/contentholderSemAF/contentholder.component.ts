@@ -113,7 +113,6 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     console.log(links_)
     for (let index = 0; index < this.links.length; index++) {
       const link = this.links[index];
-
       try {
 
 
@@ -121,7 +120,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         const from_ = document.querySelector(`#entity${link.from.id}`)
         const to_ = document.querySelector(`#entity${link.to.id}`)
         console.log("from_,to_", link, from_, to_)
-        if (!from_ || !to_) return; // maybe something else here
+        if (!from_ || !to_) continue; // maybe something else here
 
         const from = from_.getBoundingClientRect() as DOMRect;
         const to = to_.getBoundingClientRect() as DOMRect;
