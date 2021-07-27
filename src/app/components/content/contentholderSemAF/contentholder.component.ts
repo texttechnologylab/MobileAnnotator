@@ -83,6 +83,7 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
       }
       if(changes.links){
         const d = new Date();
+        console.log(JSON.stringify(this.links,null,4))
         this.link_render_date = d;
         setTimeout(()=>{this.render_links(this.links,d)}, 100); // Ensure entities are rendered
       }
@@ -102,11 +103,14 @@ export class ContentholderComponentSemAF implements OnChanges,AfterViewInit {
     console.log("render_links")
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
     const li: LinkPos[] = []
-    if(this.links === undefined) return;
+    if(this.links === undefined) {
+      console.log("this.links is undefined")
+      return;}
     this.link_visu = [];
     for (const link of links) {
       const from_ = document.querySelector(`#entity${link.from.id}`)
       const to_   = document.querySelector(`#entity${link.to.id}`)
+      console.log("from_,to_",from_,to_)
       if(!from_ || !to_) return; // maybe something else here
 
       const from = from_.getBoundingClientRect() as DOMRect;
