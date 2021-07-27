@@ -150,7 +150,7 @@ export class UserService {
     if (restored) {
       this.sessionRestore.next(true);
     } else {
-      this.cookieService.set(this.sessionCookieName, this.userData.session);
+      this.cookieService.set(this.sessionCookieName, this.userData.session,null,null,null,true);
     }
   }
 }
