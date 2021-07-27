@@ -112,11 +112,8 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     const links_ = [...this.links];
     console.log(links_)
     for (let index = 0; index < this.links.length; index++) {
-      const element = this.links[index];
-      console.log("tt",index,element)
-      
-    }
-    for (const link of links_) {
+      const link = this.links[index];
+
       try {
 
 
