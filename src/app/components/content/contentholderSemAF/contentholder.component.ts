@@ -175,6 +175,8 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     if (!this.splitToken) return;
     this.deleteMultiToken.emit(this.splitToken)
     this.splitToken = null;
+    this.multiToken = [];
+    this.lastLong = -1;
     const el: HTMLDivElement = document.querySelector("#deleteMulti")
     el.style.visibility = "hidden";
   }
