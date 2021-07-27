@@ -202,7 +202,7 @@ export class PickerComponent implements OnInit {
     this.current_sel = highlights;
 
     this.links_containing_self = links.filter((x) => { return x.from.id === id || x.to.id === id });
-
+    console.log("links",this.links_containing_self,links)
     //console.log("1")
 
     this.dialogRef.disableClose = true;//disable default close operation
