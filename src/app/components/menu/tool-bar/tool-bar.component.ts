@@ -43,8 +43,9 @@ export class ToolBarComponent implements OnInit {
 
   public openmanual(): void {
     /* Edit if-conditions for the other pages if needed*/
+    const path = "/"+document.querySelector("base").href.replace("//","").split("/").slice(1).join("/")+'assets/manual.pdf';
     if (this.title==="TOOL-SEM-AF.TITLE"){
-      window.open('/assets/manual.pdf','_blank');
+      window.open(path,'_blank');
 
     }
   }
