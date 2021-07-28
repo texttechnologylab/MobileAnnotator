@@ -467,16 +467,16 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },   
-      'startID': {
+      'beginID': {
         display_name: 'Start',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",        
       },
       'endID': {
         display_name: 'End',
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Path","org.texttechnologylab.annotation.semaf.isospace.Place"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialEntity"],
         value: "null",
       },
       'midID_array': {/*Should add a list of midpoint locations*/
@@ -561,7 +561,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       },
       "elevation": {/*option attribute*/
-        display_name: "elevation",
+        display_name: "Elevation",
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
         value: ""
@@ -572,12 +572,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       },
       'long': {
-        display_name: 'longitude',
+        display_name: 'Longitude',
         type: FeatureType.Text,
         value: "",
       },
       'lat': {
-        display_name: 'latitude',
+        display_name: 'Latitude',
         type: FeatureType.Text,
         value: "",
       }
