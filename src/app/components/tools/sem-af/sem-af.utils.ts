@@ -606,10 +606,10 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
           value_name: "PATH"
         }]
       },
-      "motion_manner": {
+      "manner": {
         display_name: "MOTION_MANNER",
         type: FeatureType.Reference,
-        reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
+        reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],        
         value: ""
       },
 
