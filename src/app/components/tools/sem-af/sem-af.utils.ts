@@ -292,17 +292,13 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: ""
       },
-      "province": {
-        display_name: "Province",
-        type: FeatureType.Text,
-        value: ""
-      },
+
       "county": {
         display_name: "County",
         type: FeatureType.Text,
         value: ""
       },
-      "CTV": {
+      "ctv": {
         display_name: "CTV",
         type: FeatureType.Select,
         value: "",
@@ -328,17 +324,17 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: ""
       },
-      'lat': {
+      "lat": {
         display_name: 'Latitude',
         type: FeatureType.Text,
         value: "",
       },
-      'long': {
-        display_name: 'Longtitude',
+      "long": {
+        display_name: 'Longitude',
         type: FeatureType.Text,
         value: "",
       },
-      'elevation': {
+      "elevation": {
         display_name: 'Elevation',
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
@@ -406,13 +402,13 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },
-      'longtitude': {
-        display_name: 'longtitude',
+      'long': {
+        display_name: 'Longitude',
         type: FeatureType.Text,
         value: "",
       },
-      'latitude': {
-        display_name: 'latitude',
+      'lat': {
+        display_name: 'Latitude',
         type: FeatureType.Text,
         value: "",
       }, 
@@ -544,7 +540,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       },
       'long': {
-        display_name: 'Longtitude',
+        display_name: 'Longitude',
         type: FeatureType.Text,
         value: "",
       },
@@ -575,12 +571,12 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },
-      'longtitude': {
-        display_name: 'longtitude',
+      'long': {
+        display_name: 'longitude',
         type: FeatureType.Text,
         value: "",
       },
-      'latitude': {
+      'lat': {
         display_name: 'latitude',
         type: FeatureType.Text,
         value: "",
@@ -771,7 +767,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         type: FeatureType.Text,
         value: "",
       },
-      "spatial_entitiy_type": {
+      "relation_type": {
         display_name: "TYPE",
         type: FeatureType.Select,
         value: "TYPE",
