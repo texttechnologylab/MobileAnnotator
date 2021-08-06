@@ -123,16 +123,17 @@ export class PickerComponent implements OnInit {
         id: link.id,
         thisLink: link,
         after_closed: this.after_closed,
-      } as any) as any
+      } as any) as any,
+      height: 'inherit',
 
     });
 
     dialogRef.afterClosed().subscribe((x) => {
       if(x == undefined || x == null) this.dialogRef.close({ type: return_type.do_nothing })
-      if (x.type == return_type.remove_selected_link) {
+      else if (x.type == return_type.remove_selected_link) {
         this.dialogRef.close({ type: return_type.do_nothing })
       }
-      if (x.type == return_type.selected_ref || x.type == return_type.selected_ref_multi) {
+      else if (x.type == return_type.selected_ref || x.type == return_type.selected_ref_multi) {
         this.dialogRef.close(x)
       }
     });
