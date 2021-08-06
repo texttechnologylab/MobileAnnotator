@@ -63,6 +63,8 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
   @Output() createMultiToken = new EventEmitter<IContentholderData[]>();
+  @Output() undoEvent = new EventEmitter<void>();
+  @Output() redoEvent = new EventEmitter<void[]>();
   @Output() deleteMultiToken = new EventEmitter<IContentholderData>();
   @Output() selectionCanceled = new EventEmitter<void>();
   @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
@@ -177,6 +179,15 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     const el: HTMLDivElement = document.querySelector("#deleteMulti")
     el.style.visibility = "hidden";
   }
+
+  public undoAction(){
+    this.undoEvent.emit()
+  }
+
+  public redoAction(){
+    this.redoEvent.emit()
+  }
+
 
   public cancelSplit() {
     this.splitToken = null;

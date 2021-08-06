@@ -129,7 +129,7 @@ export class SemAF implements OnInit, OnDestroy {
     this.activeFilters = []
   }
 
-  public deleteToken(data: IContentholderData){
+  public deleteToken(data: IContentholderData) {
     const queue: IQueueElement[] = [
       {
         cmd: 'remove',
@@ -138,7 +138,7 @@ export class SemAF implements OnInit, OnDestroy {
           addr: `${data.id}`,
         }
       }]
-      this.sendBatch(queue)
+    this.sendBatch(queue)
   }
 
   /**
@@ -315,7 +315,7 @@ export class SemAF implements OnInit, OnDestroy {
 
         }
       }
-      console.log (318,this.links)
+      console.log(318, this.links)
       const picker = this.dialog.open(PickerComponent, {
         data: {
           features: data.data.features,
@@ -338,6 +338,36 @@ export class SemAF implements OnInit, OnDestroy {
 
   public changePageSize(num: number): void {
     this.pageSize = num;
+  }
+
+  public undo() {
+    console.log("undo")
+
+
+    this.websocketService.send({
+      cmd: 'undo',
+      data: {
+        casId: this.casId,
+        toolName: 'quickpanel',
+        view: this.viewId,
+      }
+    });
+
+  }
+
+  public redo() {
+    console.log("redo")
+
+
+    this.websocketService.send({
+      cmd: 'redo',
+      data: {
+        casId: this.casId,
+        toolName: 'quickpanel',
+        view: this.viewId,
+      }
+    });
+
   }
 
 
@@ -503,20 +533,20 @@ export class SemAF implements OnInit, OnDestroy {
     const cd = data.filter((x) => {
       const diff = data.findIndex((y) => {
         return (x.data.features.begin >= y.data.features.begin)
-          && (x.data.features.end <= y.data.features.end) &&  x.id !== y.id
+          && (x.data.features.end <= y.data.features.end) && x.id !== y.id
       })
-      if(x.data.features.begin == x.data.features.end) return true // a empty token (length of text==0) would otherwise never be shown
-    
+      if (x.data.features.begin == x.data.features.end) return true // a empty token (length of text==0) would otherwise never be shown
 
 
-      
-      if(diff == -1) return true
+
+
+      if (diff == -1) return true
       data[diff].is_multi = true;
       return false
     })
 
 
-    
+
     this.data = cd.sort((a, b) => a.data.features.begin - b.data.features.begin);
 
     const find_id = (id: number) => {
@@ -553,7 +583,7 @@ export class SemAF implements OnInit, OnDestroy {
           flabel.data = figure;
         }
         else {
-          console.log("test123",figure,link,flabel,glabel)
+          console.log("test123", figure, link, flabel, glabel)
         }
         if (ground !== null && figure !== undefined) {
           glabel.id = ground._addr;
@@ -572,17 +602,17 @@ export class SemAF implements OnInit, OnDestroy {
 
 
     }
-    this.links = this.links.filter((x)=>x !== null)
-    console.log (576,this.links)
+    this.links = this.links.filter((x) => x !== null)
+    console.log(576, this.links)
     //console.log("THIS.links",this.links)
 
 
   }
 
-  public create_multitoken(data: IContentholderData[]){
+  public create_multitoken(data: IContentholderData[]) {
     //console.log("create_multitoken",data)
     let [start, end] = data;
-    if(start.data.features.begin > start.data.features.begin) start = end;
+    if (start.data.features.begin > start.data.features.begin) start = end;
 
     const featues = {
       begin: start.data.features.begin,
