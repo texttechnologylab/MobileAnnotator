@@ -55,11 +55,22 @@
     <button mat-icon-button fxFlex="none" [disabled]="page === 0" (click)="switchPage('-1')">
         <mat-icon>chevron_left</mat-icon>
     </button>
+    <button mat-icon-button fxFlex="none" (click)="undoAction()">
+        <mat-icon>undo</mat-icon>
+    </button>
     <span fxFlex="grow" style="text-align: center;">{{ 'CONTENT-CONTENTHOLDER.PAGE' | translate}}
         {{ page + 1 }}/{{ maxPage + 1 }}</span>
+
+
+    <button mat-icon-button fxFlex="none" (click)="redoAction()">
+        <mat-icon>redo</mat-icon>
+    </button>
     <button mat-icon-button fxFlex="none" [disabled]="page === maxPage" (click)="switchPage('+1')">
         <mat-icon>chevron_right</mat-icon>
     </button>
+
+
+
     <span *ngIf="showCancelSelection">
         <button (click)="selectionCanceled.emit()">Cancel Selection </button>
     </span>

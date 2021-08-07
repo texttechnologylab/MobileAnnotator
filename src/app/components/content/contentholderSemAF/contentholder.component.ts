@@ -6,6 +6,7 @@ import { defaultAnnotationClasses } from '../../tools/sem-af/sem-af.utils';
 
 import { inhe, make_filter } from '../../tools/sem-af/uima';
 import { getLinkPointsString } from './contentholder.utils';
+import { MatSnackBar } from '@angular/material';
 
 enum eContextMenu {
   DeleteMulti = 'CONTENT-CONTENTHOLDER.DELETE-MULTI'
@@ -62,11 +63,14 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
   @Output() selectionChanged = new EventEmitter<IContentholderData>();
   @Output() createMultiToken = new EventEmitter<IContentholderData[]>();
+  @Output() undoEvent = new EventEmitter<void>();
+  @Output() redoEvent = new EventEmitter<void[]>();
   @Output() deleteMultiToken = new EventEmitter<IContentholderData>();
   @Output() selectionCanceled = new EventEmitter<void>();
   @Output() selectionLinkChanged = new EventEmitter<number>(); // number is the id of the link
   constructor(
     private sanitizer: DomSanitizer,
+    public snackBar: MatSnackBar,
   ) { }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -176,6 +180,15 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     el.style.visibility = "hidden";
   }
 
+  public undoAction(){
+    this.undoEvent.emit()
+  }
+
+  public redoAction(){
+    this.redoEvent.emit()
+  }
+
+
   public cancelSplit() {
     this.splitToken = null;
     const el: HTMLDivElement = document.querySelector("#deleteMulti")
@@ -198,6 +211,8 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       }
     }
     this.multiToken.push(data)
+    if(this.multiToken.length==1)
+      this.snackBar.open(`Select start/end for Multitoken starting at "${data.label}"`, null, { duration: 2000, })
 
     if (data.is_multi === true) {
 
@@ -382,6 +397,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     }
 
     this.data = this.inData.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize);
+    setTimeout(() => { this.render_links(this.links, new Date()) }, 100);
   }
 }
 
