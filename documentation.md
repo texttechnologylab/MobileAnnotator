@@ -1,6 +1,37 @@
 # Documentation on Uima socket
 websocket based...
 
+# Github pages
+The Project uses Github pages as a free web host it is reachable under [MobileAnnotator](https://cr-heidemann.github.io/MobileAnnotator)
+Github pages only supports https. And modern Web Browser only allow secure content if the website is https.
+Shapenet and uima both don't support https/wss we thus use a nginx proxy server which reroutes them
+
+In the nginx config in a server unit which supports https use the following:
+
+```nginx
+server{
+	...
+    location /uima/ {
+
+        proxy_pass http://textannotator.texttechnologylab.org/uima;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 1d;
+
+    }
+
+    location /shapenet/ {
+    	keepalive_timeout  400;
+        proxy_pass http://shapenet.texttechnologylab.org/;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+	...
+}
+```
+
+In `src/url.config.ts` you can change this secure url which will be necessary if you want to continue using github pages, since nginx runs on a private server which i will not continue running indefinitely, better yes i would be if uima supports wss and shapenet https.
+
 # Documentation on the Mobile Annotator Iso space Tool
 
 **sem-af.Component**

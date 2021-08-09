@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
-
+import {shapenet_url} from '../../../../url.config'
 
 
 @Component({
@@ -18,7 +18,7 @@ export class ShapenetPickerComponent implements OnInit {
   public input: string;
   public cur: number = 0;
   public selected: string =null;
-  public shapenet_url = location.protocol === "https:" ? 'https://m6ytspuafdw.hopto.org/shapenet' : 'http://shapenet.texttechnologylab.org';
+  public shapenet_url = location.protocol === "https:" ? shapenet_url : 'http://shapenet.texttechnologylab.org';
 
   constructor(public dialog: MatDialog,
     public dialogRef: MatDialogRef<string>,

@@ -19,6 +19,7 @@ import { IContentholderData } from '../../content/contentholder/contentholder.co
 import { IToolElement } from 'src/app/services/interfaces';
 import { ShapenetPickerComponent } from '../shapenet-picker/shapenet-picker.component';
 
+import {shapenet_url} from '../../../../url.config'
 
 export enum return_type {
   change_attribute,
@@ -73,7 +74,7 @@ export class PickerComponent implements OnInit {
   public links_containing_self: Link[];
   public shapenet_id: string = null;
   public text: string;
-  public shapenet_url = location.protocol === "https:" ? 'https://m6ytspuafdw.hopto.org/shapenet' :  'http://shapenet.texttechnologylab.org'
+  public shapenet_url = location.protocol === "https:" ? shapenet_url :  'http://shapenet.texttechnologylab.org'
 
   public shapenet_features?: Shapenet_Req = null;
 

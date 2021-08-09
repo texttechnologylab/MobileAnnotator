@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { MenuService } from './menu.service';
 import { IWSCommunicationObject } from './interfaces';
+import {uima_url} from '../../url.config'
 
 enum eWSState {
   open,
@@ -20,7 +21,7 @@ export class WebsocketService {
   // wss://m6ytspuafdw.hopto.org/uima/
   // is an nginx proxy which parses everything through to ws://textannotator.texttechnologylab.org/uima
   // this is neccesary because if the url is secure (https://) we can't use ws://
-  private url = location.protocol === "https:" ? 'wss://m6ytspuafdw.hopto.org/uima/' : 'ws://textannotator.texttechnologylab.org/uima';
+  private url = location.protocol === "https:" ? uima_url : 'ws://textannotator.texttechnologylab.org/uima';
   private websocket: WebSocketSubject<IWSCommunicationObject>;
   private subject = new Subject<IWSCommunicationObject>();
 
