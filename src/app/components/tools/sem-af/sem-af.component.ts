@@ -747,6 +747,13 @@ export class SemAF implements OnInit, OnDestroy {
       name: 'TOOL-QUICKANNO.SAVE',
       icon: 'save',
     });
+    /*retval.push({
+      type: 'action',
+      id: ,
+      name: ,
+      icon: ,
+      }
+    )*/
     this.toolbarMenu = retval;
   }
 }
