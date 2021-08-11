@@ -8,6 +8,6 @@
     [showCancelSelection]="(selected_reference !==null) || (selected_reference_multi!==null) || (link_start_end!==null)"
     (createMultiToken)="create_multitoken($event)"
     (deleteMultiToken)="deleteToken($event)"
-    (undoEvent)="undo()" (redoEvent)="redo()"
+    (undoEvent)="undo()" (redoEvent)="redo()" [fontSize]="fontSize"
     [filters]="activeFilters">
 </app-contentholder-semaf>

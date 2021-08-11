@@ -94,7 +94,9 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       }
 
       if(changes.fontSize){
-        
+        const d = new Date();
+        this.link_render_date = d;
+        setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
       }
     }
   }
@@ -311,18 +313,6 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     }
   }
 
-  public fontsizeChage(size: number):void{
-    if (this.fontSize!==size){
-      this.fontSize=size;
-      
-    }
-  }
-
-  /*Changes the Tokensize*/
-  public getFontsize():number{
-    console.log("Size",this.fontSize);
-  return this.fontSize;  
-  }
 
   /**
    * Ändert die momentan ausgewählte Seite des Textes
