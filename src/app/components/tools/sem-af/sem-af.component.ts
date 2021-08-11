@@ -34,6 +34,8 @@ export class SemAF implements OnInit, OnDestroy {
   public link_start_end: number[] = null;
   public pageSizes = [35, 60, 100, 150, 250];
   public pageSize = this.pageSizes[3];
+  public fontSizes = [12, 14, 16, 18, 20, 22, 24, 26];
+  public fontSize = this.fontSizes[3];
   public activeFilters: string[] = [];
   public selectedAnnotation: IAnnotationClass;
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
@@ -461,6 +463,16 @@ export class SemAF implements OnInit, OnDestroy {
     }]);
   }
 
+
+  public setFontSize (num: number): void{
+    this.fontSize=num;
+
+  }
+
+  public show_links():void{
+
+  }
+
   /**
    * Reagiere auf die Auswahl eines Kontextmenü Eintrages der Toolbar
    */
@@ -475,10 +487,19 @@ export class SemAF implements OnInit, OnDestroy {
         this.openFilterSelection();
         break;
 
+      case'links':
+        this.show_links();
+        break
       case returnEventId:
         this.navigateDocument();
         break;
-
+      case 'size':
+        const numm = Number.parseInt(id,18);
+          if (this.fontSizes.some((size) => size === numm)){
+            this.fontSize=numm;
+            this.genearteToolbarMenu();
+          }
+            break;
       default:
         const num = Number.parseInt(id, 10);
         switch (parent) {
@@ -488,6 +509,7 @@ export class SemAF implements OnInit, OnDestroy {
               this.genearteToolbarMenu();
             }
             break;
+
         }
     }
   }
@@ -719,10 +741,11 @@ export class SemAF implements OnInit, OnDestroy {
    * Befülle das Kontextmenü der Toolbar
    */
   private genearteToolbarMenu(): void {
+    /*Items per page*/
     const items: IMenuListing = {
       type: 'listing',
       id: 'items',
-      name: 'TOOL-QUICKANNO.ITEMS',
+      name: 'TOOL-SEM-AF.ITEMS',
       list: [],
     };
     for (const size of this.pageSizes) {
@@ -733,27 +756,42 @@ export class SemAF implements OnInit, OnDestroy {
         selected: size === this.pageSize,
       });
     }
-
-    const retval: Array<IMenuListing | IMenuAction> = [items];
+    /*Token size*/
+    const fonts: IMenuListing = {
+      type: 'listing',
+      id: 'size',
+      name: 'TOOL-SEM-AF.SIZE',
+      list: [],
+    };
+    for (const size of this.fontSizes) {
+      fonts.list.push({
+        type: 'action',
+        id: `${size}`,
+        name: `${size}`,
+        selected: size === this.fontSize,
+      });
+    }
+    
+    const retval: Array<IMenuListing | IMenuAction> = [items, fonts];
     retval.push({
       type: 'action',
       id: 'filter',
-      name: 'TOOL-QUICKANNO.FILTER',
+      name: 'TOOL-SEM-AF.FILTER',
       icon: 'filter_list',
     });
     retval.push({
       type: 'action',
       id: 'save',
-      name: 'TOOL-QUICKANNO.SAVE',
+      name: 'TOOL-SEM-AF.SAVE',
       icon: 'save',
     });
-    /*retval.push({
+    retval.push({
       type: 'action',
-      id: ,
-      name: ,
-      icon: ,
-      }
-    )*/
+      id: 'links',
+      name: 'TOOL-SEM-AF.LINKS',
+      icon: 'link',
+      });
+      
     this.toolbarMenu = retval;
   }
 }

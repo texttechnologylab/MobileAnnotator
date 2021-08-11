@@ -18,8 +18,8 @@
     </svg>
     <div class="contentholder" (swipeleft)="switchPage('+1')" (swiperight)="switchPage('-1')">
         <div *ngFor="let entry of data; index as i" class="entryDiv" [style.background]="getBackground(entry)"
-            [id]="'entity'+entry.id.toString()" [style.outline]="(entry.id === lastLong) ? 'solid 2px black' : ''"
-            [ngClass]="getClassesForEntry(entry)" (press)="addToMultitoken(entry, $event)"
+            [id]="'entity'+entry.id.toString()" [style.outline]="(entry.id === lastLong) ? 'solid 2px black' : ''" 
+            [ngClass]="getClassesForEntry(entry)" (press)="addToMultitoken(entry, $event)" 
             (click)="onSelect(entry, $event)">
             {{entry.label}} </div>
     </div>

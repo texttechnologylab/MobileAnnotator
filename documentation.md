@@ -38,6 +38,12 @@ In `src/url.config.ts` you can change this secure url which will be necessary if
 summary: handles how the sem-af-tool works, saves the annotation and link data into data structures; 
 handles the colouration and saving the latest annotation
 
+--genearteToolbarMenu()
+	generates the toolbar with content unique for the sem-af.Component. While the Buttons that are in the Toolbar are for every Component, the menu is flexible. 
+	We added an option to change the font size which is responsible for the token size and one for showing all the links
+	The icons are available under
+	https://www.angularjswiki.com/de/angular/angular-material-icons-list-mat-icon-list/
+
 **sem-af-picker.Component**
 summary: handles the menu that opens for annotation. it's setup as a simple 2 tab menu, which corresponds with the attributes of each entity
 

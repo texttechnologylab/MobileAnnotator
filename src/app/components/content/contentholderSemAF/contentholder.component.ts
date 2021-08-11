@@ -37,6 +37,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public currentSelected: number = undefined;
   public lastTapped: number = undefined;
   public pageSizes = [50, 100, 150];
+  public fontSizes = [12, 14, 16, 18, 20, 22, 24, 26];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
   public link_visu: string[] = [];
@@ -56,6 +57,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   @Input() inData: IContentholderData[];
   @Input() links: Link[] = [];
   @Input() pageSize = 50;
+  @Input() fontSize = 18;
   @Input() page = 0;
   @Input() filters: string[] = [];
   @Input() showLastTapped = false;
@@ -89,6 +91,10 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         const d = new Date();
         this.link_render_date = d;
         setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
+      }
+
+      if(changes.fontSize){
+        
       }
     }
   }
@@ -305,6 +311,19 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     }
   }
 
+  public fontsizeChage(size: number):void{
+    if (this.fontSize!==size){
+      this.fontSize=size;
+      this.pageChanged();
+    }
+  }
+
+  /*Changes the Tokensize*/
+  public getFontsize():number{
+    console.log("Size",this.fontSize);
+  return this.fontSize;  
+  }
+
   /**
    * Ändert die momentan ausgewählte Seite des Textes
    */
@@ -368,6 +387,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     return (val === undefined) ? "#fff" : val.rgb;
   }
 
+
   /**
    * Ob die Badge des Tokens unsichtbar sein soll
    */
@@ -395,6 +415,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     if (this.page > this.maxPage) {
       this.page = this.maxPage;
     }
+    //set token size somewhere here
 
     this.data = this.inData.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize);
     setTimeout(() => { this.render_links(this.links, new Date()) }, 100);
