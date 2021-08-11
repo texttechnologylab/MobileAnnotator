@@ -478,6 +478,7 @@ export class SemAF implements OnInit, OnDestroy {
    */
   public onMenuSelect(event: string[]): void {
     const [id, parent] = event;
+    console.log("test", id, parent);
     switch (id) {
       case 'save':
         this.saveCas();
@@ -489,17 +490,12 @@ export class SemAF implements OnInit, OnDestroy {
 
       case'links':
         this.show_links();
-        break
+        break;
+
       case returnEventId:
         this.navigateDocument();
         break;
-      case 'size':
-        const numm = Number.parseInt(id,18);
-          if (this.fontSizes.some((size) => size === numm)){
-            this.fontSize=numm;
-            this.genearteToolbarMenu();
-          }
-            break;
+
       default:
         const num = Number.parseInt(id, 10);
         switch (parent) {
@@ -508,6 +504,16 @@ export class SemAF implements OnInit, OnDestroy {
               this.pageSize = num;
               this.genearteToolbarMenu();
             }
+            break;
+                    
+          case 'size':
+          const numm = Number.parseInt(id);
+          console.log("no", numm);
+          if (this.fontSizes.some((size) => size === numm)){
+            this.fontSize=numm;
+            console.log("size", this.fontSize)
+            this.genearteToolbarMenu();
+          }
             break;
 
         }

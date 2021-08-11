@@ -1,12 +1,18 @@
 <div class="header">
     <div *ngIf="lastAnnotations.length">
         <h5>{{'POPUP-PICKER.LASTANNOS' | translate}}</h5>
+
         <div *ngFor="let entry of lastAnnotations" class="entryDiv" [style.background]="entry.rgb"
             (tap)="selected(entry)">
             {{ entry.name }}
         </div>
     </div>
 </div>
+
+<h2>
+{{ text }} </h2>
+
+
 
 <mat-tab-group class="content">
     <mat-tab label="Entities">

@@ -314,7 +314,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public fontsizeChage(size: number):void{
     if (this.fontSize!==size){
       this.fontSize=size;
-      this.pageChanged();
+      
     }
   }
 
@@ -415,7 +415,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     if (this.page > this.maxPage) {
       this.page = this.maxPage;
     }
-    //set token size somewhere here
+    
 
     this.data = this.inData.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize);
     setTimeout(() => { this.render_links(this.links, new Date()) }, 100);
