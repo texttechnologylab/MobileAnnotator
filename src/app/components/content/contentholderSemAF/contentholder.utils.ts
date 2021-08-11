@@ -26,9 +26,6 @@ export function getLinkPointsString(leftNode: HTMLElement | FakeHTMLElement,
 
     const svg = document.querySelector("#mainContent > svg").clientWidth
 
-    if(leftNodewasnull||rightNodewasnull){
-        console.log({rightNode,leftNode, indexFrom,indexTo})
-    }
 
     if (leftNode == null) {
         leftNode = { offsetHeight: 0, offsetLeft: 0, offsetTop: rightNode.offsetTop, offsetWidth: 0 } as FakeHTMLElement
@@ -183,9 +180,7 @@ export function getLinkPointsString(leftNode: HTMLElement | FakeHTMLElement,
     }
 
     let points = { start, cp1, cp2, p1, p2, cp3, cp4, end };
-    if (rightNodewasnull || leftNodewasnull) {
-        console.log("points", points)
-    }
+
     let pathStr;
     if (!p0.x) {
         pathStr =
