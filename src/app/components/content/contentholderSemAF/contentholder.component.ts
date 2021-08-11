@@ -17,10 +17,7 @@ interface Pos {
   y: number
 }
 
-interface LinkPos {
-  start: Pos,
-  end: Pos
-}
+
 
 @Component({
   selector: 'app-contentholder-semaf',
@@ -43,7 +40,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public link_visu: string[] = [];
   public splitToken: IContentholderData;
 
-  public linksPos: LinkPos[] = [];
+
 
   private filterSet: Set<string> = new Set();
 
@@ -113,7 +110,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     //if(date < this.link_render_date) return; // only render once
 
     const base = document.querySelector("#mainContent").getBoundingClientRect() as DOMRect;
-    const li: LinkPos[] = []
+
     if (this.links === undefined) {
       return;
     }
@@ -126,46 +123,23 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
 
 
-        const from_ = document.querySelector(`#entity${link.from.id}`)
-        const to_ = document.querySelector(`#entity${link.to.id}`)
-        if (!from_ || !to_) continue; // maybe something else here
-
-        const from = from_.getBoundingClientRect() as DOMRect;
-        const to = to_.getBoundingClientRect() as DOMRect;
+        const from = document.querySelector(`#entity${link.from.id}`) as HTMLElement
+        const to = document.querySelector(`#entity${link.to.id}`) as HTMLElement
 
         // https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
         // At about line 1239
 
-        const pos: LinkPos = {
-          start: {
-            x: from.x + from.width / 2 + window.scrollX,
-            y: from.y - base.y + window.scrollY
-          },
-          end: {
-            x: to.x + to.width / 2 + window.scrollX,
-            y: to.y - base.y + window.scrollY
-          }
-        };
-
-        if (pos.start.y == pos.end.y) { // Both Nodes are on the same line
-
+        const indexFrom = this.inData.findIndex((x)=>x.id ==link.from.id)
+        const indexTo = this.inData.findIndex((x)=>x.id ==link.to.id)
+        if(true){
         }
 
-
-        const a = getLinkPointsString(from_, to_, false, 1, null);
+        const a = getLinkPointsString(from, to, false, 1,indexFrom,indexTo,null);
+        if(a!== null)
         this.link_visu.push(a.pathStr);
         /*console.log("svg Link a",a)*/
 
-        li.push({
-          start: {
-            x: from.x + from.width / 2 + window.scrollX,
-            y: from.y - base.y + window.scrollY
-          },
-          end: {
-            x: to.x + to.width / 2 + window.scrollX,
-            y: to.y - base.y + window.scrollY
-          }
-        })
+
 
         /*console.log("link",from,to,link)*/
       } catch (error) {
@@ -173,7 +147,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       }
     }
 
-    this.linksPos = li;
+
 
     /*console.log("document.getElementById('loginInput')",li)*/
   }

@@ -1,19 +1,58 @@
+import { reverse } from "dns"
+
+interface FakeHTMLElement {
+    offsetHeight: number;
+    offsetLeft: number;
+    offsetTop: number;
+    offsetWidth: number;
+}
+
 // Copied from https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
-export function getLinkPointsString(leftNode, rightNode, isReversed, level, type,
+export function getLinkPointsString(leftNode: HTMLElement | FakeHTMLElement,
+    rightNode: HTMLElement | FakeHTMLElement,
+    isReversed,
+    level,
+    indexFrom: number,
+    indexTo: number,
+    type,
     hStartOffsetDirection = 0,
     hEndOffsetDirection = 0) {
-    type xy = {[id: string]: number};
 
-    let start : xy = {},
-        end   : xy = {},
-        p0    : xy = {},
-        p1    : xy = {},
-        p2    : xy = {},
-        p3    : xy = {},
-        cp1   : xy = {},
-        cp2   : xy = {},
-        cp3   : xy = {},
-        cp4   : xy = {};
+    if ((leftNode == null) && (rightNode == null)) return null
+
+
+    const leftNodewasnull = leftNode == null
+    const rightNodewasnull = rightNode == null
+
+    const svg = document.querySelector("#mainContent > svg").clientWidth
+
+    if(leftNodewasnull||rightNodewasnull){
+        console.log({rightNode,leftNode, indexFrom,indexTo})
+    }
+
+    if (leftNode == null) {
+        leftNode = { offsetHeight: 0, offsetLeft: 0, offsetTop: rightNode.offsetTop, offsetWidth: 0 } as FakeHTMLElement
+        if(indexFrom>indexTo) {
+            leftNode.offsetLeft = svg
+        }
+    }
+    if (rightNode == null) {
+        rightNode = { offsetHeight: 0, offsetLeft: svg, offsetTop: leftNode.offsetTop, offsetWidth: 0 } as FakeHTMLElement
+        if(indexFrom>indexTo) rightNode.offsetLeft = 0
+    }
+
+    type xy = { [id: string]: number };
+
+    let start: xy = {},
+        end: xy = {},
+        p0: xy = {},
+        p1: xy = {},
+        p2: xy = {},
+        p3: xy = {},
+        cp1: xy = {},
+        cp2: xy = {},
+        cp3: xy = {},
+        cp4: xy = {};
     let nodeOffset = 2;
     let endOffset = 4;
     let leftNodeHOffset;
@@ -66,10 +105,12 @@ export function getLinkPointsString(leftNode, rightNode, isReversed, level, type
         p2.y = end.y - p1.dy;
     } else if (rightNode.offsetTop == leftNode.offsetTop) {
         start.y = leftNode.offsetTop + nodeOffset;
+        if (leftNodewasnull) start.y = leftNode.offsetTop - 20
         end.y = rightNode.offsetTop + nodeOffset;
 
         cp1.dx = 0;
         cp1.dy = -20 * level;
+
         cp2.dx = 0;
         cp2.dy = cp1.dy;
 
@@ -81,9 +122,13 @@ export function getLinkPointsString(leftNode, rightNode, isReversed, level, type
         cp2.x = start.x + cp2.dx;
         cp2.y = start.y + cp2.dy;
         p1.x = start.x + p1.dx;
+        if(rightNodewasnull && (indexFrom>indexTo)) p1.x = start.x - p1.dx
         p1.y = start.y + p1.dy;
 
         p2.x = end.x - p1.dx;
+        if(leftNodewasnull && (indexFrom>indexTo)){
+            p2.x = end.x+p1.dx
+        }
         p2.y = end.y + p1.dy;
         cp3.x = end.x;
         cp3.y = end.y + cp1.dy;
@@ -138,6 +183,9 @@ export function getLinkPointsString(leftNode, rightNode, isReversed, level, type
     }
 
     let points = { start, cp1, cp2, p1, p2, cp3, cp4, end };
+    if (rightNodewasnull || leftNodewasnull) {
+        console.log("points", points)
+    }
     let pathStr;
     if (!p0.x) {
         pathStr =
@@ -161,6 +209,25 @@ C ${cp3.x}, ${cp3.y}
 ${cp4.x}, ${cp4.y}
 ${p3.x}, ${p3.y}
 L ${end.x}, ${end.y}`;
+    }
+
+    if (leftNodewasnull) {
+        pathStr =
+            `M ${start.x}, ${p2.y}
+L ${p2.x}, ${p2.y}
+C ${cp3.x}, ${cp3.y}
+${cp4.x}, ${cp4.y}
+${end.x}, ${end.y}`;
+    }
+
+    if (rightNodewasnull) {
+        pathStr =
+            pathStr =
+            `M ${start.x}, ${start.y}
+C ${cp1.x}, ${cp1.y}
+${cp2.x}, ${cp2.y}
+${p1.x}, ${p1.y}
+L ${end.x!=0 ? end.x - 3: 3}, ${p2.y}`;
     }
 
     return { pathStr, points };
