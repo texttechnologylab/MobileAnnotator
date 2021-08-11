@@ -26,6 +26,7 @@ export class ToolBarComponent implements OnInit {
   @Input() title = '';
 
   @Output() menuEvent = new EventEmitter<string[]>();
+  @Output() save = new EventEmitter<void>();
   @ViewChild('mainTrigger', { static: true }) mainTrigger: MatMenuTrigger;
   constructor() { }
 

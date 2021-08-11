@@ -1,4 +1,4 @@
-<app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-KNOWLEDGEBASE.TITLE'" (menuEvent)="onMenuSelect($event)">
+<app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-KNOWLEDGEBASE.TITLE'" (menuEvent)="onMenuSelect($event)" (save)="saveCas()">
 </app-tool-bar>
 
 <app-contentholder class="content" [inData]="data" [pageSize]="pageSize" (selectionChanged)="tokenSelect($event)"
