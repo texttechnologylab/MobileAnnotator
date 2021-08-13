@@ -308,6 +308,23 @@ export class SemAF implements OnInit, OnDestroy {
               },]
             this.sendBatch(queue);
           }
+          else if (return_type.assign_to_all == result.type) {
+            
+            const d: { type: string, key: string, value: string } = result["data"]
+            if(d.value == null) return
+            const queue = this.data.filter(x => {
+              const value = x.data.features[d.key]
+              return ((x.data._type == d.type) && ((value === "null") || (value == null)))
+            }).map(x=>{
+              const map = {}
+              map[d.key]=d.value
+              console.log(x)
+              
+              return this._update_feature(x.id,map)
+            } )
+            if(queue.length>0) 
+              this.sendBatch(queue)
+          }
 
 
 
@@ -317,7 +334,6 @@ export class SemAF implements OnInit, OnDestroy {
 
         }
       }
-      console.log(318, this.links)
       const picker = this.dialog.open(PickerComponent, {
         data: {
           features: data.data.features,
@@ -464,12 +480,12 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
 
-  public setFontSize (num: number): void{
-    this.fontSize=num;
+  public setFontSize(num: number): void {
+    this.fontSize = num;
 
   }
 
-  public show_links():void{
+  public show_links(): void {
 
   }
 
@@ -488,7 +504,7 @@ export class SemAF implements OnInit, OnDestroy {
         this.openFilterSelection();
         break;
 
-      case'links':
+      case 'links':
         this.show_links();
         break;
 
@@ -505,15 +521,15 @@ export class SemAF implements OnInit, OnDestroy {
               this.genearteToolbarMenu();
             }
             break;
-                    
+
           case 'size':
-          const numm = Number.parseInt(id);
-          console.log("no", numm);
-          if (this.fontSizes.some((size) => size === numm)){
-            this.fontSize=numm;
-            console.log("size", this.fontSize)
-            this.genearteToolbarMenu();
-          }
+            const numm = Number.parseInt(id);
+            console.log("no", numm);
+            if (this.fontSizes.some((size) => size === numm)) {
+              this.fontSize = numm;
+              console.log("size", this.fontSize)
+              this.genearteToolbarMenu();
+            }
             break;
 
         }
@@ -661,11 +677,10 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
 
-
   /**
    * Updates features of a given addr
    */
-  private update_feature(addr: number, features: {}): void {
+   private _update_feature(addr: number, features: {}): IQueueElement {
     const queue: IQueueElement = {
       cmd: 'edit',
       data: {
@@ -674,7 +689,15 @@ export class SemAF implements OnInit, OnDestroy {
         features: features,
       }
     };
-    this.sendBatch([queue]);
+    return queue
+  }
+
+
+  /**
+   * Updates features of a given addr
+   */
+  private update_feature(addr: number, features: {}): void {
+    this.sendBatch([this._update_feature(addr,features)]);
   }
 
   /**
@@ -777,7 +800,7 @@ export class SemAF implements OnInit, OnDestroy {
         selected: size === this.fontSize,
       });
     }
-    
+
     const retval: Array<IMenuListing | IMenuAction> = [items, fonts];
     retval.push({
       type: 'action',
@@ -796,8 +819,8 @@ export class SemAF implements OnInit, OnDestroy {
       id: 'links',
       name: 'TOOL-SEM-AF.LINKS',
       icon: 'link',
-      });
-      
+    });
+
     this.toolbarMenu = retval;
   }
 }

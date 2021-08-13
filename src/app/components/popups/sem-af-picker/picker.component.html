@@ -10,7 +10,7 @@
 </div>
 
 <h2>
-{{ text }} </h2>
+    {{ text }} </h2>
 
 
 
@@ -42,9 +42,8 @@
 
                 <ng-container *ngIf="shapenet_id!==null && shapenet_id !== ''">
                     <mat-card>
-                        <img mat-card-image
-                            [src]="shapenet_url+'/getThumbnail?id='+shapenet_id+'&pic=1'"
-                            alt="..." loading="lazy" style="height: 8em;">
+                        <img mat-card-image [src]="shapenet_url+'/getThumbnail?id='+shapenet_id+'&pic=1'" alt="..."
+                            loading="lazy" style="height: 8em;">
                         <ng-container *ngIf="shapenet_features!==null && shapenet_features!==undefined">
                             <ng-container *ngIf="shapenet_features.success">
                                 <mat-card-subtitle>{{shapenet_features.feature.name}}</mat-card-subtitle>
@@ -71,16 +70,24 @@
 
 
                         <div *ngIf="feature.type == ft.Select">
-                            <mat-form-field [floatLabel]="true" appearance="outline">
-                                <mat-label>{{feature.display_name}}</mat-label>
-                                <mat-select formControlName={{feature.key}}>
-                                    <mat-option *ngIf="feature.data.not_nullable !== true" [value]="null"></mat-option>
-                                    <mat-option *ngFor="let feature_value of feature.data"
-                                        [value]="feature_value.value">
-                                        {{feature_value.display_name}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <div style="width:100%;">
+                                <mat-form-field [floatLabel]="true" appearance="outline">
+                                    <mat-label>{{feature.display_name}}</mat-label>
+                                    <mat-select formControlName={{feature.key}}>
+                                        <mat-option *ngIf="feature.data.not_nullable !== true" [value]="null">
+                                        </mat-option>
+                                        <mat-option *ngFor="let feature_value of feature.data"
+                                            [value]="feature_value.value">
+                                            {{feature_value.display_name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                                <button style="margin-left:5px" class="apply-all-button"
+                                    (tap)="assign_to_all(feature.key)">Apply to  <br> all unset</button>
+                            </div>
+
+
                         </div>
 
                         <div *ngIf="feature.type == ft.Reference">
@@ -115,7 +122,7 @@
                                                 *ngIf="value.text!=null" [style.background]="value.color">
                                                 <span>{{value.text}} <mat-icon class="backspace-icon"
                                                         aria-hidden="false" aria-label="Delete">backspace</mat-icon>
-                                                    </span>
+                                                </span>
                                             </button>
                                         </ng-container>
                                     </div>

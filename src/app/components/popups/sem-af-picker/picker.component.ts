@@ -30,7 +30,8 @@ export enum return_type {
   add_link,
   remove_selected,
   remove_selected_link,
-  do_nothing
+  do_nothing,
+  assign_to_all
 }
 
 type SingleRef = { text_org: string, text: string, id: number, color?: string };
@@ -88,6 +89,7 @@ export class PickerComponent implements OnInit {
     [name: string]: Feature;
   };
   public index: number;
+  public type: string;
   public addr: number;
   public originalComment = null;
   public after_closed: (result: {
@@ -160,6 +162,14 @@ export class PickerComponent implements OnInit {
     }
   }
 
+  public assign_to_all(key: string){
+    const value = this.profileForm.get(key).value
+    this.after_closed({ type: return_type.change_attribute, data: this.gather() });
+    this.dialogRef.close({ type: return_type.assign_to_all, data: {type: this.type, key: key,value:value} });
+
+
+  }
+
   public open_shapenet(): void {
 
 
@@ -223,6 +233,7 @@ export class PickerComponent implements OnInit {
     if (this.index != -1) {
 
       const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
+      this.type = annon.type
       const featues = annon.features
 
 
