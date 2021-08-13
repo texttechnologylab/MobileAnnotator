@@ -1,4 +1,3 @@
-import { reverse } from "dns"
 
 interface FakeHTMLElement {
     offsetHeight: number;

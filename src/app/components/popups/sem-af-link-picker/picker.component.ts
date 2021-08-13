@@ -87,6 +87,7 @@ export class PickerComponent implements OnInit {
   public index: number;
   public addr: number;
   public id: number;
+  public link_type: string = "";
 
   profileForm: FormGroup;
 
@@ -136,6 +137,7 @@ export class PickerComponent implements OnInit {
     if (this.index != -1) {
 
       const annon = JSON.parse(JSON.stringify(defaultLinkClasses[this.index])) as IAnnotationClass
+      this.link_type = annon.name
       const featues = annon.features
 
 
