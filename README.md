@@ -47,7 +47,11 @@ Für das Bauen der Anwendung, um sie zum Beispiel auf einem Server produktiv zu 
 9) after it concluded loading, you can access the website in a browser of your choice with 
 > localhost:4200 
 in the address field
+# How to use the Tool - Manual
 
+Please read the following document before annotating.
+
+https://github.com/cr-heidemann/MobileAnnotator/blob/main/src/assets/manual.pdf
 
 
 
