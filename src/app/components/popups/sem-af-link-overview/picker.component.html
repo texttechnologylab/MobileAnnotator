@@ -1,0 +1,28 @@
+
+
+<h2>
+    All Links</h2>
+
+
+        <div id="links contentholder">
+            <div *ngFor="let link of links" class="isolink entryDiv" [style.background]="'lightgreen'"
+                style="border: 4px solid lightgreen; display: flex; width: max-content">
+
+
+                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
+                    [style.border]="link.from.border">
+                    {{link.from.label}} </div>
+                <div class="linkstyle">
+                    <mat-icon>arrow_right_alt</mat-icon>
+                </div>
+
+
+                <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
+                    [style.border]="link.to.border">
+                    {{link.to.label}} </div>
+
+                <button mat-raised-button (click)="openDialog(link)" [style.background]="'orange'">Change
+                    Attributes</button>
+
+            </div>
+        </div>

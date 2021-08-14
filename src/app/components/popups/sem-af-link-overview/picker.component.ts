@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PickerComponent as semafLinkPickerComponent } from 'src/app/components/popups/sem-af-link-picker/picker.component';
@@ -64,7 +64,7 @@ export class PickerComponent implements OnInit {
 
 
   public annotations: IPickerEntryData[] = [];
-  public links: IAnnotationClass[] = [];
+  public links: IPickerData;
   public highlightAnnotation = new Map<string, boolean>();
   public lastAnnotations: IPickerEntryData[] = [];
   public features_json: string = "";
@@ -75,9 +75,7 @@ export class PickerComponent implements OnInit {
   public links_containing_self: Link[];
   public shapenet_id: string = null;
   public text: string;
-  public shapenet_url = location.protocol === "https:" ? shapenet_url :  'http://shapenet.texttechnologylab.org'
 
-  public shapenet_features?: Shapenet_Req = null;
 
   public ft = FeatureType;
 
@@ -100,7 +98,7 @@ export class PickerComponent implements OnInit {
   profileForm: FormGroup;
 
 
-
+  //@Input() links: Link[] = [];
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<PickerComponent>,
@@ -110,7 +108,7 @@ export class PickerComponent implements OnInit {
   /* Function to open the Link picker menu via button*/
   openDialog(link: Link): void {
     const annon = this.data.annoData;
-    //console.log("AnonData", annon)
+    console.log("AnonData", annon, this.data,)
 
     let thisLink: IToolElement = annon[link.type][link.id]
     //console.log("thisLink", thisLink)
@@ -144,23 +142,6 @@ export class PickerComponent implements OnInit {
   }
 
 
-  public async get_shapenet_data() {
-    try {
-      const url = `${this.shapenet_url}/getFeature?id=`
-
-
-
-      // We use force-cache to not put undue stress on the fragile servers :)
-      const result: Shapenet_Req = await (await fetch(url + this.shapenet_id, { cache: "force-cache" })).json()
-      this.shapenet_features = result;
-
-      //console.log("shapenet_features",this.shapenet_features)
-
-
-    } catch (error) {
-      this.shapenet_features = null
-    }
-  }
 
   public assign_to_all(key: string){
     const value = this.profileForm.get(key).value
@@ -170,32 +151,35 @@ export class PickerComponent implements OnInit {
 
   }
 
-  public open_shapenet(): void {
-
-
-    let dialogRef = this.dialog.open(ShapenetPickerComponent, {
-      data: { term: this.text, id: this.shapenet_id },
-      height: '100%',
-      width: '500px',
-      maxWidth: '100vw'
-
-    });
-
-    dialogRef.afterClosed().subscribe((x) => {
-      //this.shapenet_id =  features['object_id']
-      if (!x) return;
-      const { id } = x;
-      this.shapenet_id = id;
-      this.get_shapenet_data()
-    });
-
-  }
+  
 
   public ngOnInit(): void {
 
-    this.links = defaultLinkClasses;
+    
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
+    console.log("**************", this.data[0]); //links
+    this.links=this.data;
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     this.after_closed = after_closed;
     //console.log("links.fi", links.filter((x) => { return x.from.id === id || x.to.id === id }))
     this.lastAnnotations = last;
@@ -235,15 +219,6 @@ export class PickerComponent implements OnInit {
       const annon = JSON.parse(JSON.stringify(defaultAnnotationClasses[this.index])) as IAnnotationClass
       this.type = annon.type
       const featues = annon.features
-
-
-      if (annon.has_shapenet) {
-        if (features['object_id']) {
-          this.shapenet_id = features['object_id']
-          this.get_shapenet_data()
-          //console.log('object_id',features['object_id'])
-        }
-      }
 
 
 
@@ -521,7 +496,6 @@ export class PickerComponent implements OnInit {
   }
 
 }
-
 export interface IPickerData {
   entries: IPickerEntryData[];
   metonym: boolean;
@@ -546,28 +520,3 @@ export interface IPickerEntryData {
 }
 
 
-// Generated using quicktype
-interface Shapenet_Req {
-  feature: Shapenet_Feature;
-  success: boolean;
-}
-
-interface Shapenet_Feature {
-  wnsynset: string;
-  wnlemmas: string[];
-  solidVolume: string;
-  isContainer: boolean;
-  surfaceVolume: string;
-  weight: string;
-  tags: string[];
-  unit: string;
-  supportSurfaceArea: string;
-  staticFrictionForce: string;
-  name: string;
-  alignedDims: string;
-  id: string;
-  categories: string[];
-  up: string;
-  front: string;
-  has_parts: boolean;
-}

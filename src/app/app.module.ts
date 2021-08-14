@@ -36,6 +36,8 @@ import {MatTabsModule} from '@angular/material/tabs';
 
 import { PickerComponent as semafPickerComponent } from './components/popups/sem-af-picker/picker.component';
 import { PickerComponent as semafLinkPickerComponent } from './components/popups/sem-af-link-picker/picker.component';
+import { PickerComponent as semafLinkOverviewComponent } from './components/popups/sem-af-link-overview/picker.component';
+
 
 
 import { SemAF } from './components/tools/sem-af/sem-af.component';
@@ -59,6 +61,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling'
     PickerComponent,
     semafPickerComponent,
     semafLinkPickerComponent,
+    semafLinkOverviewComponent,
     FilterComponent,
     KnowledgeBaseComponent,
     CommentsComponent,
@@ -93,6 +96,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling'
     LoadProgressComponent,
     PickerComponent,
     semafPickerComponent,
+    semafLinkOverviewComponent,
     semafLinkPickerComponent,
     ShapenetPickerComponent,
     FilterComponent,

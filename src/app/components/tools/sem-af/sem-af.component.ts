@@ -6,6 +6,7 @@ import { DocumentService, } from 'src/app/services/document.service';
 import { ITool, IToolElement } from 'src/app/services/interfaces';
 import { IContentholderData, IContentholderAnnotation, Link, LabelAndId } from '../../content/contentholderSemAF/contentholder.component';
 import { PickerComponent } from '../../popups/sem-af-picker/picker.component';
+import { PickerComponent as semafLinkOverviewComponent} from '../../popups/sem-af-link-overview/picker.component';
 import { IAnnotationClass, defaultAnnotationClasses, defaultLinkClasses } from './sem-af.utils';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { Subscription, PartialObserver } from 'rxjs';
@@ -27,6 +28,8 @@ import { MatSnackBar } from '@angular/material';
  * Komponente für die Darstellung des QuickAnnotator Werkzeuges
  */
 export class SemAF implements OnInit, OnDestroy {
+
+  
 
   public data: IContentholderData[] = [];
   public new_link: IAnnotationClass;
@@ -70,7 +73,7 @@ export class SemAF implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
   ) { }
-
+    
   public ngOnInit(): void {
     this.menuService.hideMenubar();
     this.genearteToolbarMenu();
@@ -350,6 +353,7 @@ export class SemAF implements OnInit, OnDestroy {
 
       });
       picker.afterClosed().subscribe(after_closed);
+     
 
     }
   }
@@ -486,8 +490,12 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
   public show_links(): void {
+    //send links what was the array where they are saved?
+    const picker = this.dialog.open(semafLinkOverviewComponent, { data: this.links,});
+    
 
   }
+  
 
   /**
    * Reagiere auf die Auswahl eines Kontextmenü Eintrages der Toolbar
