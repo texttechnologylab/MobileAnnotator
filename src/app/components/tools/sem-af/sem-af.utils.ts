@@ -21,7 +21,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
       "spatial_entitiy_type": {
         display_name: "Type(req)",
         type: FeatureType.Select,
-        value: "type",
+        value: "Type(req)",
         select_option: [{/**maybe factor */
           display_name: "Fac",
           value: "FAC",
@@ -50,7 +50,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         ]
       },
       "form": {
-        display_name: "Form",
+        display_name: "Form(req)",
         type: FeatureType.Select,
         value: "form",
         select_option: [{/*Nominal Form*/
@@ -72,7 +72,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         /*only number allowed*/
       },
       "countable": {
-        display_name: "countable",
+        display_name: "Countable(req)",
         type: FeatureType.Select,
         value: 'countable',
         select_option: [{
@@ -134,11 +134,11 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: ""
       },
         "spatial_entitiy_type": {
-        display_name: "Type",
+        display_name: "Type(req)",
         type: FeatureType.Select,
         value: "type",
         select_option: [{
-          display_name: "water",
+          display_name: "Water",
           value: "WATER",
           value_name: "WATER"
         },      
@@ -768,7 +768,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       },
       "relation_type": {
-        display_name: "TYPE",
+        display_name: "Type(req)",
         type: FeatureType.Select,
         value: "TYPE",
         select_option: [{
