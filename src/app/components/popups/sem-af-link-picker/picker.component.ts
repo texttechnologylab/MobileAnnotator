@@ -125,7 +125,7 @@ export class PickerComponent implements OnInit {
     this.dialogRef.backdropClick().subscribe(result => {
       //this.gather();
       this.after_closed({ type: return_type.change_attribute, data: this.gather(), addr: this.link.id });
-      this.dialogRef.close()
+      this.dialogRef.close({ type: return_type.do_nothing })
     });
 
 

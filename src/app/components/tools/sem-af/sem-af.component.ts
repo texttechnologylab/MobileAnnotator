@@ -146,6 +146,142 @@ export class SemAF implements OnInit, OnDestroy {
     this.sendBatch(queue)
   }
 
+  public generate_after_closed(data){
+    return (result: { type: return_type, [id: string]: any }) => {
+      //console.log("CLOSED!")
+      var new_features;
+      const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : data.id;
+  
+      if (result) {
+        if (result.type == return_type.change_attribute) {
+          {
+            if (Object.entries(result.data).length == 0) return;
+            this.update_feature(addr, result.data)
+          }
+        } else if (return_type.selected == result.type) {
+          this.selectedAnnotation = result.entry;
+          new_features = result.features;
+  
+          const queue = [this.removeallAnnotations(addr), this.createAnnotation(data)]
+          this.sendBatch(queue)
+        }
+        else if (return_type.selected_after == result.type) {
+          if(data==null) return
+          this.selectedAnnotation = result.entry;
+          const featues = {
+            begin: data.data.features.end,
+            end: data.data.features.end,
+          }
+  
+  
+  
+          //console.log("data:  ", JSON.stringify(data, null, 4));
+          const features = {};
+  
+          const queue: IQueueElement = {
+            cmd: 'create',
+            data: {
+              bid: '_b0_',
+              features: featues,
+              _type: this.selectedAnnotation.type,
+            }
+          };
+          //console.log("queue11:  ", JSON.stringify(queue, null, 4));
+          this.sendBatch([queue]);
+        }
+        else if (return_type.selected_ref == result.type) {
+          //console.log("resxx", result)
+          this.selected_reference = { feature_name: result.feature_name, addr: addr }
+          if (result.allowed_type !== null) {
+            this.activeFilters = result.allowed_type;
+          }
+          {
+            if (Object.entries(result.data).length == 0) return;
+            this.update_feature(addr, result.data)
+          }
+        }
+        else if (return_type.selected_ref_multi == result.type) {
+          //console.log("resxx", result)
+          this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
+          if (result.allowed_type !== null) {
+            this.activeFilters = result.allowed_type;
+          }
+          {
+            if (Object.entries(result.data).length == 0) return;
+            this.update_feature(addr, result.data)
+          }
+        }
+  
+        else if (return_type.add_link == result.type) {
+          const link = result.entry as IAnnotationClass;
+          //console.log("link:   a", link);
+          this.link_start_end = [addr];
+          this.snackBar.open(`Select End for ${link.name}`, null, { duration: 2000, })
+          this.new_link = link;
+        }
+        else if (return_type.remove_selected == result.type) {
+          const { begin, end } = result.features
+          //console.log("data{{{{", data)
+          const queue: IQueueElement[] = [
+            {
+              cmd: 'remove',
+              data: {
+                bid: '_b0_',
+                addr: `${addr}`,
+              }
+            },
+            {
+              cmd: 'create',
+              data: {
+                bid: '_b1_',
+                features: { begin: begin, end: end },
+                _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
+              }
+            }];
+  
+          this.sendBatch(queue);
+        }
+        else if (return_type.remove_selected_link == result.type) {
+          const queue: IQueueElement[] = [
+            {
+              cmd: 'remove',
+              data: {
+                bid: '_b0_',
+                addr: `${addr}`,
+              }
+            },]
+          this.sendBatch(queue);
+        }
+        else if (return_type.assign_to_all == result.type) {
+          
+          const d: { type: string, key: string, value: string } = result["data"]
+          if(d.value == null) return
+          const queue = this.data.filter(x => {
+            const value = x.data.features[d.key]
+            return ((x.data._type == d.type) && ((value === "null") || (value == null)))
+          }).map(x=>{
+            const map = {}
+            map[d.key]=d.value
+            console.log(x)
+            
+            return this._update_feature(x.id,map)
+          } )
+          if(queue.length>0) 
+            this.sendBatch(queue)
+        }
+  
+  
+  
+  
+  
+  
+  
+      }
+    }
+  }
+
+
+
   /**
    * Markiere ein Token als ausgewähltes Element
    */
@@ -207,136 +343,7 @@ export class SemAF implements OnInit, OnDestroy {
       // Modus: Einzelne Annotation (Auswahl der Kategorie über einen Popup Dialog)
       //console.log("data.data.features", data.data.features)
 
-      const after_closed = (result: { type: return_type, [id: string]: any }) => {
-        //console.log("CLOSED!")
-        var new_features;
-        const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : data.id;
-
-        if (result) {
-          if (result.type == return_type.change_attribute) {
-            {
-              if (Object.entries(result.data).length == 0) return;
-              this.update_feature(addr, result.data)
-            }
-          } else if (return_type.selected == result.type) {
-            this.selectedAnnotation = result.entry;
-            new_features = result.features;
-
-            const queue = [this.removeallAnnotations(addr), this.createAnnotation(data)]
-            this.sendBatch(queue)
-          }
-          else if (return_type.selected_after == result.type) {
-            this.selectedAnnotation = result.entry;
-            const featues = {
-              begin: data.data.features.end,
-              end: data.data.features.end,
-            }
-
-
-
-            //console.log("data:  ", JSON.stringify(data, null, 4));
-            const features = {};
-
-            const queue: IQueueElement = {
-              cmd: 'create',
-              data: {
-                bid: '_b0_',
-                features: featues,
-                _type: this.selectedAnnotation.type,
-              }
-            };
-            //console.log("queue11:  ", JSON.stringify(queue, null, 4));
-            this.sendBatch([queue]);
-          }
-          else if (return_type.selected_ref == result.type) {
-            //console.log("resxx", result)
-            this.selected_reference = { feature_name: result.feature_name, addr: addr }
-            if (result.allowed_type !== null) {
-              this.activeFilters = result.allowed_type;
-            }
-            {
-              if (Object.entries(result.data).length == 0) return;
-              this.update_feature(addr, result.data)
-            }
-          }
-          else if (return_type.selected_ref_multi == result.type) {
-            //console.log("resxx", result)
-            this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
-            if (result.allowed_type !== null) {
-              this.activeFilters = result.allowed_type;
-            }
-            {
-              if (Object.entries(result.data).length == 0) return;
-              this.update_feature(addr, result.data)
-            }
-          }
-
-          else if (return_type.add_link == result.type) {
-            const link = result.entry as IAnnotationClass;
-            //console.log("link:   a", link);
-            this.link_start_end = [addr];
-            this.snackBar.open(`Select End for ${link.name}`, null, { duration: 2000, })
-            this.new_link = link;
-          }
-          else if (return_type.remove_selected == result.type) {
-            const { begin, end } = result.features
-            //console.log("data{{{{", data)
-            const queue: IQueueElement[] = [
-              {
-                cmd: 'remove',
-                data: {
-                  bid: '_b0_',
-                  addr: `${addr}`,
-                }
-              },
-              {
-                cmd: 'create',
-                data: {
-                  bid: '_b1_',
-                  features: { begin: begin, end: end },
-                  _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
-                }
-              }];
-
-            this.sendBatch(queue);
-          }
-          else if (return_type.remove_selected_link == result.type) {
-            const queue: IQueueElement[] = [
-              {
-                cmd: 'remove',
-                data: {
-                  bid: '_b0_',
-                  addr: `${addr}`,
-                }
-              },]
-            this.sendBatch(queue);
-          }
-          else if (return_type.assign_to_all == result.type) {
-            
-            const d: { type: string, key: string, value: string } = result["data"]
-            if(d.value == null) return
-            const queue = this.data.filter(x => {
-              const value = x.data.features[d.key]
-              return ((x.data._type == d.type) && ((value === "null") || (value == null)))
-            }).map(x=>{
-              const map = {}
-              map[d.key]=d.value
-              console.log(x)
-              
-              return this._update_feature(x.id,map)
-            } )
-            if(queue.length>0) 
-              this.sendBatch(queue)
-          }
-
-
-
-
-
-
-
-        }
-      }
+      const after_closed = this.generate_after_closed(data)
       const picker = this.dialog.open(PickerComponent, {
         data: {
           features: data.data.features,
@@ -491,7 +498,18 @@ export class SemAF implements OnInit, OnDestroy {
 
   public show_links(): void {
     //send links what was the array where they are saved?
-    const picker = this.dialog.open(semafLinkOverviewComponent, { data: this.links,});
+    const after_closed = this.generate_after_closed(null)
+    const picker = this.dialog.open(semafLinkOverviewComponent, { data: {
+      features: [],
+      entries: defaultAnnotationClasses,
+      last: this.lastAnnations,
+      highlights: [],
+      annoData: this.tool.toolElements,
+      text: this.documentService.currentCAS.text,
+      links: this.links,
+      id: null,
+      after_closed: after_closed
+    }});
     
 
   }
