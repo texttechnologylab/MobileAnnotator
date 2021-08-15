@@ -6,7 +6,7 @@ import { DocumentService, } from 'src/app/services/document.service';
 import { ITool, IToolElement } from 'src/app/services/interfaces';
 import { IContentholderData, IContentholderAnnotation, Link, LabelAndId } from '../../content/contentholderSemAF/contentholder.component';
 import { PickerComponent } from '../../popups/sem-af-picker/picker.component';
-import { PickerComponent as semafLinkOverviewComponent} from '../../popups/sem-af-link-overview/picker.component';
+import { PickerComponent as semafLinkOverviewComponent } from '../../popups/sem-af-link-overview/picker.component';
 import { IAnnotationClass, defaultAnnotationClasses, defaultLinkClasses } from './sem-af.utils';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { Subscription, PartialObserver } from 'rxjs';
@@ -17,6 +17,7 @@ import { IMenuListing, IMenuAction, returnEventId } from '../../menu/tool-bar/to
 
 import { return_type } from '../../popups/sem-af-picker/picker.component'
 import { MatSnackBar } from '@angular/material';
+import { PickerComponent as semafLinkPickerComponent } from 'src/app/components/popups/sem-af-link-picker/picker.component';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { MatSnackBar } from '@angular/material';
  */
 export class SemAF implements OnInit, OnDestroy {
 
-  
+
 
   public data: IContentholderData[] = [];
   public new_link: IAnnotationClass;
@@ -42,6 +43,10 @@ export class SemAF implements OnInit, OnDestroy {
   public activeFilters: string[] = [];
   public selectedAnnotation: IAnnotationClass;
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
+  public reopen_begin_end: { begin: number, end: number } = null;
+  public automatic_reopen: boolean = localStorage.getItem("automatic_reopen") === "true"
+
+  public reopen_link: { ground: number, figure: number, type: string }
 
   public links: Link[];
 
@@ -73,7 +78,7 @@ export class SemAF implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
   ) { }
-    
+
   public ngOnInit(): void {
     this.menuService.hideMenubar();
     this.genearteToolbarMenu();
@@ -146,12 +151,13 @@ export class SemAF implements OnInit, OnDestroy {
     this.sendBatch(queue)
   }
 
-  public generate_after_closed(data){
+  public generate_after_closed(data: IContentholderData) {
     return (result: { type: return_type, [id: string]: any }) => {
       //console.log("CLOSED!")
       var new_features;
-      const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : data.id;
-  
+      const addr = ((result.addr !== null) && result.addr !== undefined) ? result.addr : (data == null ? null : data.id);
+      if (addr == null) return
+
       if (result) {
         if (result.type == return_type.change_attribute) {
           {
@@ -161,23 +167,24 @@ export class SemAF implements OnInit, OnDestroy {
         } else if (return_type.selected == result.type) {
           this.selectedAnnotation = result.entry;
           new_features = result.features;
-  
+          this.reopen_begin_end = { begin: data.data.features.begin, end: data.data.features.end }
+
           const queue = [this.removeallAnnotations(addr), this.createAnnotation(data)]
           this.sendBatch(queue)
         }
         else if (return_type.selected_after == result.type) {
-          if(data==null) return
+          if (data == null) return
           this.selectedAnnotation = result.entry;
           const featues = {
             begin: data.data.features.end,
             end: data.data.features.end,
           }
-  
-  
-  
+
+
+
           //console.log("data:  ", JSON.stringify(data, null, 4));
           const features = {};
-  
+
           const queue: IQueueElement = {
             cmd: 'create',
             data: {
@@ -211,7 +218,7 @@ export class SemAF implements OnInit, OnDestroy {
             this.update_feature(addr, result.data)
           }
         }
-  
+
         else if (return_type.add_link == result.type) {
           const link = result.entry as IAnnotationClass;
           //console.log("link:   a", link);
@@ -238,7 +245,7 @@ export class SemAF implements OnInit, OnDestroy {
                 _type: "org.texttechnologylab.annotation.semaf.isobase.Entity",
               }
             }];
-  
+
           this.sendBatch(queue);
         }
         else if (return_type.remove_selected_link == result.type) {
@@ -253,29 +260,28 @@ export class SemAF implements OnInit, OnDestroy {
           this.sendBatch(queue);
         }
         else if (return_type.assign_to_all == result.type) {
-          
+
           const d: { type: string, key: string, value: string } = result["data"]
-          if(d.value == null) return
+          if (d.value == null) return
           const queue = this.data.filter(x => {
             const value = x.data.features[d.key]
             return ((x.data._type == d.type) && ((value === "null") || (value == null)))
-          }).map(x=>{
+          }).map(x => {
             const map = {}
-            map[d.key]=d.value
-            console.log(x)
-            
-            return this._update_feature(x.id,map)
-          } )
-          if(queue.length>0) 
+            map[d.key] = d.value
+
+            return this._update_feature(x.id, map)
+          })
+          if (queue.length > 0)
             this.sendBatch(queue)
         }
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
       }
     }
   }
@@ -360,7 +366,7 @@ export class SemAF implements OnInit, OnDestroy {
 
       });
       picker.afterClosed().subscribe(after_closed);
-     
+
 
     }
   }
@@ -499,28 +505,65 @@ export class SemAF implements OnInit, OnDestroy {
   public show_links(): void {
     //send links what was the array where they are saved?
     const after_closed = this.generate_after_closed(null)
-    const picker = this.dialog.open(semafLinkOverviewComponent, { data: {
-      features: [],
-      entries: defaultAnnotationClasses,
-      last: this.lastAnnations,
-      highlights: [],
-      annoData: this.tool.toolElements,
-      text: this.documentService.currentCAS.text,
-      links: this.links,
-      id: null,
-      after_closed: after_closed
-    }});
-    
+    const picker = this.dialog.open(semafLinkOverviewComponent, {
+      data: {
+        features: [],
+        entries: defaultAnnotationClasses,
+        last: this.lastAnnations,
+        highlights: [],
+        annoData: this.tool.toolElements,
+        text: this.documentService.currentCAS.text,
+        links: this.links,
+        id: null,
+        after_closed: after_closed
+      }
+    });
+
 
   }
-  
+
+
+  public openLink(link: Link): void {
+    const annon = this.tool.toolElements;
+
+    let thisLink: IToolElement = annon[link.type][link.id] as any
+    //console.log("thisLink", thisLink)
+
+    const after_closed = this.generate_after_closed(null)
+
+
+    let dialogRef = this.dialog.open(semafLinkPickerComponent, {
+      data: ({
+        features: thisLink.features,
+        entries: defaultLinkClasses,
+        annoData: this.tool.toolElements,
+        text: this.documentService.currentCAS.text,
+        id: link.id,
+        thisLink: link,
+        after_closed: after_closed,
+      } as any) as any,
+      height: 'inherit',
+
+    });
+
+    dialogRef.afterClosed().subscribe((x) => {
+      if (x == null) after_closed({ type: return_type.do_nothing })
+      else if (x.type == return_type.remove_selected_link) {
+        after_closed({ type: return_type.do_nothing })
+      }
+      else if (x.type == return_type.selected_ref || x.type == return_type.selected_ref_multi) {
+        after_closed(x)
+      }
+    });
+
+  }
+
 
   /**
    * Reagiere auf die Auswahl eines Kontextmenü Eintrages der Toolbar
    */
   public onMenuSelect(event: string[]): void {
     const [id, parent] = event;
-    console.log("test", id, parent);
     switch (id) {
       case 'save':
         this.saveCas();
@@ -537,6 +580,8 @@ export class SemAF implements OnInit, OnDestroy {
       case returnEventId:
         this.navigateDocument();
         break;
+
+
 
       default:
         const num = Number.parseInt(id, 10);
@@ -556,6 +601,12 @@ export class SemAF implements OnInit, OnDestroy {
               console.log("size", this.fontSize)
               this.genearteToolbarMenu();
             }
+            break;
+
+          case 'reopen':
+            this.automatic_reopen = id == "true"
+            localStorage.setItem("automatic_reopen", this.automatic_reopen.toString())
+            this.genearteToolbarMenu();
             break;
 
         }
@@ -618,6 +669,14 @@ export class SemAF implements OnInit, OnDestroy {
 
 
     this.data = cd.sort((a, b) => a.data.features.begin - b.data.features.begin);
+    if ((this.reopen_begin_end != null) && this.automatic_reopen) {
+      const { begin, end } = this.reopen_begin_end
+      const cc = this.data.find(x => x.data.features.begin === begin && x.data.features.end === end)
+      if (cc !== undefined) {
+        cc.reopen = true
+      }
+      this.reopen_begin_end = null
+    }
 
     const find_id = (id: number) => {
       if (id === null || id == undefined) return null;
@@ -630,7 +689,7 @@ export class SemAF implements OnInit, OnDestroy {
      * so they extract all links and save them in this.links
      */
     const link_types = [...defaultLinkClasses];
-    console.log(this.tool.toolElements)
+
     this.links = []
     for (const { type, rgb } of link_types) {
       // Not all Files need to have all types of links
@@ -653,7 +712,6 @@ export class SemAF implements OnInit, OnDestroy {
           flabel.data = figure;
         }
         else {
-          console.log("test123", figure, link, flabel, glabel)
         }
         if (ground !== null && figure !== undefined) {
           glabel.id = ground._addr;
@@ -673,8 +731,16 @@ export class SemAF implements OnInit, OnDestroy {
 
     }
     this.links = this.links.filter((x) => x !== null)
-    console.log(576, this.links)
-    //console.log("THIS.links",this.links)
+
+    if (this.reopen_link != null && this.automatic_reopen) {
+      const reopen_link = this.links.find(x => (
+        (x.from.id === this.reopen_link.figure) &&
+        (x.to.id === this.reopen_link.ground) &&
+        (x.type === this.reopen_link.type)
+      ))
+      this.openLink(reopen_link)
+    }
+
 
 
   }
@@ -706,7 +772,7 @@ export class SemAF implements OnInit, OnDestroy {
   /**
    * Updates features of a given addr
    */
-   private _update_feature(addr: number, features: {}): IQueueElement {
+  private _update_feature(addr: number, features: {}): IQueueElement {
     const queue: IQueueElement = {
       cmd: 'edit',
       data: {
@@ -723,7 +789,7 @@ export class SemAF implements OnInit, OnDestroy {
    * Updates features of a given addr
    */
   private update_feature(addr: number, features: {}): void {
-    this.sendBatch([this._update_feature(addr,features)]);
+    this.sendBatch([this._update_feature(addr, features)]);
   }
 
   /**
@@ -760,6 +826,8 @@ export class SemAF implements OnInit, OnDestroy {
         _type: type,
       }
     };
+    this.reopen_link = { figure: start, ground: end, type: type }
+
     //console.log("queuex:  ", JSON.stringify(queue, null, 4));
     this.sendBatch([queue]);
   }
@@ -827,7 +895,29 @@ export class SemAF implements OnInit, OnDestroy {
       });
     }
 
-    const retval: Array<IMenuListing | IMenuAction> = [items, fonts];
+
+    const reopen: IMenuListing = {
+      type: 'listing',
+      id: 'reopen',
+      name: 'Automatically Reopen Token',
+      list: [
+        {
+          type: 'action',
+          id: `true`,
+          name: `True`,
+          selected: this.automatic_reopen == true,
+        },
+        {
+          type: 'action',
+          id: `false`,
+          name: `False`,
+          selected: this.automatic_reopen == false,
+        }
+      ],
+    };
+
+
+    const retval: Array<IMenuListing | IMenuAction> = [items, fonts, reopen];
     retval.push({
       type: 'action',
       id: 'filter',

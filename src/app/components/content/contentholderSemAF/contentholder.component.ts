@@ -42,6 +42,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
 
 
+
   private filterSet: Set<string> = new Set();
 
   private longpress = false;
@@ -81,16 +82,18 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         }
         this.pageChanged();
       }
+
       if (changes.filters) {
         this.filterSet = make_filter(this.filters);
       }
       if (changes.links) {
+        console.log(this.links)
         const d = new Date();
         this.link_render_date = d;
         setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
       }
 
-      if(changes.fontSize){
+      if (changes.fontSize) {
         const d = new Date();
         this.link_render_date = d;
         setTimeout(() => { this.render_links(this.links, d) }, 100); // Ensure entities are rendered
@@ -128,21 +131,21 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         // https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
         // At about line 1239
 
-        const indexFrom = this.inData.findIndex((x)=>x.id ==link.from.id)
-        const indexTo = this.inData.findIndex((x)=>x.id ==link.to.id)
-        if(true){
+        const indexFrom = this.inData.findIndex((x) => x.id == link.from.id)
+        const indexTo = this.inData.findIndex((x) => x.id == link.to.id)
+        if (true) {
         }
 
-        const a = getLinkPointsString(from, to, false, 1,indexFrom,indexTo,null);
-        if(a!== null)
-        this.link_visu.push(a.pathStr);
+        const a = getLinkPointsString(from, to, false, 1, indexFrom, indexTo, null);
+        if (a !== null)
+          this.link_visu.push(a.pathStr);
         /*console.log("svg Link a",a)*/
 
 
 
         /*console.log("link",from,to,link)*/
       } catch (error) {
-        console.log(error,"Testz")
+        console.log(error, "Testz")
       }
     }
 
@@ -161,11 +164,11 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     el.style.visibility = "hidden";
   }
 
-  public undoAction(){
+  public undoAction() {
     this.undoEvent.emit()
   }
 
-  public redoAction(){
+  public redoAction() {
     this.redoEvent.emit()
   }
 
@@ -183,8 +186,8 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
 
     this.preventDefault(event.srcEvent as MouseEvent);
     this.longpress = true;
-    if(this.multiToken.length>0){
-      if(this.multiToken[0] == data){
+    if (this.multiToken.length > 0) {
+      if (this.multiToken[0] == data) {
         this.multiToken = [];
         this.lastLong = -1;
         console.log("Cancel create multitoken")
@@ -192,7 +195,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
       }
     }
     this.multiToken.push(data)
-    if(this.multiToken.length==1)
+    if (this.multiToken.length == 1)
       this.snackBar.open(`Select start/end for Multitoken starting at "${data.label}"`, null, { duration: 2000, })
 
     if (data.is_multi === true) {
@@ -232,8 +235,11 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
    * Händelt die Auswahl eines Tokens
    */
   public onSelect(entry: IContentholderData, event: MouseEvent) {
-    event.preventDefault();
-    this.preventDefault(event);
+    if (event !== null) {
+      event.preventDefault();
+      this.preventDefault(event);
+    }
+
 
     if (!this.filterSet.has(entry.data._type) && this.filterSet.size) return;
 
@@ -378,10 +384,17 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
     if (this.page > this.maxPage) {
       this.page = this.maxPage;
     }
-    
+
 
     this.data = this.inData.slice(this.page * this.pageSize, (this.page + 1) * this.pageSize);
     setTimeout(() => { this.render_links(this.links, new Date()) }, 100);
+    for (const element of this.inData) {
+      if (element.reopen == true) {
+        console.log("reopening", element)
+        this.onSelect(element, null)
+        break
+      }
+    }
   }
 }
 
@@ -403,6 +416,7 @@ export interface IContentholderData {
   data: IToolElement;
   border?: string;
   is_multi?: boolean;
+  reopen?: boolean;
 }
 
 export interface IContentholderAnnotation {
