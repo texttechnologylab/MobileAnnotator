@@ -45,6 +45,7 @@ export class SemAF implements OnInit, OnDestroy {
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
   public reopen_begin_end: { begin: number, end: number } = null;
   public automatic_reopen: boolean = localStorage.getItem("automatic_reopen") === "true"
+  public reopen_link_by_id: number = null
 
   public reopen_link: { ground: number, figure: number, type: string }
 
@@ -134,6 +135,7 @@ export class SemAF implements OnInit, OnDestroy {
   public selectionCanceled(): void {
     //console.log("Canceled Selection")
     this.selected_reference = null;
+    this.reopen_link_by_id = null
     this.selected_reference_multi = null;
     this.link_start_end = null;
     this.activeFilters = []
@@ -198,6 +200,11 @@ export class SemAF implements OnInit, OnDestroy {
         }
         else if (return_type.selected_ref == result.type) {
           //console.log("resxx", result)
+          const this_link = this.links.find(x => x.id === addr)
+          if (this_link != undefined) {
+            this.reopen_link_by_id = addr
+          console.log("found_reopen_link", this_link)
+        }
           this.selected_reference = { feature_name: result.feature_name, addr: addr }
           if (result.allowed_type !== null) {
             this.activeFilters = result.allowed_type;
@@ -519,6 +526,8 @@ export class SemAF implements OnInit, OnDestroy {
       }
     });
 
+    picker.afterClosed().subscribe(after_closed)
+
 
   }
 
@@ -732,13 +741,33 @@ export class SemAF implements OnInit, OnDestroy {
     }
     this.links = this.links.filter((x) => x !== null)
 
-    if (this.reopen_link != null && this.automatic_reopen) {
-      const reopen_link = this.links.find(x => (
+    if (((this.reopen_link != null) || (this.reopen_link_by_id != null)) && this.automatic_reopen) {
+      let reopen_link = null
+
+      if(this.reopen_link!=null)
+      reopen_link = this.links.find(x => (
         (x.from.id === this.reopen_link.figure) &&
         (x.to.id === this.reopen_link.ground) &&
         (x.type === this.reopen_link.type)
       ))
-      this.openLink(reopen_link)
+      
+      console.log("this.reopen_link_by_id",this.reopen_link_by_id)
+      if (reopen_link == null) {
+        reopen_link = this.links.find(x => (
+          x.id === this.reopen_link_by_id
+        ))
+        console.log("reopen_link",reopen_link)
+      }
+
+      if(reopen_link != null){
+        this.reopen_link = null
+        this.reopen_link_by_id = null
+        this.openLink(reopen_link)
+      }
+      
+
+
+
     }
 
 
