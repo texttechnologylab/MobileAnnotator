@@ -826,7 +826,7 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
 export const defaultLinkClasses: IAnnotationClass[] = [
   /*QS link complete*/
   {      
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(60,150,204)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.QsLink',
     name: 'QSLink',
     css_class: 'I-QsLink',
@@ -925,7 +925,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   },
   /*mlink complete*/
   {     
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(100,100,100)',
     type: 'org.texttechnologylab.annotation.semaf.isotimeml.MLink',
     /*type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',*/
     name: 'MLink',
@@ -998,7 +998,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   },
   /*metalink complete*/
   {     
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(204,60,100)',
     type: 'org.texttechnologylab.annotation.semaf.meta.MetaLink',
     name: 'MetaLink',
     css_class: 'I-MetaLink',
@@ -1053,7 +1053,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   },
   /*srlink complete but what to annotate?*/
   {     
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(50,50,123)',
     type: 'org.texttechnologylab.annotation.semaf.semafsr.SrLink',
     name: 'SrLink',
     css_class: 'I-SrLink',
@@ -1325,7 +1325,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   },*/
    /* move link complete */
   {
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(30,120,10)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.MoveLink',
     name: 'Move Link',
     css_class: 'I-MoveLink',
@@ -1438,7 +1438,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
    /*orientation link complete  */
   {
     
-    rgb: 'rgb(204,204,204)',
+    rgb: 'rgb(90,40,10)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.OLink',
     name: 'OLink',
     css_class: 'I-OLink',
