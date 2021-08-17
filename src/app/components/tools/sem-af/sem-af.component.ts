@@ -88,7 +88,6 @@ export class SemAF implements OnInit, OnDestroy {
     const auto = localStorage.getItem("auto_save")
     if (auto != null) {
       this.auto_save = auto === "true"
-      console.log("this.auto", auto,this.auto_save)
 
     }
     else {
@@ -116,16 +115,19 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
 
+  public called_auto_save: boolean = false;
   @HostListener('window:beforeunload', ['$event'])
-  doSomething($event) {
+  call_auto_save($event) {
+    if(this.called_auto_save) return
+    this.called_auto_save = true;
     if (this.auto_save) {
       this.documentService.saveCas(this.casId);
-      console.log("Saved!")
     }
 
   }
 
   public ngOnDestroy(): void {
+    this.call_auto_save(null)
     // Beende die momentanen Subscriptions
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
@@ -226,7 +228,6 @@ export class SemAF implements OnInit, OnDestroy {
           const this_link = this.links.find(x => x.id === addr)
           if (this_link != undefined) {
             this.reopen_link_by_id = addr
-            console.log("found_reopen_link", this_link)
           }
           this.selected_reference = { feature_name: result.feature_name, addr: addr }
           if (result.allowed_type !== null) {
