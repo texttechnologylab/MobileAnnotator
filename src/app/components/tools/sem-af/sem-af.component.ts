@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { MenuService } from 'src/app/services/menu.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -47,6 +47,8 @@ export class SemAF implements OnInit, OnDestroy {
   public automatic_reopen: boolean = localStorage.getItem("automatic_reopen") === "true"
   public reopen_link_by_id: number = null
 
+  public auto_save: boolean = true;
+
   public reopen_link: { ground: number, figure: number, type: string }
 
   public links: Link[];
@@ -82,7 +84,17 @@ export class SemAF implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.menuService.hideMenubar();
+    
+    const auto = localStorage.getItem("auto_save")
+    if (auto != null) {
+      this.auto_save = auto === "true"
+
+    }
+    else {
+      localStorage.setItem("auto_save", "true")
+    }
     this.genearteToolbarMenu();
+
 
     // Query Parameter der URL auslesen um darüber Dokument und View zu laden
     const paramObserver: PartialObserver<{ [key: string]: string }> = {
@@ -102,7 +114,20 @@ export class SemAF implements OnInit, OnDestroy {
     this.subscriptions.push(this.documentService.casChanged.subscribe(changeObserver));
   }
 
+
+  public called_auto_save: boolean = false;
+  @HostListener('window:beforeunload', ['$event'])
+  call_auto_save($event) {
+    if(this.called_auto_save) return
+    this.called_auto_save = true;
+    if (this.auto_save) {
+      this.documentService.saveCas(this.casId);
+    }
+
+  }
+
   public ngOnDestroy(): void {
+    this.call_auto_save(null)
     // Beende die momentanen Subscriptions
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
@@ -203,8 +228,7 @@ export class SemAF implements OnInit, OnDestroy {
           const this_link = this.links.find(x => x.id === addr)
           if (this_link != undefined) {
             this.reopen_link_by_id = addr
-          console.log("found_reopen_link", this_link)
-        }
+          }
           this.selected_reference = { feature_name: result.feature_name, addr: addr }
           if (result.allowed_type !== null) {
             this.activeFilters = result.allowed_type;
@@ -617,6 +641,11 @@ export class SemAF implements OnInit, OnDestroy {
             localStorage.setItem("automatic_reopen", this.automatic_reopen.toString())
             this.genearteToolbarMenu();
             break;
+          case 'auto_save':
+            this.auto_save = id == "true"
+            localStorage.setItem("auto_save", this.auto_save.toString())
+            this.genearteToolbarMenu();
+            break;
 
         }
     }
@@ -744,27 +773,27 @@ export class SemAF implements OnInit, OnDestroy {
     if (((this.reopen_link != null) || (this.reopen_link_by_id != null)) && this.automatic_reopen) {
       let reopen_link = null
 
-      if(this.reopen_link!=null)
-      reopen_link = this.links.find(x => (
-        (x.from.id === this.reopen_link.figure) &&
-        (x.to.id === this.reopen_link.ground) &&
-        (x.type === this.reopen_link.type)
-      ))
-      
-      console.log("this.reopen_link_by_id",this.reopen_link_by_id)
+      if (this.reopen_link != null)
+        reopen_link = this.links.find(x => (
+          (x.from.id === this.reopen_link.figure) &&
+          (x.to.id === this.reopen_link.ground) &&
+          (x.type === this.reopen_link.type)
+        ))
+
+      console.log("this.reopen_link_by_id", this.reopen_link_by_id)
       if (reopen_link == null) {
         reopen_link = this.links.find(x => (
           x.id === this.reopen_link_by_id
         ))
-        console.log("reopen_link",reopen_link)
+        console.log("reopen_link", reopen_link)
       }
 
-      if(reopen_link != null){
+      if (reopen_link != null) {
         this.reopen_link = null
         this.reopen_link_by_id = null
         this.openLink(reopen_link)
       }
-      
+
 
 
 
@@ -958,6 +987,25 @@ export class SemAF implements OnInit, OnDestroy {
       id: 'save',
       name: 'TOOL-SEM-AF.SAVE',
       icon: 'save',
+    });
+    retval.push({
+      type: 'listing',
+      id: 'auto_save',
+      name: 'Try Auto Save on Close',
+      list: [
+        {
+          type: 'action',
+          id: `true`,
+          name: `True`,
+          selected: this.auto_save == true,
+        },
+        {
+          type: 'action',
+          id: `false`,
+          name: `False`,
+          selected: this.auto_save == false,
+        }
+      ],
     });
     retval.push({
       type: 'action',
