@@ -75,6 +75,7 @@ export class PickerComponent implements OnInit {
   public links_containing_self: Link[];
   public shapenet_id: string = null;
   public text: string;
+  public name: string;
   public shapenet_url = location.protocol === "https:" ? shapenet_url :  'http://shapenet.texttechnologylab.org'
 
   public shapenet_features?: Shapenet_Req = null;
@@ -193,6 +194,8 @@ export class PickerComponent implements OnInit {
 
   public ngOnInit(): void {
 
+    
+
     this.links = defaultLinkClasses;
     const annotationList = [];
     const { entries, highlights, last, features, annoData, text, links, id, after_closed } = this.data;
@@ -207,7 +210,7 @@ export class PickerComponent implements OnInit {
     this.features = features;
 
     this.text = text.slice(features["begin"], features["end"])
-
+    
 
     //console.log("this.datathis.data", this.data)
 
@@ -367,6 +370,10 @@ export class PickerComponent implements OnInit {
       annotationList.push(entry);
     }
     this.annotations = annotationList.sort((a, b) => a.name < b.name ? -1 : 1);
+    /*if (this.type == undefined){
+      console.log("empty");
+    }
+    else{console.log("type", this.type.split(".").splice(-1)[0]);}*/
 
   }
 

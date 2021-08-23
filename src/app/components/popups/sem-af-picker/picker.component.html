@@ -9,8 +9,9 @@
     </div>
 </div>
 
-<h2>
-    {{ text }} </h2>
+<div *ngIf="type!= undefined"> <h2> Entity : {{ type.split(".").splice(-1)[0] }}</h2></div> 
+<h3>
+    {{ text }}</h3>
 
 
 
