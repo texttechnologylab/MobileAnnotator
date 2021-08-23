@@ -956,23 +956,28 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
         value: "null",
       },
-      "endpoints": {
-        display_name: "endpoints",      
+      "end_point1": {
+        display_name: "endpoint1",      
          type: FeatureType.Reference,      
-         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Endpoint"],
+         reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
          value: "null",
       },
-
+      "end_point2": {
+        display_name: "endpoint2",      
+         type: FeatureType.Reference,      
+         reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
+         value: "null",
+      },
       "val": {
         display_name: "Val",      
          type: FeatureType.Reference,      
          reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
          value: "null",
       },
-      "bounds": {
+      "bounds_array": {
         display_name: "Bounds",
-         type: FeatureType.Reference,      
-         reference_option: ["uima.cas.FSList"],
+         type: FeatureType.ReferenceMulti,      
+         reference_option: ["org.texttechnologylab.annotation.semaf.isobase.Entity"],
          value: "null",
       },
       "rel_type": {
