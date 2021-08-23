@@ -28565,3 +28565,4 @@ export function make_filter(filter: string[]){
 
 
 
+//Deno.writeTextFileSync("uima.types.ts", "export type allowed_uima_types = "+  Object.keys(data).map(x=>`"${x}"`).join(" | "))
