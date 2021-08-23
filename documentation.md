@@ -1,5 +1,10 @@
 # Documentation on Uima socket
-websocket based...
+
+# Websocket Debugging
+The Tool's Backend is based on Websocket uima.
+In Chrome/Firefox's Nework Tab you can filter by WS (Websocket), then you have something with a status of 101 filename /uima... click on it, then go into the response tab, here you can see everything the websocket sends(green arrow)/receives(red arrow) from the server.
+This can be extremly helpful in debugging why something does not work, if you send the server something and the server does not send a response it probally failed.
+Internally you don't work directly with the websocket but with WebsocketService and a further abstraction DocumentService
 
 # Github pages
 The Project uses Github pages as a free web host it is reachable under [MobileAnnotator](https://cr-heidemann.github.io/MobileAnnotator)
@@ -30,7 +35,7 @@ server{
 }
 ```
 
-In `src/url.config.ts` you can change this secure url which will be necessary if you want to continue using github pages, since nginx runs on a private server which i will not continue running indefinitely, better yes i would be if uima supports wss and shapenet https.
+In `src/url.config.ts` you can change this secure url which will be necessary if you want to continue using github pages, since nginx runs on a private server which i will not continue running indefinitely, better yet would be if uima supports wss and shapenet https.
 
 # Documentation on the Mobile Annotator Iso space Tool
 
