@@ -1837,6 +1837,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
 ]
 
 
+import {allowed_uima_types} from 'src/app/components/tools/sem-af/uima.types'
 
 export interface SelectOption {
   /** Shoule be unique among the Array, does otherwise not mather */
@@ -1860,7 +1861,7 @@ export interface Feature {
    * Should be empty if not FeatureType.Reference 
    * Example: ['org.texttechnologylab.annotation.semaf.isospace.OLink']
   */
-  reference_option?: String[];
+  reference_option?: allowed_uima_types[];
 
 
   /** There are Attributes like DCL where it can only be true or false, 
@@ -1873,7 +1874,7 @@ export interface Feature {
 export interface IAnnotationClass {
   name: string;
   /** should be the same as in Uima, a list of most can be found in ./uima.json */
-  type: string;
+  type: allowed_uima_types;
   /** Can be any css color, i think */
   rgb: string;
   css_class: string;
