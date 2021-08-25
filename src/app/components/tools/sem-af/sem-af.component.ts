@@ -45,7 +45,7 @@ export class SemAF implements OnInit, OnDestroy {
   public toolbarMenu: Array<IMenuAction | IMenuListing> = [];
   public reopen_begin_end: { begin: number, end: number } = null;
   public automatic_reopen: boolean = localStorage.getItem("automatic_reopen") === "true"
-  public reopen_link_by_id: number = null
+  public reopen_by_id: number = null
 
   public auto_save: boolean = true;
 
@@ -160,7 +160,7 @@ export class SemAF implements OnInit, OnDestroy {
   public selectionCanceled(): void {
     //console.log("Canceled Selection")
     this.selected_reference = null;
-    this.reopen_link_by_id = null
+    this.reopen_by_id = null
     this.selected_reference_multi = null;
     this.link_start_end = null;
     this.activeFilters = []
@@ -226,8 +226,11 @@ export class SemAF implements OnInit, OnDestroy {
         else if (return_type.selected_ref == result.type) {
           //console.log("resxx", result)
           const this_link = this.links.find(x => x.id === addr)
+          const this_entity = this.data.find(x => x.id === addr)
           if (this_link != undefined) {
-            this.reopen_link_by_id = addr
+            this.reopen_by_id = addr
+          }else if(this_entity!=undefined){
+            this.reopen_by_id =  addr
           }
           this.selected_reference = { feature_name: result.feature_name, addr: addr }
           if (result.allowed_type !== null) {
@@ -240,6 +243,14 @@ export class SemAF implements OnInit, OnDestroy {
         }
         else if (return_type.selected_ref_multi == result.type) {
           //console.log("resxx", result)
+          const this_link = this.links.find(x => x.id === addr)
+          const this_entity = this.data.find(x => x.id === addr)
+          console.log("this_link",this_link)
+          if (this_link != undefined) {
+            this.reopen_by_id = addr
+          }else if(this_entity!=undefined){
+            this.reopen_by_id =  addr
+          }
           this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
           if (result.allowed_type !== null) {
             this.activeFilters = result.allowed_type;
@@ -770,7 +781,7 @@ export class SemAF implements OnInit, OnDestroy {
     }
     this.links = this.links.filter((x) => x !== null)
 
-    if (((this.reopen_link != null) || (this.reopen_link_by_id != null)) && this.automatic_reopen) {
+    if (((this.reopen_link != null) || (this.reopen_by_id != null)) && this.automatic_reopen) {
       let reopen_link = null
 
       if (this.reopen_link != null)
@@ -780,17 +791,22 @@ export class SemAF implements OnInit, OnDestroy {
           (x.type === this.reopen_link.type)
         ))
 
-      console.log("this.reopen_link_by_id", this.reopen_link_by_id)
+      console.log("this.reopen_link_by_id", this.reopen_by_id)
       if (reopen_link == null) {
         reopen_link = this.links.find(x => (
-          x.id === this.reopen_link_by_id
+          x.id === this.reopen_by_id
         ))
+        const reopen_entity = this.data.find(x => (x.id == this.reopen_by_id ))
+        if(reopen_entity!=undefined){
+          this.tokenSelect(reopen_entity)
+          this.reopen_by_id = null
+        }
         console.log("reopen_link", reopen_link)
       }
 
       if (reopen_link != null) {
         this.reopen_link = null
-        this.reopen_link_by_id = null
+        this.reopen_by_id = null
         this.openLink(reopen_link)
       }
 
