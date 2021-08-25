@@ -9,7 +9,7 @@ interface FakeHTMLElement {
 // Copied from https://github.com/henlein/TextAnnotator/blob/main/WebApplication/app/view/tool/semaf/SemAFPanelController.js
 export function getLinkPointsString(leftNode: HTMLElement | FakeHTMLElement,
     rightNode: HTMLElement | FakeHTMLElement,
-    isReversed,
+    isReversed: boolean,
     level,
     indexFrom: number,
     indexTo: number,
@@ -18,6 +18,13 @@ export function getLinkPointsString(leftNode: HTMLElement | FakeHTMLElement,
     hEndOffsetDirection = 0) {
 
     if ((leftNode == null) && (rightNode == null)) return null
+
+    if(leftNode!=null && rightNode != null){
+        if(leftNode.offsetLeft>rightNode.offsetLeft && leftNode.offsetTop == rightNode.offsetTop){
+            [leftNode,rightNode] = [rightNode,leftNode]
+            isReversed = true
+        }
+    }
 
 
     const leftNodewasnull = leftNode == null
@@ -224,5 +231,5 @@ ${p1.x}, ${p1.y}
 L ${end.x!=0 ? end.x - 3: 3}, ${p2.y}`;
     }
 
-    return { pathStr, points };
+    return { pathStr, points,isReversed };
 }

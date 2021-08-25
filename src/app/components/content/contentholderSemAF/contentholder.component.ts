@@ -37,7 +37,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public fontSizes = [12, 14, 16, 18, 20, 22, 24, 26];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
-  public link_visu: {link: string, color: string}[] = [];
+  public link_visu: {link: string, color: string, reverse_class: string}[] = [];
   public splitToken: IContentholderData;
 
 
@@ -142,7 +142,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         else{color=this_link.rgb}
         const a = getLinkPointsString(from, to, false, 1, indexFrom, indexTo, null);
         if (a !== null)
-          this.link_visu.push({link: a.pathStr,color:color});
+          this.link_visu.push({link: a.pathStr,color:color,reverse_class: a.isReversed? 'link-reversed': 'link-normal'});
         /*console.log("svg Link a",a)*/
 
 

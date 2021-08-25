@@ -90,6 +90,14 @@
     stroke-opacity: 0.6;
 }
 
+.link-reversed{
+    stroke-width: 4;
+    fill: none;
+    marker-start: url(#arrow);
+    marker-end: none;
+    stroke-opacity: 0.6;
+}
+
 #deleteMulti{
     position: absolute; 
     top: 0; 
