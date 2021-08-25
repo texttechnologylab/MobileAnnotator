@@ -926,7 +926,7 @@ export const defaultLinkClasses: IAnnotationClass[] = [
   /*mlink complete*/
   {     
     rgb: 'rgb(100,100,100)',
-    type: 'org.texttechnologylab.annotation.semaf.isotimeml.MLink',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',
     /*type: 'org.texttechnologylab.annotation.semaf.isospace.MLink',*/
     name: 'MLink',
     css_class: 'I-MLink',
