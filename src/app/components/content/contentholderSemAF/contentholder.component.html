@@ -9,7 +9,7 @@
 
 
 
-        <path *ngFor="let link of link_visu; index as i" class="svg-arrow" [attr.d]="link"></path>
+        <path *ngFor="let link of link_visu; index as i" class="svg-arrow" [attr.d]="link.link" [attr.stroke]="link.color"></path>
 
 
 

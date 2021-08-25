@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, AfterViewInit, Simpl
 import { MatMenuTrigger } from '@angular/material/menu';
 import { IToolElement } from 'src/app/services/interfaces';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { defaultAnnotationClasses } from '../../tools/sem-af/sem-af.utils';
+import { defaultAnnotationClasses,defaultLinkClasses } from '../../tools/sem-af/sem-af.utils';
 
 import { inhe, make_filter } from '../../tools/sem-af/uima';
 import { getLinkPointsString } from './contentholder.utils';
@@ -37,7 +37,7 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
   public fontSizes = [12, 14, 16, 18, 20, 22, 24, 26];
   public maxPage = 0;
   public contextMenuEntries: eContextMenu[] = [];
-  public link_visu: string[] = [];
+  public link_visu: {link: string, color: string}[] = [];
   public splitToken: IContentholderData;
 
 
@@ -136,9 +136,13 @@ export class ContentholderComponentSemAF implements OnChanges, AfterViewInit {
         if (true) {
         }
 
+        const this_link = defaultLinkClasses.find((x)=>x.type == link.type)
+        let color: string
+        if(this_link==undefined) {color ="#bbb"}
+        else{color=this_link.rgb}
         const a = getLinkPointsString(from, to, false, 1, indexFrom, indexTo, null);
         if (a !== null)
-          this.link_visu.push(a.pathStr);
+          this.link_visu.push({link: a.pathStr,color:color});
         /*console.log("svg Link a",a)*/
 
 
