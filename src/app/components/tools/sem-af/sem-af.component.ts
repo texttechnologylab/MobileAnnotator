@@ -316,7 +316,9 @@ export class SemAF implements OnInit, OnDestroy {
           if (d.value == null) return
           const queue = this.data.filter(x => {
             const value = x.data.features[d.key]
-            return ((x.data._type == d.type) && ((value === "null") || (value == null)))
+            if((x.data._type == d.type))
+            console.log(1234,x,value)
+            return ((x.data._type == d.type) && ((value === "null") || (value == null) || (value == "")))
           }).map(x => {
             const map = {}
             map[d.key] = d.value
