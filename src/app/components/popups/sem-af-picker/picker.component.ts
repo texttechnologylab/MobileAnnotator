@@ -453,7 +453,7 @@ export class PickerComponent implements OnInit {
       }
       if (fe.type === FeatureType.ReferenceMulti) {
         const non_removed = (fe.data.values as SingleRef[]).filter((x) => x.text !== null)
-        if (non_removed.length !== fe.data.length) {
+        if (non_removed.length !== fe.data.values.length) {
           new_features[fe.key] = non_removed.map((x) => x.id);
         }
       }

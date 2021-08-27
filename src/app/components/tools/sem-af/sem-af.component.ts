@@ -178,6 +178,14 @@ export class SemAF implements OnInit, OnDestroy {
     this.sendBatch(queue)
   }
 
+  private async set_reopen_by_id(id:number){
+    await new Promise(r => setTimeout(r, 500))
+    // We have the Problem that when we want to reopen using id
+    // so in the case of reference{_multi} we may also update some values before that.
+    // this would instantly reopen the page
+    this.reopen_by_id = id
+  }
+
   public generate_after_closed(data: IContentholderData) {
     return (result: { type: return_type, [id: string]: any }) => {
       //console.log("CLOSED!")
@@ -228,9 +236,10 @@ export class SemAF implements OnInit, OnDestroy {
           const this_link = this.links.find(x => x.id === addr)
           const this_entity = this.data.find(x => x.id === addr)
           if (this_link != undefined) {
-            this.reopen_by_id = addr
+            this.set_reopen_by_id(addr)
+            
           }else if(this_entity!=undefined){
-            this.reopen_by_id =  addr
+            this.set_reopen_by_id(addr)
           }
           this.selected_reference = { feature_name: result.feature_name, addr: addr }
           if (result.allowed_type !== null) {
@@ -247,9 +256,9 @@ export class SemAF implements OnInit, OnDestroy {
           const this_entity = this.data.find(x => x.id === addr)
           console.log("this_link",this_link)
           if (this_link != undefined) {
-            this.reopen_by_id = addr
+            this.set_reopen_by_id(addr)
           }else if(this_entity!=undefined){
-            this.reopen_by_id =  addr
+            this.set_reopen_by_id(addr)
           }
           this.selected_reference_multi = { feature_name: result.feature_name, addr: addr, current_ids: result.current_ids }
           if (result.allowed_type !== null) {
