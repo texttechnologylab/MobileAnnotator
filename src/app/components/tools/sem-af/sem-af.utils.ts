@@ -413,10 +413,10 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
         value: "",
       }, 
        "elevation": {/*option attribute*/
-        display_name: "elevation",
+        display_name: "Elevation",
         type: FeatureType.Reference,
         reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Measure"],
-        value: ""
+        value: "null"
       }
 
     }
@@ -744,7 +744,60 @@ export const defaultAnnotationClasses: IAnnotationClass[] = [
 
     }
   },
-  /*spatial signal<-->sRelation complete */
+  /*spatial signal complete */
+  {
+    rgb: 'rgb(255,235,205)',
+    type: 'org.texttechnologylab.annotation.semaf.isospace.SpatialSignal',
+    name: 'Spatial Signal',
+    css_class: 'I-SpatialSignal',
+    has_shapenet: true,
+    features: {
+      
+      "comment": {
+        display_name: 'Comment',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "cluster": {
+        display_name: 'Cluster',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "value": {
+        display_name: 'Value',
+        type: FeatureType.Text,
+        value: "",
+      },
+      'mod': {
+        display_name: 'mod',
+        type: FeatureType.Text,
+        value: "",
+      },
+      "semantic_type": {
+        display_name: "semantic_type",
+        type: FeatureType.Select,
+        value: "TYPE",
+        select_option: [{
+          display_name: "Topological",
+          value: "TOPOLOGICAL",
+          value_name: "TOPOLOGICAL"
+        },
+        {
+          display_name: "Directional",
+          value: "DIRECTIONAL",
+          value_name: "DIRECTIONAL"
+        },
+        {
+          display_name: "Dir_Top",
+          value: "Dir_Top",
+          value_name: "Dir_Top"
+        },
+        
+        ]
+      },
+    }
+  },
+  /*sRelation complete */
   {
     rgb: 'rgb(27,153,139)',
     type: 'org.texttechnologylab.annotation.semaf.isospace.SRelation',
@@ -1427,16 +1480,14 @@ export const defaultLinkClasses: IAnnotationClass[] = [
           reference_option: ["org.texttechnologylab.annotation.semaf.isospace.SpatialSignal"],
           value: "null",
         },
+        /* 
         "motionsignal_id": {
           display_name: "ground",              
           type: FeatureType.Reference,      
           reference_option: ["org.texttechnologylab.annotation.semaf.isospace.MotionSignal"],
           value: "null",
-    
-
-       
-            
-    }
+                  
+    }*/
     
   },
 },
