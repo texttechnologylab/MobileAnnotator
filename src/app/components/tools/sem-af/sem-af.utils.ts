@@ -1146,19 +1146,35 @@ export const defaultLinkClasses: IAnnotationClass[] = [
         type: FeatureType.Select,
         value: "",
         select_option: [{
-          display_name: "Coreference",
-          value: "COREFERENCE",
-          value_name: "COREFERENCE"
+          display_name: "ARGO0",
+          value: "ARGO0",
+          value_name: "ARGO0"
         },
         {
-          display_name: "Subcoreference",
-          value: "SUBCOREFFERENCE",
-          value_name: "SUBCOREFFERENCE"
+          display_name: "ARGO1",
+          value: "ARGO1",
+          value_name: "ARGO1"
         },
         {
-          display_name: " In Front Of",
-          value: "IN FRONT OF",
-          value_name: "IN FRONT OF"
+          display_name: "ARGO2",
+          value: "ARGO2",
+          value_name: "ARGO2"
+        },   
+
+        {
+          display_name: "ARGO3",
+          value: "ARGO3",
+          value_name: "ARGO3"
+        },
+        {
+          display_name: "ARGO4",
+          value: "ARGO4",
+          value_name: "ARGO4"
+        },  
+        {
+          display_name: "ARGO5",
+          value: "ARGO5",
+          value_name: "ARGO5"
         },]}
     }
   },
