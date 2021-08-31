@@ -43,17 +43,41 @@ In `src/url.config.ts` you can change this secure url which will be necessary if
 summary: handles how the sem-af-tool works, saves the annotation and link data into data structures; 
 handles the colouration and saving the latest annotation
 
+
 --genearteToolbarMenu()
 	generates the toolbar with content unique for the sem-af.Component. While the Buttons that are in the Toolbar are for every Component, the menu is flexible. 
-	We added an option to change the font size which is responsible for the token size and one for showing all the links
+	We added an option to change the font size which is responsible for the token size, one for showing all the links and one for automatically reopening the menu after just picking the type
 	The icons are available under
 	https://www.angularjswiki.com/de/angular/angular-material-icons-list-mat-icon-list/
+	first, the new menu entry needs to be declared, then it needs to be pushed in the const retval. for it to show up in the menu, its important to add it to the de.json and en.json files for translations.
+	according to the style in them, with the name being in accordance of the name in parathesis in the json files and the tool being the current tool
+	
+--onMenuSelect()
+	describes how a toolbar entry should react on being chosen. It can mean that only another function should be called (like save or show_links)
+	in more complex cases like tokens per page or page size this newly selected number needs to be subscribed back to the toolbarmenu and contentholder
+	
+
+--removeallAnnotations()
+	to select a new entity type thats also displayed via the colour coded background, this function deletes all previous annotations (in case the document is imported from a different annotator and has more than 1 annotation type.
+	After that the new type can be subscribed to that ID.
+
+--setFonstize()
+	saves the selected fontsize in the class variable
+	
+--showLinks()
+	sends the Link data to the semAFLinkOverview.Component of sem-af-link-overview.Component to open a menu displaying all links currently existing in the document with the option to change attributes there
 
 **sem-af-picker.Component**
 summary: handles the menu that opens for annotation. it's setup as a simple 2 tab menu, which corresponds with the attributes of each entity
 
+the hitml document is seperated as a mat tab group, so seperate tabs for Enities and Links exist, which allow 2 seperate menus in one for better usability
+
+
 **sem-af-link-picker.Component**
 summary: handles the menu that opens when link annotation is selected in the sem-af-picker menu. it corresponds with the link attributes
+
+**sem-af-link-overview.Component**
+summary:
 
 **shapenet-picker.Component**
 summary: handles the menu that opens when shape net objects are to be selected. it corresponds with the shapenet id database
@@ -62,7 +86,7 @@ summary: handles the menu that opens when shape net objects are to be selected. 
 	this function saves the id to the data in the sem-af.Component and this component
 	
 **tool-bar.Component**
-summary: changes in this menu allowed for including a "help" button to display the menu
+summary: changes in this menu allowed for including a "help" button to display the menu; toolbar menu can be individualised via a queue to this toolbar in the sem-af.component
 
  -- openmanual()
 	this functions sole purpose is to open the manual.pdf that is saved for the certain tool
