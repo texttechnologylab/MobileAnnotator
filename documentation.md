@@ -76,3 +76,23 @@ summary: its made from copying the original contentholder, changes allow to visu
 -- .entryDiv (in contentholder.Component.html)
 	border-radius: set to be more rectangular than in the other tools, so that the links can be visualised easier (higher percent - more round; lower percent - more rectangulat)
 	margin: needs to be changed to get more space between tokens and between lines
+
+**uima**
+summary: This provides a reference for completing the file "sem-af.utils".Do not change.
+
+--example
+"org.texttechnologylab.annotation.semaf.semafsr.SrLink": {
+	//the above refer to sem-af.utils.type
+    "parent": "org.texttechnologylab.annotation.semaf.isobase.Link",	
+    "features": [ 
+      {
+        "primitive": true,
+        "domain": "org.texttechnologylab.annotation.semaf.isobase.Link",
+		//"domain" sometimes needs to provide the path to the "reference option" in "utils"
+        "name": "comment",
+		// "name" needs to be consistent with the name in util
+        "range": "uima.cas.String"
+	
+      },
+**sem-af.utils**
+summary: 
