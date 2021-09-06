@@ -5,6 +5,11 @@ Dieses Projekt ist im Zuge einer Bachelorarbeit entstanden und wurde von Pascal 
 
 # How to use the Tool - Manual
 
+For the live-version, that does not require the yarn set up and it is for use only, please visit 
+
+https://cr-heidemann.github.io/MobileAnnotator
+
+
 Please read the following document before annotating.
 
 https://github.com/cr-heidemann/MobileAnnotator/blob/main/src/assets/manual.pdf
