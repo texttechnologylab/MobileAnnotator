@@ -110,6 +110,7 @@ summary: its made from copying the original contentholder, changes allow to visu
 
 **uima**
 summary: This provides a reference for completing the file "sem-af.utils".Do not change.
+Each attribute/link is a JSON Object with features.
 
 --example
 "org.texttechnologylab.annotation.semaf.semafsr.SrLink": {
@@ -124,6 +125,31 @@ summary: This provides a reference for completing the file "sem-af.utils".Do not
 		// "name" needs to be consistent with the name in util
         "range": "uima.cas.String"
 	
-      },
+      },}
 **sem-af.utils**
-summary: 
+summary: This file provides all the attributes and links to the annotator.Each attribute/link is just a JSON Object with features
+--example
+ {
+    rgb: 'rgb(218,247,220)',
+    //EventPath button color setting
+    type: 'org.texttechnologylab.annotation.semaf.isospace.EventPath',
+    //address copy from uima file
+    name: 'Event-Path',
+    //botton display name
+    css_class: 'I-eventpath',
+    has_shapenet: true,
+    features: {
+      "trigger": {
+        display_name: "TRIGGER",
+        //the feature name 
+        type: FeatureType.Reference,
+        //Should be the default to which it will be initialized 
+        //value: boolean | string | number | number[];
+        reference_option: ["org.texttechnologylab.annotation.semaf.isospace.Motion"],
+        //Options for the Select should be Empty if type is not Select 
+        value: ""      
+      },}}
+      
+
+  
+ 
