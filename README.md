@@ -3,6 +3,21 @@
 
 Dieses Projekt ist im Zuge einer Bachelorarbeit entstanden und wurde von Pascal Adeberg in Zusammenarbeit mit dem TextTechnologyLab der Goethe Universität Frankfurt (Main) entwickelt.
 
+# How to use the Tool - Manual
+
+For the live-version, that does not require the yarn set up and it is for use only, please visit 
+
+https://cr-heidemann.github.io/MobileAnnotator
+
+
+Please read the following document before annotating.
+
+https://github.com/cr-heidemann/MobileAnnotator/blob/main/src/assets/manual.pdf
+
+Please read the documentation if you are further developing this tool.
+
+https://github.com/cr-heidemann/MobileAnnotator/blob/main/documentation.md
+
 ## Hinweise für die Entwicklung
 
 >Für die Arbeit an dem Projekt wird **Visual Studio Code** empfohlen.
@@ -47,11 +62,7 @@ Für das Bauen der Anwendung, um sie zum Beispiel auf einem Server produktiv zu 
 9) after it concluded loading, you can access the website in a browser of your choice with 
 > localhost:4200 
 in the address field
-# How to use the Tool - Manual
 
-Please read the following document before annotating.
-
-https://github.com/cr-heidemann/MobileAnnotator/blob/main/src/assets/manual.pdf
 
 
 

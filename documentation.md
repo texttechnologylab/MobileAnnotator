@@ -70,14 +70,21 @@ handles the colouration and saving the latest annotation
 **sem-af-picker.Component**
 summary: handles the menu that opens for annotation. it's setup as a simple 2 tab menu, which corresponds with the attributes of each entity
 
-the hitml document is seperated as a mat tab group, so seperate tabs for Enities and Links exist, which allow 2 seperate menus in one for better usability
+the html document is seperated as a mat tab group, so seperate tabs for Enities and Links exist, which allow 2 seperate menus in one for better usability
 
+--openDialog():
+	opens the sem-af-Link-picker Menu to change attributes of Links, since having it all in one menu would be too cluttered
+
+--openShapenet()
+	opens the shapenet-picker Menu to select an icon
 
 **sem-af-link-picker.Component**
 summary: handles the menu that opens when link annotation is selected in the sem-af-picker menu. it corresponds with the link attributes
 
 **sem-af-link-overview.Component**
-summary:
+summary: handels the display of all the links. its a copy of sem-af-link-picker.Component while not having the restriction of only displaying all the links of the selected token
+
+
 
 **shapenet-picker.Component**
 summary: handles the menu that opens when shape net objects are to be selected. it corresponds with the shapenet id database
