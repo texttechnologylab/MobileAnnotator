@@ -9,6 +9,10 @@ Please read the following document before annotating.
 
 https://github.com/cr-heidemann/MobileAnnotator/blob/main/src/assets/manual.pdf
 
+Please read the documentation if you are further developing this tool.
+
+https://github.com/cr-heidemann/MobileAnnotator/blob/main/documentation.md
+
 ## Hinweise für die Entwicklung
 
 >Für die Arbeit an dem Projekt wird **Visual Studio Code** empfohlen.
