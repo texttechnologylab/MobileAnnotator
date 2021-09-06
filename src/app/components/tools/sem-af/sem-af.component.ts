@@ -556,7 +556,7 @@ export class SemAF implements OnInit, OnDestroy {
   }
 
   public show_links(): void {
-    //send links what was the array where they are saved?
+    //
     const after_closed = this.generate_after_closed(null)
     const picker = this.dialog.open(semafLinkOverviewComponent, {
       data: {
