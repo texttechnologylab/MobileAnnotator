@@ -133,7 +133,6 @@ Each attribute/link is a JSON Object with features.
 
 
 **sem-af.utils**
-
 summary: This file provides all the attributes and links to the annotator.Each attribute/link is just a JSON Object with features
 
 
