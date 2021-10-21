@@ -1,0 +1,114 @@
+<div class="header">
+    <div *ngIf="lastAnnotations.length">
+        <h5>{{'POPUP-PICKER.LASTANNOS' | translate}}</h5>
+        <div *ngFor="let entry of lastAnnotations" class="entryDiv" [style.background]="entry.rgb"
+            (tap)="selected(entry)">
+            {{ entry.name }}
+        </div>
+    </div>
+</div>
+
+<mat-dialog-content style="max-height: none;">
+    <h2>Link: {{link_type}}</h2>
+    <div>
+        <div class="isolink entryDiv" [style.background]="'lightgreen'"
+            style="border: 4px solid lightgreen; display: flex; width: max-content" matBadgeSize="small">
+
+
+            <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.from)"
+                [style.border]="link.from.border">
+                {{link.from.label}} </div>
+            <div class="linkstyle">
+                <mat-icon>arrow_right_alt</mat-icon>
+            </div>
+
+
+            <div class="entryDiv linkstyle" [style.margin-top]="'0'" [style.background]="getBackground(link.to)"
+                [style.border]="link.to.border">
+                {{link.to.label}} </div>
+
+            <button mat-raised-button (click)="deleteThis()" [style.background]="'orange'">Delete Link</button>
+
+        </div>
+
+        <ng-container *ngIf="index != -1">
+            <h2>Attributes</h2>
+            <form [formGroup]="profileForm">
+
+                <div *ngFor="let inp of text_inputs; index as i">
+                    <mat-form-field [floatLabel]="true" appearance="outline">
+                        <mat-label>{{inp.key}}</mat-label>
+                        <input matInput formControlName={{inp.key}} placeholder="Just a placeholder">
+                        <br />
+                    </mat-form-field>
+                </div>
+
+                <div *ngFor="let feature of features_typed">
+                    <ng-container *ngIf="feature[1].type == 0">
+                        <mat-form-field [floatLabel]="true" appearance="outline">
+                            <mat-label>{{feature[1].display_name}}</mat-label>
+                            <mat-select formControlName={{feature[0]}}>
+                                <mat-option *ngIf="feature[1].not_nullable !== true" [value]="null"></mat-option>
+                                <mat-option *ngFor="let feature_value of feature[1].select_option"
+                                    [value]="feature_value.value">
+                                    {{feature_value.display_name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </ng-container>
+                </div>
+
+                <hr>
+                <div *ngFor="let refe of reference">
+                    <span>{{refe.display_name}}</span><br>
+                    <ng-container>
+                        <div style="width:100%; display: flex">
+                            <div class="item-ref">
+                                <button (tap)="refe.text=null" class="item-ref-button" *ngIf="refe.text!=null">
+                                    <span>{{refe.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                                            aria-label="Delete">backspace</mat-icon></span>
+                                </button>
+                            </div>
+                            <button style="margin-left:5px" class="item-ref-button"
+                                (tap)="selected_ref(refe.feature_name)">
+                                Select
+                            </button>
+                        </div>
+
+                    </ng-container>
+
+                    <hr>
+                </div>
+
+
+                <div *ngFor="let refe of referenceMulti">
+                    <span>{{refe.display_name}}</span><br>
+                    <ng-container>
+                        <div style="width:100%; display: flex">
+                            <div class="item-ref">
+                                <ng-container *ngFor="let value of refe.values">
+                                    <button (tap)="value.text=null" class="item-ref-button" *ngIf="value.text!=null">
+                                        <span>{{value.text}} <mat-icon class="backspace-icon" aria-hidden="false"
+                                                aria-label="Delete">backspace</mat-icon></span>
+                                    </button>
+                                </ng-container>
+                            </div>
+                            <button style="margin-left:5px" class="item-ref-button"
+                                (tap)="selected_ref_multi(refe.feature_name)">
+                                Select
+                            </button>
+                        </div>
+
+                    </ng-container>
+
+                    <hr>
+                </div>
+
+
+
+
+            </form>
+        </ng-container>
+
+    </div>
+</mat-dialog-content>

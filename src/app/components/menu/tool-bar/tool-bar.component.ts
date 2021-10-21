@@ -1,3 +1,5 @@
+import { getTreeMultipleDefaultNodeDefsError } from '@angular/cdk/tree';
+import { TitleCasePipe } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
@@ -24,10 +26,12 @@ export class ToolBarComponent implements OnInit {
   @Input() title = '';
 
   @Output() menuEvent = new EventEmitter<string[]>();
+  @Output() save = new EventEmitter<void>();
   @ViewChild('mainTrigger', { static: true }) mainTrigger: MatMenuTrigger;
   constructor() { }
 
   ngOnInit() {
+    /*console.log(this.title);*/ 
   }
 
   /**
@@ -38,12 +42,21 @@ export class ToolBarComponent implements OnInit {
     this.menuEvent.next(id);
   }
 
+  public openmanual(): void {
+    /* Edit if-conditions for the other pages if needed*/
+    const path = "/"+document.querySelector("base").href.replace("//","").split("/").slice(1).join("/")+'assets/manual.pdf';
+    if (this.title==="TOOL-SEM-AF.TITLE"){
+      window.open(path,'_blank');
+
+    }
+  }
   /**
    * Emitted das Event, dass der "Zurück" Button gewählt wurde
    */
   public returnEvent(): void {
     this.menuEvent.next([returnEventId]);
   }
+
 
 }
 

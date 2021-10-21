@@ -1,0 +1,27 @@
+.toolbar {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.modeName {
+    font-size: xx-small;
+}
+
+.content {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+
+
+.footer {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+}

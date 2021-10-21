@@ -1,0 +1,79 @@
+.contentholder {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+
+
+.entryDiv {
+    border-radius: 9%;
+    padding: 0.2em;
+    margin: 0.2em;
+    text-align: center;
+    box-shadow: 0 2px 5px 0 rgba(52,47,51,.63);
+}
+
+.highlight {
+    border: 0.3em solid black;
+}
+
+.header {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.content {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+div.entry-entity {
+    display: flex;
+
+}
+div.entry-entity > div.entity{
+    flex-grow: 1;
+}
+
+.backspace-icon{
+    width: unset;
+    height: unset;
+    font-size: 15px;
+    vertical-align: middle;
+}
+.item-ref-button{
+    background-color: #cacaca;
+    border: #a29e9e solid 2px;
+    padding: 6px;
+    border-radius: 7px;
+}
+
+.apply-all-button{
+    background-color: #cacaca;
+    border: #a29e9e solid 2px;
+    border-radius: 7px;
+}
+
+.item-ref{
+    border: 1px solid rgba(0, 0, 0, 0.12);
+flex: 1;
+padding: 4px;
+border-radius: 5px;
+}
+
+.linkstyle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button{
+display: inline-block;
+}

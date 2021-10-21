@@ -1,0 +1,16 @@
+<app-tool-bar [menu]="toolbarMenu" [title]="'TOOL-SEM-AF.TITLE'" (menuEvent)="onMenuSelect($event)" (save)="saveCas()">
+</app-tool-bar>
+
+
+<app-contentholder-semaf class="content" [inData]="data" [links]="links" [pageSize]="pageSize"
+    (selectionCanceled)="selectionCanceled()" (selectionChanged)="tokenSelect($event)"
+    (selectionLinkChanged)="select_link($event)"
+    [showCancelSelection]="(selected_reference !==null) || (selected_reference_multi!==null) || (link_start_end!==null)"
+    (createMultiToken)="create_multitoken($event)"
+    (deleteMultiToken)="deleteToken($event)"
+    (undoEvent)="undo()" (redoEvent)="redo()" [fontSize]="fontSize"
+    [filters]="activeFilters">
+</app-contentholder-semaf>
+
+
+    

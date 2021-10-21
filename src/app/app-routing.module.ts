@@ -11,6 +11,9 @@ import { QuickAnnoComponent } from './components/tools/quick-anno/quick-anno.com
 import { KnowledgeBaseComponent } from './components/tools/knowledge-base/knowledge-base.component';
 import { ToolGuard } from './guards/tool.guard';
 
+import { SemAF } from './components/tools/sem-af/sem-af.component';
+
+
 const routes: Routes = [
     {
         path: 'login',
@@ -43,9 +46,16 @@ const routes: Routes = [
         component: DocumentSelectComponent,
     },
     {
+        path: 'sem-af',
+        canActivate: [ToolGuard],
+        component: SemAF,
+    },
+    {
         path: '**',
         redirectTo: 'dashboard'
     },
+
+
 ];
 
 @NgModule({

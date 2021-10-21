@@ -1,0 +1,38 @@
+<div>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Search Term</mat-label>
+        <input matInput placeholder="" name="searchterm" [(ngModel)]="input" (change)="change_input($event)"
+            width="100%">
+    </mat-form-field>
+
+
+
+
+    <!-- <code>{{searchJson}}</code> -->
+
+    <div *ngIf="searchResult !== undefined && searchResult !== null; else elseBlock">
+        <ng-container *ngIf="searchResult.success">
+            <ng-container *ngFor="let res of searchResult.results; let i = index">
+                <div style="display: flex;" class="searchResult" (click)="set_shapenet(res.id)"
+                    [style.background]="selected===res.id?'lightgreen' : 'white'">
+                    <img [src]="shapenet_url+'/getThumbnail?id='+res.id+'&pic=1'" alt="..."
+                        loading="lazy" style="height: 8em;">
+                    {{res.name}}
+                </div>
+            </ng-container>
+            <p *ngIf="searchResult.results.length == 0" class="center">No Results found!</p>
+        </ng-container>
+        <p *ngIf="!searchResult.success" class="center">Search failed!</p>
+
+
+    </div>
+
+    <ng-template #elseBlock>
+        <div id="abctest" style="display: flex; justify-content: center;">
+            <mat-spinner></mat-spinner>
+        </div>
+    </ng-template>
+
+
+</div>

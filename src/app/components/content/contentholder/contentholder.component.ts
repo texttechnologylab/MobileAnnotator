@@ -251,4 +251,5 @@ export interface IContentholderAnnotation {
     [type: string]: Array<{ id: string, fp: boolean }>;
   };
   badge?: number;
+  features?: any;
 }

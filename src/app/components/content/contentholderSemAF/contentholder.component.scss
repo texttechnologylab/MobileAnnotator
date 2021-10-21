@@ -1,0 +1,112 @@
+.contentholder {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    padding: 0.5em;
+    z-index: 1;
+}
+
+.spacer {
+    flex-grow: 1;
+    z-index: 1;
+}
+
+@keyframes wobble {
+    from {transform: rotate(1deg);}
+    to {transform: rotate(-1deg);}
+}
+
+.selected {
+    border-radius: 38%;
+    padding: 0.2em;
+    border: 0.2em solid black;
+}
+
+.longpress {
+    animation-name: wobble;
+    animation-duration: 0.2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.unselected {
+    padding: 0.4em
+}
+
+.filtered {
+    opacity: 0.6;
+}
+
+.entryDiv {
+    
+    //set this smaller for less round
+    border-radius:15%;
+    
+    //change margin for more space, because all are flex objects you cant just set extra line-space
+    margin: 0 10px;
+    margin-top: 2cm;
+
+    text-align: center;
+    box-shadow: 0 2px 5px 0 rgba(52,47,51,.63);
+    z-index: 2;
+    //change fontsize to make the tokens bigger or smaller
+    font-size:  18px;
+    
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: visible;
+    z-index: 0;
+}
+
+.contextMenuContainer{
+    position: absolute;
+}
+
+.footer {
+    flex-grow: 0;
+    flex-shrink: 0;
+    color: #ffffff;
+    background-color: #00618F;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.svg-arrow{
+    stroke-width: 4;
+    fill: none;
+    marker-end: url(#arrow);
+    stroke-opacity: 0.6;
+}
+
+.link-reversed{
+    stroke-width: 4;
+    fill: none;
+    marker-start: url(#arrow);
+    marker-end: none;
+    stroke-opacity: 0.6;
+}
+
+#deleteMulti{
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    visibility: hidden;
+    padding: 0.5em;
+    text-align: center;
+    background: #a5ab52;
+    border-radius: 11px;
+    font-size: 15px;
+
+}
