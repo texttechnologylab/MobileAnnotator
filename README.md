@@ -1,6 +1,6 @@
+[![Thesis](https://img.shields.io/badge/Thesis-Adeberg-green)](https://publikationen.ub.uni-frankfurt.de/files/57150/Thesis2.pdf)
+
 # MobileAnnotator
-
-
 Dieses Projekt ist im Zuge einer Bachelorarbeit entstanden und wurde von Pascal Adeberg in Zusammenarbeit mit dem TextTechnologyLab der Goethe Universität Frankfurt (Main) entwickelt.
 
 # How to use the Tool - Manual
@@ -96,10 +96,7 @@ G. Abrami, A. Henlein, A. Lücking, A. Kett, P. Adeberg, and A. Mehler, “Unlea
   Series         = {ISA-17},
   location       = {Groningen, Netherlands},
   month     = {June},
-  year           = {2021},
-  note = {accepted}
+  year           = {2021}
 }
-
-
 
 ```
