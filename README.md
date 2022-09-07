@@ -1,4 +1,5 @@
 [![Thesis](https://img.shields.io/badge/Thesis-Adeberg-green)](https://publikationen.ub.uni-frankfurt.de/files/57150/Thesis2.pdf)
+https://img.shields.io/github/license/texttechnologylab/MobileAnnotator
 
 # MobileAnnotator
 Dieses Projekt ist im Zuge einer Bachelorarbeit entstanden und wurde von Pascal Adeberg in Zusammenarbeit mit dem TextTechnologyLab der Goethe Universität Frankfurt (Main) entwickelt.
